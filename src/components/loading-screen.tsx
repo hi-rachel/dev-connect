@@ -1,4 +1,5 @@
 import { styled } from "styled-components";
+import { FONTS } from "../constants/font";
 
 const Wrapper = styled.div`
   height: 100vh;
@@ -8,7 +9,7 @@ const Wrapper = styled.div`
 `;
 
 const Text = styled.span`
-  font-size: 24px;
+  font-size: ${FONTS.xLarge};
 `;
 
 export default function LoadingScreen() {

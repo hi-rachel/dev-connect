@@ -1,4 +1,6 @@
 import { styled } from "styled-components";
+import { COLORS } from "../constants/color";
+import { FONTS } from "../constants/font";
 
 export const Wrapper = styled.div`
   height: 100%;
@@ -10,7 +12,7 @@ export const Wrapper = styled.div`
 `;
 
 export const Title = styled.h1`
-  font-size: 42px;
+  font-size: ${FONTS.title};
 `;
 
 export const Form = styled.form`
@@ -27,7 +29,7 @@ export const Input = styled.input`
   border-radius: 50px;
   border: none;
   width: 100%;
-  font-size: 16px;
+  font-size: ${FONTS.normal};
   &[type="submit"] {
     cursor: pointer;
     &:hover {
@@ -37,24 +39,24 @@ export const Input = styled.input`
 `;
 
 export const Error = styled.span`
-  font-weight: 600;
-  color: tomato;
+  font-weight: ${FONTS.semiBold};
+  color: ${COLORS.tomato};
 `;
 
 export const Switcher = styled.span`
   margin-top: 20px;
   margin-bottom: 30px;
   a {
-    color: #1d9bf0;
+    color: ${COLORS.twitterBlue};
   }
 `;
 
 export const Button = styled.span`
   margin-top: 20px;
-  background-color: white;
-  font-weight: 500;
+  background-color: ${COLORS.white};
+  font-weight: ${FONTS.medium};
   width: 100%;
-  color: black;
+  color: ${COLORS.black};
   padding: 10px 20px;
   border-radius: 50px;
   border: 0;

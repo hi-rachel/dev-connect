@@ -10,6 +10,7 @@ import { useEffect, useState } from "react";
 import LoadingScreen from "./components/loading-screen";
 import { auth } from "./firebase";
 import ProtectedRoute from "./components/protected-route";
+import { COLORS } from "./constants/color";
 
 const GlobalStyles = createGlobalStyle`
     ${reset};
@@ -17,8 +18,8 @@ const GlobalStyles = createGlobalStyle`
       box-sizing: border-box;
     }
     body {
-      background-color: black;
-      color: white;
+      background-color: ${COLORS.black};
+      color: ${COLORS.white};
       font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     }
 `;
