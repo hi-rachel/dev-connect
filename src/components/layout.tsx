@@ -14,7 +14,7 @@ const Wrapper = styled.div`
 `;
 
 const Menu = styled.div`
-  display: felx;
+  display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;

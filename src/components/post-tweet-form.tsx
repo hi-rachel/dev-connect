@@ -1,12 +1,6 @@
-// import { styled } from "styled-components";
 import React, { useState } from "react";
-import {
-  Form,
-  AttachFileButton,
-  AttachFileInput,
-  SubmitBtn,
-  TextArea,
-} from "./post-components";
+import { Form, AttachFileButton, SubmitBtn } from "./post-components";
+import { TextArea, AttachFileInput } from "./common-components";
 import { addDoc, collection, updateDoc } from "firebase/firestore";
 import { auth, db, storage } from "../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -24,7 +18,7 @@ export default function PostTweetForm() {
     if (files && files.length === 1 && files[0].size <= maxSize) {
       setFile(files[0]);
     } else {
-      alert("1MB 이하의 사진 파일 하나를 올려주세요.");
+      alert("Please upload a picture smaller than 1 MB.");
     }
   };
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
