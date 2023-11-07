@@ -4,11 +4,10 @@ import { FONTS } from "../constants/font";
 
 export const EditButton = styled.button`
   background-color: ${COLORS.tomato};
-  font-weight: ${FONTS.semiBold};
+  font-weight: ${FONTS.medium};
   border: 0;
-  font-size: ${FONTS.xSmall};
+  font-size: ${FONTS.small};
   padding: 5px 10px;
-  text-transform: uppercase;
   border-radius: 5px;
   cursor: pointer;
   color: ${COLORS.white};

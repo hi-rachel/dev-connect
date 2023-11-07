@@ -18,6 +18,7 @@ const Wrapper = styled.div`
   padding: 20px;
   border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 15px;
+  height: auto;
 `;
 
 const Column = styled.div``;
@@ -25,12 +26,11 @@ const Column = styled.div``;
 const EditTextArea = styled(TextArea)`
   margin-right: 20px;
   margin-bottom: 20px;
-  width: 95%;
+  width: 90%;
 `;
 
 const Photo = styled.img`
-  width: 200px;
-  height: 200px;
+  width: 100%;
   border-radius: 15px;
 `;
 
@@ -55,11 +55,13 @@ const EditTweetButton = styled(EditButton)``;
 const ChangeFileInput = styled(AttachFileInput)``;
 
 const ChangeFileButton = styled(EditButton)`
-  margin-right: 15px;
-`;
-
-const UndoFileChangeButton = styled(EditButton)`
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  svg {
+    height: 15px;
+    margin-right: 5px;
+  }
 `;
 
 export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
@@ -136,20 +138,6 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
     }
   };
 
-  // useEffect(() => {
-  //   const handleClick = (event: MouseEvent) => {
-  //     if (edit && !fileInputRef.current?.contains(event.target as Node)) {
-  //       setEdit(false);
-  //     }
-  //   };
-
-  //   document.addEventListener("mousedown", handleClick);
-
-  //   return () => {
-  //     document.removeEventListener("mousedown", handleClick);
-  //   };
-  // }, [edit]);
-
   return (
     <Wrapper>
       <Column>
@@ -177,11 +165,22 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
         {edit ? (
           <>
             <ChangeFileButton onClick={() => fileInputRef.current?.click()}>
-              {originalPhoto ? "Edit Photo" : "Add Photo"}
+              {originalPhoto ? (
+                <>
+                  <svg
+                    fill="currentColor"
+                    viewBox="0 0 20 20"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                  >
+                    <path d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" />
+                  </svg>
+                  Edit
+                </>
+              ) : (
+                "Add Photo"
+              )}
             </ChangeFileButton>
-            <UndoFileChangeButton onClick={() => setEdit(false)}>
-              Cancel
-            </UndoFileChangeButton>
             <ChangeFileInput
               ref={fileInputRef}
               onChange={onFileChange}
