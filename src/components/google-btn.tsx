@@ -10,9 +10,11 @@ export default function GoogleButton() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
   const onClick = async () => {
+    setLoading(true);
+    setError("");
     try {
-      setLoading(true);
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
       navigate("/");

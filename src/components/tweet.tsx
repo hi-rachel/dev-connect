@@ -64,8 +64,20 @@ const ChangeFileButton = styled(EditButton)`
   }
 `;
 
-export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
+const TweetDate = styled.div`
+  margin-top: 15px;
+`;
+
+export default function Tweet({
+  username,
+  photo,
+  tweet,
+  userId,
+  id,
+  createdAt,
+}: ITweet) {
   const user = auth.currentUser;
+  const date = createdAt.substring(0, 10);
   const [edit, setEdit] = useState(false);
   const [editTweet, setEditTweet] = useState(tweet);
   const [file, setFile] = useState<File | null>(null);
@@ -77,10 +89,13 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
   }, [photo]);
 
   const onDelete = async () => {
-    const ok = confirm("Are you sure delete this tweet?");
+    const ok = window.confirm("Are you sure you want to delete this tweet?");
+
     if (!ok || user?.uid !== userId) return;
+
     try {
       await deleteDoc(doc(db, "tweets", id));
+
       if (photo) {
         const photoRef = ref(storage, `tweets/${user.uid}/${id}`);
         await deleteObject(photoRef);
@@ -96,7 +111,9 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
+
     const maxSize = 1024 * 768;
+
     if (files && files.length === 1 && files[0].size <= maxSize) {
       const newFile = files[0];
       setFile(newFile);
@@ -126,6 +143,11 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
         await updateDoc(doc(db, "tweets", id), {
           photo: url,
         });
+      }
+
+      if (editTweet === "") {
+        alert("Please write your tweet.");
+        return;
       }
 
       await updateDoc(doc(db, "tweets", id), {
@@ -194,6 +216,7 @@ export default function Tweet({ username, photo, tweet, userId, id }: ITweet) {
           originalPhoto && <Photo src={originalPhoto} />
         )}
       </Column>
+      <TweetDate>{date}</TweetDate>
     </Wrapper>
   );
 }

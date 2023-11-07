@@ -11,7 +11,7 @@ import {
   Error,
   Form,
 } from "../components/auth-components";
-import GithubButton from "../components/github-btn";
+// import GithubButton from "../components/github-btn";
 import GoogleButton from "../components/google-btn";
 
 export default function CreateAccount() {
@@ -33,6 +33,7 @@ export default function CreateAccount() {
       setPassword(value);
     }
   };
+
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
@@ -94,7 +95,7 @@ export default function CreateAccount() {
       <Switcher>
         Already have an account ? <Link to="/login">Log in &rarr;</Link>
       </Switcher>
-      <GithubButton />
+      {/* <GithubButton /> */}
       <GoogleButton />
     </Wrapper>
   );

@@ -3,14 +3,15 @@ import { COLORS } from "../constants/color";
 import { FONTS } from "../constants/font";
 
 export const EditButton = styled.button`
-  background-color: ${COLORS.tomato};
+  background-color: #0d1117;
   font-weight: ${FONTS.medium};
   border: 0;
   font-size: ${FONTS.small};
   padding: 5px 10px;
   border-radius: 5px;
+  border: 1px solid #e6edf3c6;
   cursor: pointer;
-  color: ${COLORS.white};
+  color: #e6edf3;
   &:hover,
   &:active {
     opacity: 0.8;
