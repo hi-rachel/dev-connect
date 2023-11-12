@@ -9,7 +9,7 @@ const Wrapper = styled.div`
 `;
 
 const Text = styled.span`
-  font-size: ${FONTS.xLarge};
+  font-size: ${FONTS.xl};
 `;
 
 export default function LoadingScreen() {

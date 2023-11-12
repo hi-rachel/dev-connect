@@ -21,10 +21,10 @@ export interface ITweet {
 }
 
 const Wrapper = styled.div`
+  margin-top: 50px;
   display: flex;
   gap: 10px;
   flex-direction: column;
-  overflow-y: scroll;
 `;
 
 export default function Timeline() {
@@ -36,7 +36,7 @@ export default function Timeline() {
       const tweetsQuery = query(
         collection(db, "tweets"),
         orderBy("createdAt", "desc"),
-        limit(25)
+        limit(50)
       );
       unsubscribe = onSnapshot(tweetsQuery, (snapshot) => {
         const tweets = snapshot.docs.map((doc) => {

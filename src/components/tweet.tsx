@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import { ITweet } from "./timeline";
-import { FONTS } from "../constants/font";
+import { FONTS, FONTS_WEIGHT } from "../constants/font";
 import { auth, db, storage } from "../firebase";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import {
@@ -36,14 +36,19 @@ const Photo = styled.img`
 
 const Username = styled.span`
   display: block;
-  font-weight: ${FONTS.semiBold};
+  font-weight: ${FONTS_WEIGHT.semiBold};
   font-size: normal;
   margin-bottom: 10px;
 `;
 
+// const UserProfilePhoto = styled.img`
+//   width: 100px;
+//   border-radius: 50%;
+// `;
+
 const Payload = styled.p`
   margin: 10px 0px;
-  font-size: ${FONTS.large};
+  font-size: ${FONTS.lg};
 `;
 
 const DeleteTweetButton = styled(EditButton)`
@@ -77,6 +82,7 @@ export default function Tweet({
   createdAt,
 }: ITweet) {
   const user = auth.currentUser;
+
   const date = createdAt.substring(0, 10);
   const [edit, setEdit] = useState(false);
   const [editTweet, setEditTweet] = useState(tweet);
@@ -145,7 +151,7 @@ export default function Tweet({
         });
       }
 
-      if (editTweet === "") {
+      if (editTweet.length < 2) {
         alert("Please write your tweet.");
         return;
       }
@@ -164,6 +170,7 @@ export default function Tweet({
     <Wrapper>
       <Column>
         <Username>{username}</Username>
+        {/* <UserProfilePhoto src={user && user.photoURL}>{}</UserProfilePhoto> */}
         {edit ? (
           <EditTextArea
             rows={5}

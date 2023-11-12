@@ -15,6 +15,7 @@ import {
 } from "firebase/firestore";
 import { ITweet } from "../components/timeline";
 import Tweet from "../components/tweet";
+import { TextArea } from "../components/common-components";
 
 const Wrapper = styled.div`
   display: flex;
@@ -47,8 +48,29 @@ const AvartarInput = styled.input`
   display: none;
 `;
 
-const Name = styled.span`
-  font-size: ${FONTS.xLarge};
+const UsernameSpace = styled.form`
+  display: flex;
+  align-items: center;
+`;
+
+const Username = styled.div`
+  font-size: ${FONTS.xl};
+`;
+
+const EditUsernameTextArea = styled(TextArea)`
+  width: fit-content;
+  padding: 5px;
+`;
+
+const EditUsernameIcon = styled.div`
+  width: 22px;
+  height: 22px;
+  margin-right: 8px;
+`;
+
+const SaveUsernameIcon = styled(EditUsernameIcon)`
+  width: 32px;
+  height: 32px;
 `;
 
 const Tweets = styled.div`
@@ -59,25 +81,64 @@ const Tweets = styled.div`
 
 export default function Profile() {
   const user = auth.currentUser;
-  const [avatar, setAvatar] = useState(user?.photoURL);
   const [myTweets, setMyTweets] = useState<ITweet[]>([]);
+  const [avatar, setAvatar] = useState(user?.photoURL);
+  const [newUsername, setNewUsername] = useState(
+    user?.displayName ?? "Anonymous"
+  );
+  const [editUsername, setEditUsername] = useState(false);
+
   const onAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!user) return;
     const { files } = e.target;
     const maxSize = 1024 * 1024;
-    if (!user) return;
     if (files && files.length === 1 && files[0].size <= maxSize) {
       const file = files[0];
       const locationRef = ref(storage, `avatars/${user?.uid}`);
       const result = await uploadBytes(locationRef, file);
-      const avatarUrl = await getDownloadURL(result.ref);
-      setAvatar(avatarUrl);
+      const avatarURL = await getDownloadURL(result.ref);
+      setAvatar(avatarURL);
       await updateProfile(user, {
-        photoURL: avatarUrl,
+        photoURL: avatarURL,
       });
     } else {
       alert("Please upload a picture smaller than 1 MB.");
     }
   };
+
+  const onUsernameKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      onUsernameSave();
+    }
+  };
+
+  const onUsernameChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setNewUsername(e.target.value);
+  };
+
+  const onUsernameEdit = () => {
+    setEditUsername(true);
+  };
+
+  const onUsernameSave = async () => {
+    if (!user || !setEditUsername) return;
+    if (newUsername.length < 2) {
+      alert("Please enter a username with a least 2 characters.");
+      setEditUsername(false);
+      return;
+    }
+    try {
+      await updateProfile(user, {
+        displayName: newUsername,
+      });
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setEditUsername(false);
+    }
+  };
+
   const fetchTweets = async () => {
     const tweetQuery = query(
       collection(db, "tweets"),
@@ -87,26 +148,28 @@ export default function Profile() {
     );
     const snapshot = await getDocs(tweetQuery);
     const tweets = snapshot.docs.map((doc) => {
-      const { tweet, createdAt, userId, username, photo } = doc.data();
+      const { tweet, createdAt, userId, photo } = doc.data();
       return {
         id: doc.id,
         tweet,
         createdAt,
         userId,
-        username,
+        username: newUsername,
         photo,
       };
     });
     setMyTweets(tweets);
   };
+
   useEffect(() => {
     fetchTweets();
   }, []);
+
   return (
     <Wrapper>
       <AvatarUpload htmlFor="avatar">
         {avatar ? (
-          <AvartarImg src={avatar} />
+          <AvartarImg src={avatar} alt="avatar" />
         ) : (
           <svg
             fill="currentColor"
@@ -124,7 +187,54 @@ export default function Profile() {
         type="file"
         accept="image/*"
       />
-      <Name>{user?.displayName ?? "Anonymous"}</Name>
+      <UsernameSpace>
+        {editUsername ? (
+          <SaveUsernameIcon onClick={onUsernameSave}>
+            <svg
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.5}
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+          </SaveUsernameIcon>
+        ) : (
+          <EditUsernameIcon onClick={onUsernameEdit}>
+            <svg
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.5}
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+              />
+            </svg>
+          </EditUsernameIcon>
+        )}
+        {editUsername ? (
+          <EditUsernameTextArea
+            rows={1}
+            maxLength={20}
+            onChange={onUsernameChange}
+            value={newUsername}
+            onKeyDown={onUsernameKeyDown}
+          />
+        ) : (
+          <Username>{newUsername ?? "Anonymous"}</Username>
+        )}
+      </UsernameSpace>
       <Tweets>
         {myTweets.map((tweet) => (
           <Tweet key={tweet.id} {...tweet} />

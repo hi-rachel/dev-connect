@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import { COLORS } from "../constants/color";
-import { FONTS } from "../constants/font";
+import { FONTS, FONTS_WEIGHT } from "../constants/font";
 
 export const Wrapper = styled.div`
   height: 100%;
@@ -29,7 +29,7 @@ export const Input = styled.input`
   border-radius: 50px;
   border: none;
   width: 100%;
-  font-size: ${FONTS.normal};
+  font-size: ${FONTS.md};
   &[type="submit"] {
     cursor: pointer;
     &:hover {
@@ -39,7 +39,7 @@ export const Input = styled.input`
 `;
 
 export const Error = styled.span`
-  font-weight: ${FONTS.semiBold};
+  font-weight: ${FONTS_WEIGHT.semiBold};
   color: ${COLORS.tomato};
 `;
 
@@ -54,7 +54,7 @@ export const Switcher = styled.span`
 export const Button = styled.span`
   margin-top: 20px;
   background-color: ${COLORS.white};
-  font-weight: ${FONTS.medium};
+  font-weight: ${FONTS_WEIGHT.medium};
   width: 100%;
   color: ${COLORS.black};
   padding: 10px 20px;

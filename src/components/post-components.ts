@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 import { COLORS } from "../constants/color";
-import { FONTS } from "../constants/font";
+import { FONTS, FONTS_WEIGHT } from "../constants/font";
 
 export const Form = styled.form`
   display: flex;
@@ -12,7 +12,7 @@ export const MainBtn = styled.input`
   border: none;
   padding: 10px 0px;
   border-radius: 20px;
-  font-size: ${FONTS.normal};
+  font-size: ${FONTS.md};
   cursor: pointer;
   &:hover,
   &:active {
@@ -26,8 +26,8 @@ export const AttachFileButton = styled.label`
   text-align: center;
   border-radius: 20px;
   border: 1px solid ${COLORS.twitterBlue};
-  font-size: ${FONTS.small};
-  font-weight: ${FONTS.semiBold};
+  font-size: ${FONTS.sm};
+  font-weight: ${FONTS_WEIGHT.semiBold};
   cursor: pointer;
 `;
 
