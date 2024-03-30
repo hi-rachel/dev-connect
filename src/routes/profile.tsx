@@ -29,7 +29,7 @@ const AvatarUpload = styled.label`
   overflow: hidden;
   height: 80px;
   border-radius: 50%;
-  background-color: ${COLORS.twitterBlue};
+  background-color: ${COLORS.primary};
   cursor: pointer;
   display: flex;
   justify-content: center;

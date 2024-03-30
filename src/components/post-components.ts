@@ -22,16 +22,16 @@ export const MainBtn = styled.input`
 
 export const AttachFileButton = styled.label`
   padding: 10px 0px;
-  color: ${COLORS.twitterBlue};
+  color: ${COLORS.primary};
   text-align: center;
   border-radius: 20px;
-  border: 1px solid ${COLORS.twitterBlue};
+  border: 1px solid ${COLORS.primary};
   font-size: ${FONTS.sm};
   font-weight: ${FONTS_WEIGHT.semiBold};
   cursor: pointer;
 `;
 
 export const SubmitBtn = styled(MainBtn)`
-  background-color: ${COLORS.twitterBlue};
+  background-color: ${COLORS.primary};
   color: ${COLORS.white};
 `;

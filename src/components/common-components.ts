@@ -35,7 +35,7 @@ export const TextArea = styled.textarea`
   }
   &:focus {
     outline: none;
-    border-color: ${COLORS.twitterBlue};
+    border-color: ${COLORS.primary};
   }
 `;
 

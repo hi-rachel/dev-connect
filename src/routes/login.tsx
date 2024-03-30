@@ -2,12 +2,12 @@ import { useState } from "react";
 import { auth } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
+import { SparklesCore } from "../components/ui/sparkles";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import {
   Input,
   Switcher,
   Title,
-  Wrapper,
   Error,
   Form,
 } from "../components/auth-components";
@@ -50,38 +50,53 @@ export default function CreateAccount() {
     }
   };
   return (
-    <Wrapper>
-      <Title>Log Into X</Title>
-      <Form onSubmit={onSubmit}>
-        <Input
-          onChange={onChange}
-          value={email}
-          name="email"
-          placeholder="Email"
-          type="email"
-          required
+    <div className="h-screen relative w-full flex flex-col items-center justify-center overflow-hidden rounded-md">
+      <div className="w-full absolute inset-0">
+        <SparklesCore
+          id="tsparticlesfullpage"
+          background="transparent"
+          minSize={0.6}
+          maxSize={3}
+          particleDensity={100}
+          className="w-full h-full"
+          particleColor="#5eead4"
         />
-        <Input
-          onChange={onChange}
-          value={password}
-          name="password"
-          placeholder="Password"
-          type="password"
-          required
-        />
-        <Input
-          onChange={onChange}
-          type="submit"
-          value={loading ? "Loading" : "Log In"}
-        />
-      </Form>
-      {error !== "" && <Error>{error}</Error>}
-      <Switcher>
-        Don't have an account ?{" "}
-        <Link to="/create-account">Create one &rarr;</Link>
-      </Switcher>
-      <GithubButton />
-      <GoogleButton />
-    </Wrapper>
+      </div>
+      <div className="z-20 md:w-96 sm:w-80">
+        <Title>Log In</Title>
+        <Form onSubmit={onSubmit}>
+          <Input
+            onChange={onChange}
+            value={email}
+            name="email"
+            placeholder="Email"
+            type="email"
+            required
+          />
+          <Input
+            onChange={onChange}
+            value={password}
+            name="password"
+            placeholder="Password"
+            type="password"
+            required
+          />
+          <Input
+            onChange={onChange}
+            type="submit"
+            value={loading ? "Loading" : "Log In"}
+          />
+        </Form>
+        {error !== "" && <Error>{error}</Error>}
+        <Switcher>
+          Don't have an account ?{" "}
+          <Link to="/create-account">
+            <b>Create one &rarr;</b>
+          </Link>
+        </Switcher>
+        <GithubButton />
+        <GoogleButton />
+      </div>
+    </div>
   );
 }

@@ -7,12 +7,12 @@ import {
   Input,
   Switcher,
   Title,
-  Wrapper,
   Error,
   Form,
 } from "../components/auth-components";
-// import GithubButton from "../components/github-btn";
+import GithubButton from "../components/github-btn";
 import GoogleButton from "../components/google-btn";
+import { SparklesCore } from "../components/ui/sparkles";
 
 export default function CreateAccount() {
   const navigate = useNavigate();
@@ -59,44 +59,60 @@ export default function CreateAccount() {
     }
   };
   return (
-    <Wrapper>
-      <Title>Join Into X</Title>
-      <Form onSubmit={onSubmit}>
-        <Input
-          onChange={onChange}
-          value={name}
-          name="name"
-          placeholder="Name"
-          type="text"
+    <div className="h-screen relative w-full flex flex-col items-center justify-center overflow-hidden rounded-md">
+      <div className="w-full absolute inset-0">
+        <SparklesCore
+          id="tsparticlesfullpage"
+          background="transparent"
+          minSize={0.6}
+          maxSize={3}
+          particleDensity={100}
+          className="w-full h-full"
+          particleColor="#5eead4"
         />
-        <Input
-          onChange={onChange}
-          value={email}
-          name="email"
-          placeholder="Email"
-          type="email"
-          required
-        />
-        <Input
-          onChange={onChange}
-          value={password}
-          name="password"
-          placeholder="Password"
-          type="password"
-          required
-        />
-        <Input
-          onChange={onChange}
-          type="submit"
-          value={loading ? "Loading" : "Create Account"}
-        />
-      </Form>
-      {error !== "" && <Error>{error}</Error>}
-      <Switcher>
-        Already have an account ? <Link to="/login">Log in &rarr;</Link>
-      </Switcher>
-      {/* <GithubButton /> */}
-      <GoogleButton />
-    </Wrapper>
+      </div>
+      <div className="z-20 md:w-96 sm:w-80">
+        <Title>Sign Up</Title>
+        <Form onSubmit={onSubmit}>
+          <Input
+            onChange={onChange}
+            value={name}
+            name="name"
+            placeholder="Name"
+            type="text"
+          />
+          <Input
+            onChange={onChange}
+            value={email}
+            name="email"
+            placeholder="Email"
+            type="email"
+            required
+          />
+          <Input
+            onChange={onChange}
+            value={password}
+            name="password"
+            placeholder="Password"
+            type="password"
+            required
+          />
+          <Input
+            onChange={onChange}
+            type="submit"
+            value={loading ? "Loading" : "Create Account"}
+          />
+        </Form>
+        {error !== "" && <Error>{error}</Error>}
+        <Switcher>
+          Already have an account ?{" "}
+          <Link to="/login">
+            <b>Log in &rarr;</b>
+          </Link>
+        </Switcher>
+        <GithubButton />
+        <GoogleButton />
+      </div>
+    </div>
   );
 }

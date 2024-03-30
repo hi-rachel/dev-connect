@@ -2,15 +2,6 @@ import { styled } from "styled-components";
 import { COLORS } from "../constants/color";
 import { FONTS, FONTS_WEIGHT } from "../constants/font";
 
-export const Wrapper = styled.div`
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  width: 420px;
-  padding: 50px 0px;
-`;
-
 export const Title = styled.h1`
   font-size: ${FONTS.title};
 `;
@@ -25,9 +16,10 @@ export const Form = styled.form`
 `;
 
 export const Input = styled.input`
+  border: 1px solid var(--gray--300);
+  font-weight: ${FONTS_WEIGHT.medium};
   padding: 10px 20px;
   border-radius: 50px;
-  border: none;
   width: 100%;
   font-size: ${FONTS.md};
   &[type="submit"] {
@@ -40,26 +32,26 @@ export const Input = styled.input`
 
 export const Error = styled.span`
   font-weight: ${FONTS_WEIGHT.semiBold};
-  color: ${COLORS.tomato};
+  color: var(--danger);
 `;
 
-export const Switcher = styled.span`
+export const Switcher = styled.div`
+  text-align: center;
   margin-top: 20px;
   margin-bottom: 30px;
   a {
-    color: ${COLORS.twitterBlue};
+    color: ${COLORS.primary};
   }
 `;
 
-export const Button = styled.span`
+export const Button = styled.button`
+  background: transparent;
   margin-top: 20px;
-  background-color: ${COLORS.white};
   font-weight: ${FONTS_WEIGHT.medium};
   width: 100%;
-  color: ${COLORS.black};
   padding: 10px 20px;
   border-radius: 50px;
-  border: 0;
+  border: 1px solid var(--gray--300);
   display: flex;
   gap: 5px;
   align-items: center;
