@@ -11,7 +11,7 @@ import {
   Error,
   Form,
 } from "../components/auth-components";
-// import GithubButton from "../components/github-btn";
+import GithubButton from "../components/github-btn";
 import GoogleButton from "../components/google-btn";
 
 export default function CreateAccount() {
@@ -80,7 +80,7 @@ export default function CreateAccount() {
         Don't have an account ?{" "}
         <Link to="/create-account">Create one &rarr;</Link>
       </Switcher>
-      {/* <GithubButton /> */}
+      <GithubButton />
       <GoogleButton />
     </Wrapper>
   );
