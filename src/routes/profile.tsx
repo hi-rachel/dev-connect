@@ -148,13 +148,13 @@ export default function Profile() {
     );
     const snapshot = await getDocs(tweetQuery);
     const tweets = snapshot.docs.map((doc) => {
-      const { tweet, createdAt, userId, photo } = doc.data();
+      const { tweet, createdAt, userId, photo, username } = doc.data();
       return {
         id: doc.id,
         tweet,
         createdAt,
         userId,
-        username: newUsername,
+        username,
         photo,
       };
     });
@@ -232,12 +232,12 @@ export default function Profile() {
             onKeyDown={onUsernameKeyDown}
           />
         ) : (
-          <Username>{newUsername ?? "Anonymous"}</Username>
+          <Username>{newUsername}</Username>
         )}
       </UsernameSpace>
       <Tweets>
         {myTweets.map((tweet) => (
-          <Tweet key={tweet.id} {...tweet} />
+          <Tweet key={tweet.id} {...tweet} username={newUsername} />
         ))}
       </Tweets>
     </Wrapper>
