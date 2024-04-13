@@ -244,7 +244,7 @@ export default function Profile() {
         </UsernameSpace>
         <Tweets>
           {myTweets.map((tweet) => (
-            <Tweet key={tweet.id} {...tweet} username={username} />
+            <Tweet key={tweet.id} {...tweet} />
           ))}
         </Tweets>
       </Wrapper>
