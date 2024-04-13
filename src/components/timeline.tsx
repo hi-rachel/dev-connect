@@ -42,7 +42,6 @@ export default function Timeline() {
         const tweets = snapshot.docs.map((doc) => {
           const { tweet, createdAt, userId, username, photo, userImg } =
             doc.data();
-
           return {
             id: doc.id,
             tweet,

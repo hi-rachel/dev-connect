@@ -3,14 +3,13 @@ import { auth, db, storage } from "../firebase";
 import { useEffect, useState } from "react";
 import { FONTS } from "../constants/font";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { updateProfile } from "firebase/auth";
+import { Unsubscribe, updateProfile } from "firebase/auth";
 import {
   collection,
-  getDocs,
   limit,
+  onSnapshot,
   orderBy,
   query,
-  where,
 } from "firebase/firestore";
 import { ITweet } from "../components/timeline";
 import Tweet from "../components/tweet";
@@ -140,31 +139,35 @@ export default function Profile() {
     }
   };
 
-  const fetchTweets = async () => {
-    const tweetQuery = query(
-      collection(db, "tweets"),
-      where("userId", "==", user?.uid),
-      orderBy("createdAt", "desc"),
-      limit(25)
-    );
-    const snapshot = await getDocs(tweetQuery);
-    const tweets = snapshot.docs.map((doc) => {
-      const { tweet, createdAt, userId, photo, username, userImg } = doc.data();
-      return {
-        id: doc.id,
-        tweet,
-        createdAt,
-        userId,
-        username,
-        photo,
-        userImg,
-      };
-    });
-    setMyTweets(tweets);
-  };
-
   useEffect(() => {
+    let unsubscribe: Unsubscribe | null = null;
+    const fetchTweets = () => {
+      const tweetsQuery = query(
+        collection(db, "tweets"),
+        orderBy("createdAt", "desc"),
+        limit(50)
+      );
+      unsubscribe = onSnapshot(tweetsQuery, (snapshot) => {
+        const tweets = snapshot.docs.map((doc) => {
+          const { tweet, createdAt, userId, username, photo, userImg } =
+            doc.data();
+          return {
+            id: doc.id,
+            tweet,
+            createdAt,
+            userId,
+            username,
+            photo,
+            userImg,
+          };
+        });
+        setMyTweets(tweets);
+      });
+    };
     fetchTweets();
+    return () => {
+      unsubscribe && unsubscribe();
+    };
   }, []);
 
   return (
