@@ -1,5 +1,4 @@
 import { styled } from "styled-components";
-import { COLORS } from "../constants/color";
 import { FONTS, FONTS_WEIGHT } from "../constants/font";
 
 export const Title = styled.h1`
@@ -40,7 +39,7 @@ export const Switcher = styled.div`
   margin-top: 20px;
   margin-bottom: 30px;
   a {
-    color: ${COLORS.primary};
+    color: var(--primary);
   }
 `;
 

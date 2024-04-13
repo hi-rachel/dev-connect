@@ -1,5 +1,4 @@
 import { styled } from "styled-components";
-import { COLORS } from "../constants/color";
 import { FONTS, FONTS_WEIGHT } from "../constants/font";
 
 export const Form = styled.form`
@@ -22,16 +21,17 @@ export const MainBtn = styled.input`
 
 export const AttachFileButton = styled.label`
   padding: 10px 0px;
-  color: ${COLORS.primary};
+  color: var(--primary);
   text-align: center;
   border-radius: 20px;
-  border: 1px solid ${COLORS.primary};
+  border: 1px solid var(--primary);
   font-size: ${FONTS.sm};
   font-weight: ${FONTS_WEIGHT.semiBold};
   cursor: pointer;
 `;
 
 export const SubmitBtn = styled(MainBtn)`
-  background-color: ${COLORS.primary};
-  color: ${COLORS.white};
+  background-color: var(--primary);
+  color: var(--black);
+  font-weight: ${FONTS_WEIGHT.semiBold};
 `;

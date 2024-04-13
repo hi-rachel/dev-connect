@@ -1,7 +1,6 @@
 import { styled } from "styled-components";
 import { auth, db, storage } from "../firebase";
 import { useEffect, useState } from "react";
-import { COLORS } from "../constants/color";
 import { FONTS } from "../constants/font";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
@@ -29,7 +28,7 @@ const AvatarUpload = styled.label`
   overflow: hidden;
   height: 80px;
   border-radius: 50%;
-  background-color: ${COLORS.primary};
+  background-color: var(--primary);
   cursor: pointer;
   display: flex;
   justify-content: center;
@@ -74,6 +73,7 @@ const SaveUsernameIcon = styled(EditUsernameIcon)`
 `;
 
 const Tweets = styled.div`
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px;
@@ -81,11 +81,12 @@ const Tweets = styled.div`
 
 export default function Profile() {
   const user = auth.currentUser;
+
+  if (!user) return null;
   const [myTweets, setMyTweets] = useState<ITweet[]>([]);
   const [avatar, setAvatar] = useState(user?.photoURL);
-  const [newUsername, setNewUsername] = useState(
-    user?.displayName ?? "Anonymous"
-  );
+  const [username] = useState(user.displayName || "Anonymous");
+  const [newUsername, setNewUsername] = useState(username);
   const [editUsername, setEditUsername] = useState(false);
 
   const onAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -123,7 +124,7 @@ export default function Profile() {
 
   const onUsernameSave = async () => {
     if (!user || !setEditUsername) return;
-    if (newUsername.length < 2) {
+    if (username.length < 2) {
       alert("Please enter a username with a least 2 characters.");
       setEditUsername(false);
       return;
@@ -148,7 +149,7 @@ export default function Profile() {
     );
     const snapshot = await getDocs(tweetQuery);
     const tweets = snapshot.docs.map((doc) => {
-      const { tweet, createdAt, userId, photo, username } = doc.data();
+      const { tweet, createdAt, userId, photo, username, userImg } = doc.data();
       return {
         id: doc.id,
         tweet,
@@ -156,6 +157,7 @@ export default function Profile() {
         userId,
         username,
         photo,
+        userImg,
       };
     });
     setMyTweets(tweets);
@@ -166,80 +168,83 @@ export default function Profile() {
   }, []);
 
   return (
-    <Wrapper>
-      <AvatarUpload htmlFor="avatar">
-        {avatar ? (
-          <AvartarImg src={avatar} alt="avatar" />
-        ) : (
-          <svg
-            fill="currentColor"
-            viewBox="0 0 20 20"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
-          </svg>
-        )}
-      </AvatarUpload>
-      <AvartarInput
-        onChange={onAvatarChange}
-        id="avatar"
-        type="file"
-        accept="image/*"
-      />
-      <UsernameSpace>
-        {editUsername ? (
-          <SaveUsernameIcon onClick={onUsernameSave}>
+    user &&
+    user.displayName && (
+      <Wrapper>
+        <AvatarUpload htmlFor="avatar">
+          {avatar ? (
+            <AvartarImg src={avatar} alt="avatar" />
+          ) : (
             <svg
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={1.5}
-              viewBox="0 0 24 24"
+              fill="currentColor"
+              viewBox="0 0 20 20"
               xmlns="http://www.w3.org/2000/svg"
               aria-hidden="true"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-              />
+              <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
             </svg>
-          </SaveUsernameIcon>
-        ) : (
-          <EditUsernameIcon onClick={onUsernameEdit}>
-            <svg
-              fill="none"
-              stroke="currentColor"
-              strokeWidth={1.5}
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
-              />
-            </svg>
-          </EditUsernameIcon>
-        )}
-        {editUsername ? (
-          <EditUsernameTextArea
-            rows={1}
-            maxLength={20}
-            onChange={onUsernameChange}
-            value={newUsername}
-            onKeyDown={onUsernameKeyDown}
-          />
-        ) : (
-          <Username>{newUsername}</Username>
-        )}
-      </UsernameSpace>
-      <Tweets>
-        {myTweets.map((tweet) => (
-          <Tweet key={tweet.id} {...tweet} username={newUsername} />
-        ))}
-      </Tweets>
-    </Wrapper>
+          )}
+        </AvatarUpload>
+        <AvartarInput
+          onChange={onAvatarChange}
+          id="avatar"
+          type="file"
+          accept="image/*"
+        />
+        <UsernameSpace>
+          {editUsername ? (
+            <SaveUsernameIcon onClick={onUsernameSave}>
+              <svg
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
+              </svg>
+            </SaveUsernameIcon>
+          ) : (
+            <EditUsernameIcon onClick={onUsernameEdit}>
+              <svg
+                fill="none"
+                stroke="currentColor"
+                strokeWidth={1.5}
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
+                />
+              </svg>
+            </EditUsernameIcon>
+          )}
+          {editUsername ? (
+            <EditUsernameTextArea
+              rows={1}
+              maxLength={20}
+              onChange={onUsernameChange}
+              value={newUsername}
+              onKeyDown={onUsernameKeyDown}
+            />
+          ) : (
+            <Username>{username}</Username>
+          )}
+        </UsernameSpace>
+        <Tweets>
+          {myTweets.map((tweet) => (
+            <Tweet key={tweet.id} {...tweet} username={username} />
+          ))}
+        </Tweets>
+      </Wrapper>
+    )
   );
 }

@@ -1,7 +1,6 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
 import { auth } from "../firebase";
-import { COLORS } from "../constants/color";
 import { useState } from "react";
 
 const Wrapper = styled.div`
@@ -31,12 +30,17 @@ const MenuItem = styled.div`
   border-radius: 50%;
   svg {
     width: 30px;
-    /* fill: white; */
-    color: ${COLORS.white};
+    color: var(--foreground);
   }
   &:hover,
   &:active {
-    background-color: ${COLORS.grey};
+    background-color: var(--gray-100);
+  }
+  @media (prefers-color-scheme: dark) {
+    &:hover,
+    &:active {
+      background-color: var(--gray);
+    }
   }
 `;
 

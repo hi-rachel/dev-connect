@@ -1,17 +1,13 @@
 import { styled } from "styled-components";
-import { COLORS } from "../constants/color";
 import { FONTS, FONTS_WEIGHT } from "../constants/font";
 
 export const EditButton = styled.button`
   background-color: #0d1117;
   font-weight: ${FONTS_WEIGHT.medium};
-  border: 0;
   font-size: ${FONTS.sm};
   padding: 5px 10px;
   border-radius: 5px;
-  border: 1px solid #e6edf3c6;
   cursor: pointer;
-  color: #e6edf3;
   &:hover,
   &:active {
     opacity: 0.8;
@@ -20,12 +16,12 @@ export const EditButton = styled.button`
 
 export const TextArea = styled.textarea`
   overflow: hidden;
-  border: 2px solid white;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   padding: 20px;
   border-radius: 20px;
   font-size: ${FONTS.md};
-  color: ${COLORS.white};
-  background-color: ${COLORS.black};
+  color: var(--foreground);
+  background-color: var(--background);
   width: 100%;
   resize: none;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
@@ -35,7 +31,11 @@ export const TextArea = styled.textarea`
   }
   &:focus {
     outline: none;
-    border-color: ${COLORS.primary};
+    border-color: var(--primary);
+  }
+  @media (prefers-color-scheme: dark) {
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 4px 12px;
+    border: 1px solid var(--gray);
   }
 `;
 
