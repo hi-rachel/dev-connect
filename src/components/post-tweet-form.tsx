@@ -39,6 +39,7 @@ export default function PostTweetForm() {
         createdAt: new Date().toISOString(),
         username: user.displayName || "Anonymous",
         userId: user.uid,
+        userImg: user.photoURL,
       });
 
       if (file) {

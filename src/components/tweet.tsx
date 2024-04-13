@@ -16,9 +16,14 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 3fr 1fr;
   padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.5);
   border-radius: 15px;
   height: auto;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+
+  @media (prefers-color-scheme: dark) {
+    box-shadow: rgba(255, 255, 255, 0.2) 0px 4px 12px;
+    border: 1px solid var(--gray);
+  }
 `;
 
 const Column = styled.div``;
@@ -34,17 +39,27 @@ const Photo = styled.img`
   border-radius: 15px;
 `;
 
-const Username = styled.span`
-  display: block;
-  font-weight: ${FONTS_WEIGHT.semiBold};
-  font-size: normal;
-  margin-bottom: 10px;
+const UserWrapper = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 15px;
 `;
 
-// const UserProfilePhoto = styled.img`
-//   width: 100px;
-//   border-radius: 50%;
-// `;
+const Username = styled.p`
+  font-weight: ${FONTS_WEIGHT.semiBold};
+`;
+
+const UserProfilePhoto = styled.img`
+  width: 36px;
+  border-radius: 50%;
+`;
+
+const UserProfileNoPhoto = styled.div`
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--primary);
+`;
 
 const Payload = styled.p`
   margin: 10px 0px;
@@ -52,10 +67,14 @@ const Payload = styled.p`
 `;
 
 const DeleteTweetButton = styled(EditButton)`
+  background-color: var(--danger);
+  color: var(--foreground);
   margin-right: 15px;
 `;
 
-const EditTweetButton = styled(EditButton)``;
+const EditTweetButton = styled(EditButton)`
+  background-color: var(--success);
+`;
 
 const ChangeFileInput = styled(AttachFileInput)``;
 
@@ -80,6 +99,7 @@ export default function Tweet({
   userId,
   id,
   createdAt,
+  userImg,
 }: ITweet) {
   const user = auth.currentUser;
 
@@ -169,8 +189,15 @@ export default function Tweet({
   return (
     <Wrapper>
       <Column>
-        <Username>{username}</Username>
-        {/* <UserProfilePhoto src={user && user.photoURL}>{}</UserProfilePhoto> */}
+        <UserWrapper>
+          {userImg ? (
+            <UserProfilePhoto src={userImg} alt="user-profile-image" />
+          ) : (
+            <UserProfileNoPhoto />
+          )}
+
+          <Username>{username}</Username>
+        </UserWrapper>
         {edit ? (
           <EditTextArea
             rows={5}
