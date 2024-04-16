@@ -35,6 +35,7 @@ export default function Timeline() {
   const [tweets, setTweets] = useState<ITweet[]>([]);
   const [lastVisible, setLastVisible] =
     useState<firebase.firestore.DocumentData | null>(null);
+  const [showLoadMore, setShowLoadMore] = useState(true);
 
   useEffect(() => {
     let unsubscribe: Unsubscribe | null = null;
@@ -62,6 +63,7 @@ export default function Timeline() {
         setTweets(newTweets);
         const lastVisibleDoc = snapshot.docs[snapshot.docs.length - 1];
         setLastVisible(lastVisibleDoc);
+        setShowLoadMore(snapshot.size >= 20);
       });
     };
 
@@ -99,8 +101,13 @@ export default function Timeline() {
       });
       setTweets((prevTweets) => [...prevTweets, ...newTweets]);
 
-      const lastVisibleDoc = snapshot.docs[snapshot.docs.length - 1];
-      setLastVisible(lastVisibleDoc);
+      if (snapshot.size > 0) {
+        const lastVisibleDoc = snapshot.docs[snapshot.docs.length - 1];
+        setLastVisible(lastVisibleDoc);
+        setShowLoadMore(snapshot.size >= 20);
+      } else {
+        setShowLoadMore(false);
+      }
     }
   };
 
@@ -109,7 +116,7 @@ export default function Timeline() {
       {tweets.map((tweet) => (
         <Tweet key={tweet.id} {...tweet} />
       ))}
-      <button onClick={loadMore}>Load More</button>
+      {showLoadMore && <button onClick={loadMore}>Load More</button>}
     </Wrapper>
   );
 }
