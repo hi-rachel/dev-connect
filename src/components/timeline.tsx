@@ -7,7 +7,7 @@ import {
   query,
   startAfter,
 } from "firebase/firestore";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { styled } from "styled-components";
 import { db } from "../firebase";
 import Tweet from "./tweet";
@@ -31,15 +31,23 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
+const Loader = styled.div`
+  margin-top: 20px;
+  text-align: center;
+`;
+
 export default function Timeline() {
   const [tweets, setTweets] = useState<ITweet[]>([]);
   const [lastVisible, setLastVisible] =
     useState<firebase.firestore.DocumentData | null>(null);
   const [showLoadMore, setShowLoadMore] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const loaderRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     let unsubscribe: Unsubscribe | null = null;
     const fetchTweets = () => {
+      setLoading(true);
       const tweetsQuery = query(
         collection(db, "tweets"),
         orderBy("createdAt", "desc"),
@@ -60,10 +68,11 @@ export default function Timeline() {
             userImg,
           });
         });
-        setTweets(newTweets);
+        setTweets((prevTweets) => [...prevTweets, ...newTweets]);
         const lastVisibleDoc = snapshot.docs[snapshot.docs.length - 1];
         setLastVisible(lastVisibleDoc);
         setShowLoadMore(snapshot.size >= 20);
+        setLoading(false);
       });
     };
 
@@ -74,8 +83,29 @@ export default function Timeline() {
     };
   }, []);
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (isBottom() && showLoadMore && !loading) {
+        loaderRef.current?.click();
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [showLoadMore, loading]);
+
+  const isBottom = () => {
+    return (
+      window.innerHeight + window.scrollY >=
+      document.documentElement.scrollHeight
+    );
+  };
+
   const loadMore = async () => {
     if (lastVisible) {
+      setLoading(true);
       const tweetsRef = collection(db, "tweets");
       const tweetsQuery = query(
         tweetsRef,
@@ -101,13 +131,10 @@ export default function Timeline() {
       });
       setTweets((prevTweets) => [...prevTweets, ...newTweets]);
 
-      if (snapshot.size > 0) {
-        const lastVisibleDoc = snapshot.docs[snapshot.docs.length - 1];
-        setLastVisible(lastVisibleDoc);
-        setShowLoadMore(snapshot.size >= 20);
-      } else {
-        setShowLoadMore(false);
-      }
+      const lastVisibleDoc = snapshot.docs[snapshot.docs.length - 1];
+      setLastVisible(lastVisibleDoc);
+      setShowLoadMore(snapshot.size >= 20);
+      setLoading(false);
     }
   };
 
@@ -116,7 +143,12 @@ export default function Timeline() {
       {tweets.map((tweet) => (
         <Tweet key={tweet.id} {...tweet} />
       ))}
-      {showLoadMore && <button onClick={loadMore}>Load More</button>}
+      {loading && <Loader>Loading...</Loader>}
+      {showLoadMore && (
+        <button ref={loaderRef} style={{ display: "none" }} onClick={loadMore}>
+          Load More
+        </button>
+      )}
     </Wrapper>
   );
 }
