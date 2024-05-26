@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { FONTS, FONTS_WEIGHT } from "../constants/font";
+import { FONTS, FONTS_WEIGHT } from "../constants/fonts";
 
 export const Title = styled.h1`
   font-size: ${FONTS.title};

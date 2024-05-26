@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Form, AttachFileButton, SubmitBtn } from "./post-components";
-import { TextArea, AttachFileInput } from "./common-components";
+import { Form, AttachFileButton, SubmitBtn } from "./PostTweetForm.styled";
+import { TextArea, AttachFileInput } from "../common/common.styled";
 import { addDoc, collection, updateDoc } from "firebase/firestore";
 import { auth, db, storage } from "../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";

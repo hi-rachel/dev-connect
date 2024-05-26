@@ -1,6 +1,4 @@
-import { styled } from "styled-components";
-import { ITweet } from "./timeline";
-import { FONTS, FONTS_WEIGHT } from "../constants/font";
+import { ITweet } from "./Timeline";
 import { auth, db, storage } from "../firebase";
 import { deleteDoc, doc, updateDoc } from "firebase/firestore";
 import {
@@ -10,87 +8,22 @@ import {
   uploadBytes,
 } from "firebase/storage";
 import React, { useEffect, useRef, useState } from "react";
-import { EditButton, TextArea, AttachFileInput } from "./common-components";
-
-const Wrapper = styled.div`
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-  padding: 20px;
-  border-radius: 15px;
-  height: auto;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-
-  @media (prefers-color-scheme: dark) {
-    box-shadow: rgba(255, 255, 255, 0.2) 0px 4px 12px;
-    border: 1px solid var(--gray);
-  }
-`;
-
-const Column = styled.div``;
-
-const EditTextArea = styled(TextArea)`
-  margin-right: 20px;
-  margin-bottom: 20px;
-  width: 90%;
-`;
-
-const Photo = styled.img`
-  width: 100%;
-  border-radius: 15px;
-`;
-
-const UserWrapper = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 15px;
-`;
-
-const Username = styled.p`
-  font-weight: ${FONTS_WEIGHT.semiBold};
-`;
-
-const UserProfilePhoto = styled.img`
-  width: 36px;
-  border-radius: 50%;
-`;
-
-const UserProfileNoPhoto = styled.div`
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: var(--primary);
-`;
-
-const Payload = styled.p`
-  margin: 10px 0px;
-  font-size: ${FONTS.lg};
-`;
-
-const DeleteTweetButton = styled(EditButton)`
-  background-color: var(--danger);
-  color: var(--foreground);
-  margin-right: 15px;
-`;
-
-const EditTweetButton = styled(EditButton)`
-  background-color: var(--success);
-`;
-
-const ChangeFileInput = styled(AttachFileInput)``;
-
-const ChangeFileButton = styled(EditButton)`
-  margin-bottom: 10px;
-  display: flex;
-  align-items: center;
-  svg {
-    height: 15px;
-    margin-right: 5px;
-  }
-`;
-
-const TweetDate = styled.div`
-  margin-top: 15px;
-`;
+import {
+  ChangeFileButton,
+  ChangeFileInput,
+  Column,
+  DeleteTweetButton,
+  EditTextArea,
+  EditTweetButton,
+  Payload,
+  Photo,
+  TweetDate,
+  UserProfileNoPhoto,
+  UserProfilePhoto,
+  UserWrapper,
+  Username,
+  Wrapper,
+} from "./Tweet.styled";
 
 export default function Tweet({
   username,

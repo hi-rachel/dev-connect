@@ -1,92 +1,94 @@
-import { styled } from "styled-components";
+import { useState } from "react";
+import { useQuery, useMutation } from "react-query";
 import { auth, db, storage } from "../firebase";
-import { useEffect, useState } from "react";
-import { FONTS } from "../constants/font";
+
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { Unsubscribe, updateProfile } from "firebase/auth";
+import { updateProfile } from "firebase/auth";
 import {
   collection,
+  getDocs,
   limit,
-  onSnapshot,
   orderBy,
   query,
+  where,
+  updateDoc,
+  doc,
 } from "firebase/firestore";
-import { ITweet } from "../components/timeline";
-import Tweet from "../components/tweet";
-import { TextArea } from "../components/common-components";
-
-const Wrapper = styled.div`
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  gap: 20px;
-`;
-
-const AvatarUpload = styled.label`
-  width: 80px;
-  overflow: hidden;
-  height: 80px;
-  border-radius: 50%;
-  background-color: var(--primary);
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  svg {
-    width: 50px;
-  }
-`;
-
-const AvartarImg = styled.img`
-  width: 100%;
-  height: 100%;
-`;
-
-const AvartarInput = styled.input`
-  display: none;
-`;
-
-const UsernameSpace = styled.form`
-  display: flex;
-  align-items: center;
-`;
-
-const Username = styled.div`
-  font-size: ${FONTS.xl};
-`;
-
-const EditUsernameTextArea = styled(TextArea)`
-  width: fit-content;
-  padding: 5px;
-`;
-
-const EditUsernameIcon = styled.div`
-  width: 22px;
-  height: 22px;
-  margin-right: 8px;
-`;
-
-const SaveUsernameIcon = styled(EditUsernameIcon)`
-  width: 32px;
-  height: 32px;
-`;
-
-const Tweets = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
+import { ITweet } from "../timeline/Timeline";
+import Tweet from "../timeline/Tweet";
+import {
+  AvartarImg,
+  AvartarInput,
+  AvatarUpload,
+  EditUsernameIcon,
+  EditUsernameTextArea,
+  SaveUsernameIcon,
+  Tweets,
+  Username,
+  UsernameSpace,
+  Wrapper,
+} from "./Profile.styled";
 
 export default function Profile() {
   const user = auth.currentUser;
 
   if (!user) return null;
-  const [myTweets, setMyTweets] = useState<ITweet[]>([]);
   const [avatar, setAvatar] = useState(user?.photoURL);
-  const [username] = useState(user.displayName || "Anonymous");
+  const [username, setUsername] = useState(user.displayName || "Anonymous");
   const [newUsername, setNewUsername] = useState(username);
   const [editUsername, setEditUsername] = useState(false);
+
+  const { data: myTweets, refetch } = useQuery<ITweet[]>(
+    ["myTweets", user.uid],
+    async () => {
+      const tweetsQuery = query(
+        collection(db, "tweets"),
+        where("userId", "==", user.uid),
+        orderBy("createdAt", "desc"),
+        limit(100)
+      );
+      const snapshot = await getDocs(tweetsQuery);
+      return snapshot.docs.map((doc) => {
+        const { tweet, createdAt, userId, username, photo, userImg } =
+          doc.data();
+        return {
+          id: doc.id,
+          tweet,
+          createdAt,
+          userId,
+          username,
+          photo,
+          userImg,
+        };
+      });
+    }
+  );
+
+  const updateUserProfile = useMutation(
+    async (newUsername: string) => {
+      await updateProfile(user, {
+        displayName: newUsername,
+      });
+
+      // 사용자의 모든 트윗을 가져와서 각각 업데이트합니다.
+      const userTweetsQuery = query(
+        collection(db, "tweets"),
+        where("userId", "==", user.uid)
+      );
+      const querySnapshot = await getDocs(userTweetsQuery);
+      querySnapshot.forEach(async (document) => {
+        await updateDoc(doc(db, "tweets", document.id), {
+          username: newUsername,
+        });
+      });
+    },
+    {
+      onSuccess: () => {
+        setUsername(newUsername);
+        refetch();
+      },
+    }
+  );
 
   const onAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!user) return;
@@ -106,10 +108,15 @@ export default function Profile() {
     }
   };
 
-  const onUsernameKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+  const onUsernameKeyDown = async (
+    e: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      onUsernameSave();
+      if (newUsername !== username) {
+        await updateUserProfile.mutateAsync(newUsername);
+      }
+      setEditUsername(false);
     }
   };
 
@@ -123,53 +130,16 @@ export default function Profile() {
 
   const onUsernameSave = async () => {
     if (!user || !setEditUsername) return;
-    if (username.length < 2) {
-      alert("Please enter a username with a least 2 characters.");
+    if (newUsername.length < 2) {
+      alert("Please enter a username with at least 2 characters.");
       setEditUsername(false);
       return;
     }
-    try {
-      await updateProfile(user, {
-        displayName: newUsername,
-      });
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setEditUsername(false);
+    if (newUsername !== username) {
+      await updateUserProfile.mutateAsync(newUsername);
     }
+    setEditUsername(false);
   };
-
-  useEffect(() => {
-    let unsubscribe: Unsubscribe | null = null;
-    const fetchTweets = () => {
-      const tweetsQuery = query(
-        collection(db, "tweets"),
-        orderBy("createdAt", "desc"),
-        limit(50)
-      );
-      unsubscribe = onSnapshot(tweetsQuery, (snapshot) => {
-        const tweets = snapshot.docs.map((doc) => {
-          const { tweet, createdAt, userId, username, photo, userImg } =
-            doc.data();
-          return {
-            id: doc.id,
-            tweet,
-            createdAt,
-            userId,
-            username,
-            photo,
-            userImg,
-          };
-        });
-        setMyTweets(tweets);
-      });
-    };
-    fetchTweets();
-    return () => {
-      unsubscribe && unsubscribe();
-    };
-  }, []);
-
   return (
     user &&
     user.displayName && (
@@ -243,7 +213,7 @@ export default function Profile() {
           )}
         </UsernameSpace>
         <Tweets>
-          {myTweets.map((tweet) => (
+          {myTweets?.map((tweet) => (
             <Tweet key={tweet.id} {...tweet} />
           ))}
         </Tweets>

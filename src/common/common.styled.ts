@@ -1,8 +1,7 @@
 import { styled } from "styled-components";
-import { FONTS, FONTS_WEIGHT } from "../constants/font";
+import { FONTS, FONTS_WEIGHT } from "../constants/fonts";
 
 export const EditButton = styled.button`
-  background-color: #0d1117;
   font-weight: ${FONTS_WEIGHT.medium};
   font-size: ${FONTS.sm};
   padding: 5px 10px;
@@ -15,13 +14,12 @@ export const EditButton = styled.button`
 `;
 
 export const TextArea = styled.textarea`
+  background: transparent;
   overflow: hidden;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
   padding: 20px;
   border-radius: 20px;
   font-size: ${FONTS.md};
-  color: var(--foreground);
-  background-color: var(--background);
   width: 100%;
   resize: none;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,

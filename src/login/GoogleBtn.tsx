@@ -2,9 +2,9 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../firebase";
 import { FirebaseError } from "firebase/app";
 import { useNavigate } from "react-router-dom";
-import { Button, Logo } from "./auth-components";
+import { Button, Logo } from "../common/auth.styled";
 import { useState } from "react";
-import { Error } from "./auth-components";
+import { Error } from "../common/auth.styled";
 
 export default function GoogleButton() {
   const [loading, setLoading] = useState(false);

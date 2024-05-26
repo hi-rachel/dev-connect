@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { FONTS } from "../constants/font";
+import { FONTS } from "../constants/fonts";
 
 const Wrapper = styled.div`
   height: 100vh;

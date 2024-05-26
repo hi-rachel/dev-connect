@@ -1,6 +1,6 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { styled } from "styled-components";
-import { auth } from "../firebase";
+import { auth } from "./firebase";
 import { useState } from "react";
 
 const Wrapper = styled.div`
