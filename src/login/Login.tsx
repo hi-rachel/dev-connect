@@ -5,7 +5,7 @@ import { FirebaseError } from "firebase/app";
 import { SparklesCore } from "../common/ui/Sparkles";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Input, Switcher, Title, Error, Form } from "../common/auth.styled";
-// import GithubButton from "../components/github-btn";
+import GithubButton from "./GithubBtn";
 import GoogleButton from "./GoogleBtn";
 
 export default function CreateAccount() {
@@ -88,7 +88,7 @@ export default function CreateAccount() {
             <b>Create one &rarr;</b>
           </Link>
         </Switcher>
-        {/* <GithubButton /> */}
+        <GithubButton />
         <GoogleButton />
       </div>
     </div>

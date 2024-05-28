@@ -4,7 +4,7 @@ import { auth } from "../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
 import { Input, Switcher, Title, Error, Form } from "../common/auth.styled";
-// import GithubButton from "../components/github-btn";
+import GithubButton from "./GithubBtn";
 import GoogleButton from "./GoogleBtn";
 import { SparklesCore } from "../common/ui/Sparkles";
 
@@ -104,7 +104,7 @@ export default function CreateAccount() {
             <b>Log in &rarr;</b>
           </Link>
         </Switcher>
-        {/* <GithubButton /> */}
+        <GithubButton />
         <GoogleButton />
       </div>
     </div>
