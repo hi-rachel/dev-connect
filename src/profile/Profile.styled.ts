@@ -64,3 +64,8 @@ export const Tweets = styled.div`
   flex-direction: column;
   gap: 10px;
 `;
+
+export const Loader = styled.div`
+  padding: 20px;
+  text-align: center;
+`;

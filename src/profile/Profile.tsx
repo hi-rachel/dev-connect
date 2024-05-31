@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { useQuery, useMutation } from "react-query";
+import { useState, useEffect } from "react";
+import { useMutation } from "react-query";
 import { auth, db, storage } from "../firebase";
 
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
@@ -7,12 +7,13 @@ import { updateProfile } from "firebase/auth";
 import {
   collection,
   getDocs,
-  limit,
   orderBy,
   query,
   where,
   updateDoc,
   doc,
+  limit,
+  startAfter,
 } from "firebase/firestore";
 import { ITweet } from "../timeline/Timeline";
 import Tweet from "../timeline/Tweet";
@@ -22,6 +23,7 @@ import {
   AvatarUpload,
   EditUsernameIcon,
   EditUsernameTextArea,
+  Loader,
   SaveUsernameIcon,
   Tweets,
   Username,
@@ -37,32 +39,95 @@ export default function Profile() {
   const [username, setUsername] = useState(user.displayName || "Anonymous");
   const [newUsername, setNewUsername] = useState(username);
   const [editUsername, setEditUsername] = useState(false);
+  const [myTweets, setMyTweets] = useState<ITweet[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasMoreData, setHasMoreData] = useState(true);
+  const pageSize = 5;
 
-  const { data: myTweets, refetch } = useQuery<ITweet[]>(
-    ["myTweets", user.uid],
-    async () => {
-      const tweetsQuery = query(
-        collection(db, "tweets"),
-        where("userId", "==", user.uid),
-        orderBy("createdAt", "desc"),
-        limit(100)
-      );
-      const snapshot = await getDocs(tweetsQuery);
-      return snapshot.docs.map((doc) => {
-        const { tweet, createdAt, userId, username, photo, userImg } =
-          doc.data();
-        return {
-          id: doc.id,
-          tweet,
-          createdAt,
-          userId,
-          username,
-          photo,
-          userImg,
-        };
+  useEffect(() => {
+    fetchTweets();
+  }, []);
+
+  const fetchTweets = async () => {
+    setIsLoading(true);
+    const tweetsQuery = query(
+      collection(db, "tweets"),
+      where("userId", "==", user.uid),
+      orderBy("createdAt", "desc"),
+      limit(pageSize)
+    );
+    const snapshot = await getDocs(tweetsQuery);
+    const fetchedTweets: ITweet[] = [];
+    snapshot.forEach((doc) => {
+      const { tweet, createdAt, userId, username, photo, userImg } = doc.data();
+      fetchedTweets.push({
+        id: doc.id,
+        tweet,
+        createdAt,
+        userId,
+        username,
+        photo,
+        userImg,
       });
+    });
+    setMyTweets(fetchedTweets);
+    setIsLoading(false);
+    if (snapshot.size < pageSize) {
+      setHasMoreData(false);
     }
-  );
+  };
+
+  const handleScroll = () => {
+    const scrollHeight = document.documentElement.scrollHeight;
+    const scrollTop = document.documentElement.scrollTop;
+    const clientHeight = document.documentElement.clientHeight;
+    if (
+      scrollTop + clientHeight + 100 >= scrollHeight &&
+      !isLoading &&
+      hasMoreData
+    ) {
+      fetchNextTweets();
+    }
+  };
+
+  const fetchNextTweets = async () => {
+    setIsLoading(true);
+    const lastTweet = myTweets[myTweets.length - 1];
+    const tweetsQuery = query(
+      collection(db, "tweets"),
+      where("userId", "==", user.uid),
+      orderBy("createdAt", "desc"),
+      startAfter(lastTweet?.createdAt),
+      limit(pageSize)
+    );
+    const snapshot = await getDocs(tweetsQuery);
+    const newTweets: ITweet[] = [];
+    snapshot.forEach((doc) => {
+      const { tweet, createdAt, userId, username, photo, userImg } = doc.data();
+      newTweets.push({
+        id: doc.id,
+        tweet,
+        createdAt,
+        userId,
+        username,
+        photo,
+        userImg,
+      });
+    });
+    setMyTweets((prevTweets) => [...prevTweets, ...newTweets]);
+    setIsLoading(false);
+    if (snapshot.size < pageSize) {
+      setHasMoreData(false);
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [isLoading, hasMoreData]);
 
   const updateUserProfile = useMutation(
     async (newUsername: string) => {
@@ -85,7 +150,7 @@ export default function Profile() {
     {
       onSuccess: () => {
         setUsername(newUsername);
-        refetch();
+        fetchTweets(); // 프로필이름이 변경될 때마다 트윗 목록을 다시 가져옴
       },
     }
   );
@@ -140,6 +205,7 @@ export default function Profile() {
     }
     setEditUsername(false);
   };
+
   return (
     user &&
     user.displayName && (
@@ -213,10 +279,11 @@ export default function Profile() {
           )}
         </UsernameSpace>
         <Tweets>
-          {myTweets?.map((tweet) => (
-            <Tweet key={tweet.id} {...tweet} />
+          {myTweets?.map((tweet, index) => (
+            <Tweet key={`${tweet.id}-${index}`} {...tweet} />
           ))}
         </Tweets>
+        {isLoading && <Loader>isLoading...</Loader>}
       </Wrapper>
     )
   );
