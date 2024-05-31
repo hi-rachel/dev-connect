@@ -8,10 +8,11 @@ import {
   startAfter,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { styled } from "styled-components";
 import { db } from "../firebase";
 import Tweet from "./Tweet";
 import { Unsubscribe } from "firebase/auth";
+
+import { Loader, Wrapper } from "./Timeline.styled";
 
 export interface ITweet {
   id: string;
@@ -22,18 +23,6 @@ export interface ITweet {
   createdAt: string;
   userImg: string;
 }
-
-const Wrapper = styled.div`
-  margin-top: 50px;
-  display: flex;
-  gap: 10px;
-  flex-direction: column;
-`;
-
-const Loader = styled.div`
-  padding: 20px;
-  text-align: center;
-`;
 
 export default function Timeline() {
   const [tweets, setTweets] = useState<ITweet[]>([]);
