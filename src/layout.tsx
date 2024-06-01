@@ -1,48 +1,7 @@
 import { Link, Outlet, useNavigate } from "react-router-dom";
-import { styled } from "styled-components";
 import { auth } from "./firebase";
 import { useState } from "react";
-
-const Wrapper = styled.div`
-  display: grid;
-  gap: 20px;
-  padding: 50px 0px;
-  grid-template-columns: 1fr 4fr;
-  height: 100%;
-  width: 100%;
-  max-width: 860px;
-`;
-
-const Menu = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
-`;
-
-const MenuItem = styled.div`
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 50px;
-  width: 50px;
-  border-radius: 50%;
-  svg {
-    width: 30px;
-    color: var(--foreground);
-  }
-  &:hover,
-  &:active {
-    background-color: var(--gray-100);
-  }
-  @media (prefers-color-scheme: dark) {
-    &:hover,
-    &:active {
-      background-color: var(--gray);
-    }
-  }
-`;
+import { LayoutWrapper, Menu, MenuItem } from "./layout.styled";
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -57,8 +16,13 @@ export default function Layout() {
   };
 
   return (
-    <Wrapper>
+    <LayoutWrapper>
       <Menu>
+        <Link to="/">
+          <MenuItem onClick={() => setSelectedItem("home")}>
+            <img width={50} src="main-logo.png" alt="logo" />
+          </MenuItem>
+        </Link>
         <Link to="/">
           <MenuItem onClick={() => setSelectedItem("home")}>
             {selectedItem === "home" ? (
@@ -143,6 +107,6 @@ export default function Layout() {
         </MenuItem>
       </Menu>
       <Outlet />
-    </Wrapper>
+    </LayoutWrapper>
   );
 }
