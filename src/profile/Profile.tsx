@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useMutation } from "react-query";
 import { auth, db, storage } from "../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
-import { updateProfile } from "firebase/auth";
+import { Unsubscribe, updateProfile } from "firebase/auth";
 import {
   collection,
   getDocs,
@@ -13,6 +13,7 @@ import {
   doc,
   limit,
   startAfter,
+  onSnapshot,
 } from "firebase/firestore";
 import { IPost } from "../type/post";
 import {
@@ -41,53 +42,59 @@ export default function Profile() {
   const [myPosts, setMyPosts] = useState<IPost[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMoreData, setHasMoreData] = useState(true);
-  const pageSize = 5;
+  const pageSize = 10;
 
   useEffect(() => {
-    fetchPosts();
-  }, []);
+    let unsubscribe: Unsubscribe | null = null;
 
-  const fetchPosts = async () => {
-    setIsLoading(true);
-    const PostsQuery = query(
-      collection(db, "posts"),
-      where("userId", "==", user.uid),
-      orderBy("createdAt", "desc"),
-      limit(pageSize)
-    );
-    const snapshot = await getDocs(PostsQuery);
-    const fetchedPosts: IPost[] = [];
-    snapshot.forEach((doc) => {
-      const {
-        userName,
-        userId,
-        userImg,
-        content,
-        createdAt,
-        postImg,
-        tags,
-        bookmarkedBy,
-        likedBy,
-      } = doc.data();
-      fetchedPosts.push({
-        postId: doc.id,
-        userName,
-        userId,
-        userImg,
-        content,
-        createdAt,
-        postImg,
-        tags,
-        bookmarkedBy,
-        likedBy,
+    const fetchPosts = async () => {
+      setIsLoading(true);
+      const postsQuery = query(
+        collection(db, "posts"),
+        where("userId", "==", user.uid),
+        orderBy("createdAt", "desc"),
+        limit(pageSize)
+      );
+      unsubscribe = await onSnapshot(postsQuery, (snapshot) => {
+        const newPosts: IPost[] = [];
+        snapshot.forEach((doc) => {
+          const {
+            userName,
+            userId,
+            userImg,
+            content,
+            createdAt,
+            postImg,
+            tags,
+            bookmarkedBy,
+            likedBy,
+          } = doc.data();
+          newPosts.push({
+            postId: doc.id,
+            userName,
+            userId,
+            userImg,
+            content,
+            createdAt,
+            postImg,
+            tags,
+            bookmarkedBy,
+            likedBy,
+          });
+        });
+        setMyPosts(() => [...newPosts]);
+        setIsLoading(false);
       });
-    });
-    setMyPosts(fetchedPosts);
-    setIsLoading(false);
-    if (snapshot.size < pageSize) {
-      setHasMoreData(false);
-    }
-  };
+    };
+
+    fetchPosts();
+
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
+  }, []);
 
   const handleScroll = () => {
     const scrollHeight = document.documentElement.scrollHeight;
@@ -160,7 +167,6 @@ export default function Profile() {
         displayName: newUsername,
       });
 
-      // 사용자의 모든 트윗을 가져와서 각각 업데이트합니다.
       const userPostsQuery = query(
         collection(db, "posts"),
         where("userId", "==", user.uid)
@@ -168,14 +174,13 @@ export default function Profile() {
       const querySnapshot = await getDocs(userPostsQuery);
       querySnapshot.forEach(async (document) => {
         await updateDoc(doc(db, "posts", document.id), {
-          username: newUsername,
+          userName: newUsername,
         });
       });
     },
     {
       onSuccess: () => {
         setUsername(newUsername);
-        fetchPosts(); // 프로필이름이 변경될 때마다 트윗 목록을 다시 가져옴
       },
     }
   );
