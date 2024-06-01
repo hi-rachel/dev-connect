@@ -71,7 +71,7 @@ export default function Timeline() {
             likedBy,
           });
         });
-        setPosts((prevPosts) => [...prevPosts, ...newPosts]); // 기존 트윗 목록에 새로운 트윗 추가
+        setPosts(() => [...newPosts]); // 기존 트윗 목록에 새로운 트윗 추가
         setIsLoading(false);
       });
     };
