@@ -8,5 +8,5 @@ export const COLORS = {
   warning: "#FFE711",
   dannger: "#FF4F54",
 
-  grey: "#2e2e2e78",
+  gray: "#2e2e2e78",
 };
