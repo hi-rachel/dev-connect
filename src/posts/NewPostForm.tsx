@@ -43,8 +43,6 @@ export default function NewPostForm() {
     e.preventDefault();
     const user = auth.currentUser;
 
-    console.log(user);
-
     if (!user || loading) return;
 
     if (post === "") {
@@ -70,8 +68,6 @@ export default function NewPostForm() {
         likedBy: [],
         bookmarkedBy: [],
       });
-
-      console.log(doc);
 
       if (file) {
         const locationRef = ref(storage, `posts/${user.uid}/${doc.id}`);

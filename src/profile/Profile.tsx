@@ -32,7 +32,6 @@ import Post from "../posts/Post";
 
 export default function Profile() {
   const user = auth.currentUser;
-  console.log(user);
 
   if (!user) return null;
   const [avatar, setAvatar] = useState(user?.photoURL);
@@ -57,7 +56,6 @@ export default function Profile() {
       limit(pageSize)
     );
     const snapshot = await getDocs(PostsQuery);
-    console.log(snapshot);
     const fetchedPosts: IPost[] = [];
     snapshot.forEach((doc) => {
       const {

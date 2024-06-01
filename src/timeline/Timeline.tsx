@@ -77,7 +77,6 @@ export default function Timeline() {
     };
 
     fetchPosts();
-    console.log(posts);
 
     return () => {
       if (unsubscribe) {
@@ -110,7 +109,6 @@ export default function Timeline() {
       limit(pageSize)
     );
     const snapshot = await getDocs(postsQuery);
-    console.log(snapshot);
     const newPosts: IPost[] = [];
     snapshot.forEach((doc) => {
       const {

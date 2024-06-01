@@ -66,7 +66,6 @@ export default function Post({
   const [isHeartClick, setIsHeartClick] = useState(false);
   const [isBookmark, setIsBookmark] = useState(false);
   // const queryClient = useQueryClient();
-  console.log(tags);
 
   useEffect(() => {
     setOriginalPhoto(postImg || null);
