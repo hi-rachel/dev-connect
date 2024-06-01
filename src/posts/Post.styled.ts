@@ -2,9 +2,7 @@ import styled from "styled-components";
 import { FONTS, FONTS_WEIGHT } from "../constants/fonts";
 import { AttachFileInput, EditButton, TextArea } from "../common/common.styled";
 
-export const Wrapper = styled.div`
-  display: grid;
-  grid-template-columns: 3fr 1fr;
+export const PostWrapper = styled.div`
   padding: 20px;
   border-radius: 15px;
   height: auto;
@@ -14,6 +12,11 @@ export const Wrapper = styled.div`
     box-shadow: rgba(255, 255, 255, 0.2) 0px 4px 12px;
     border: 1px solid var(--gray);
   }
+`;
+
+export const PostGrid = styled.div`
+  display: grid;
+  grid-template-columns: 3fr 1fr;
 `;
 
 export const Column = styled.div``;
@@ -56,13 +59,13 @@ export const Payload = styled.p`
   font-size: ${FONTS.lg};
 `;
 
-export const DeleteTweetButton = styled(EditButton)`
+export const DeletePostButton = styled(EditButton)`
   background-color: var(--danger);
   color: var(--foreground);
   margin-right: 15px;
 `;
 
-export const EditTweetButton = styled(EditButton)`
+export const EditPostButton = styled(EditButton)`
   background-color: var(--success);
 `;
 
@@ -80,6 +83,29 @@ export const ChangeFileButton = styled(EditButton)`
   }
 `;
 
-export const TweetDate = styled.div`
-  margin-top: 15px;
+export const PostDate = styled.div`
+  margin: 15px 0;
+`;
+
+export const TagWrapper = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+`;
+
+export const Tag = styled.div`
+  padding: 4px 8px;
+  border-radius: 16px;
+  background-color: #f3f4f6;
+`;
+
+export const PostFooter = styled.div`
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+`;
+
+export const LikesCount = styled.div`
+  color: var(--gray);
 `;

@@ -58,7 +58,7 @@ export const SaveUsernameIcon = styled(EditUsernameIcon)`
   height: 32px;
 `;
 
-export const Tweets = styled.div`
+export const Posts = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;

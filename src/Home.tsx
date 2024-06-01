@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import PostTweetForm from "./timeline/PostTweetForm";
+import NewPostForm from "./posts/NewPostForm";
 import Timeline from "./timeline/Timeline";
 
 const Wrapper = styled.div``;
@@ -7,7 +7,7 @@ const Wrapper = styled.div``;
 export default function Home() {
   return (
     <Wrapper>
-      <PostTweetForm />
+      <NewPostForm />
       <Timeline />
     </Wrapper>
   );

@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useMutation } from "react-query";
 import { auth, db, storage } from "../firebase";
-
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { updateProfile } from "firebase/auth";
 import {
@@ -15,8 +14,7 @@ import {
   limit,
   startAfter,
 } from "firebase/firestore";
-import { ITweet } from "../timeline/Timeline";
-import Tweet from "../timeline/Tweet";
+import { IPost } from "../type/post";
 import {
   AvartarImg,
   AvartarInput,
@@ -25,52 +23,68 @@ import {
   EditUsernameTextArea,
   Loader,
   SaveUsernameIcon,
-  Tweets,
+  Posts,
   Username,
   UsernameSpace,
   Wrapper,
 } from "./Profile.styled";
+import Post from "../posts/Post";
 
 export default function Profile() {
   const user = auth.currentUser;
+  console.log(user);
 
   if (!user) return null;
   const [avatar, setAvatar] = useState(user?.photoURL);
   const [username, setUsername] = useState(user.displayName || "Anonymous");
   const [newUsername, setNewUsername] = useState(username);
   const [editUsername, setEditUsername] = useState(false);
-  const [myTweets, setMyTweets] = useState<ITweet[]>([]);
+  const [myPosts, setMyPosts] = useState<IPost[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMoreData, setHasMoreData] = useState(true);
   const pageSize = 5;
 
   useEffect(() => {
-    fetchTweets();
+    fetchPosts();
   }, []);
 
-  const fetchTweets = async () => {
+  const fetchPosts = async () => {
     setIsLoading(true);
-    const tweetsQuery = query(
-      collection(db, "tweets"),
+    const PostsQuery = query(
+      collection(db, "posts"),
       where("userId", "==", user.uid),
       orderBy("createdAt", "desc"),
       limit(pageSize)
     );
-    const snapshot = await getDocs(tweetsQuery);
-    const fetchedTweets: ITweet[] = [];
+    const snapshot = await getDocs(PostsQuery);
+    console.log(snapshot);
+    const fetchedPosts: IPost[] = [];
     snapshot.forEach((doc) => {
-      const { tweet, createdAt, userId, username, photo, userImg } = doc.data();
-      fetchedTweets.push({
-        id: doc.id,
-        tweet,
-        createdAt,
+      const {
+        userName,
         userId,
-        username,
-        photo,
         userImg,
+        content,
+        createdAt,
+        postImg,
+        tags,
+        bookmarkedBy,
+        likedBy,
+      } = doc.data();
+      fetchedPosts.push({
+        postId: doc.id,
+        userName,
+        userId,
+        userImg,
+        content,
+        createdAt,
+        postImg,
+        tags,
+        bookmarkedBy,
+        likedBy,
       });
     });
-    setMyTweets(fetchedTweets);
+    setMyPosts(fetchedPosts);
     setIsLoading(false);
     if (snapshot.size < pageSize) {
       setHasMoreData(false);
@@ -86,35 +100,48 @@ export default function Profile() {
       !isLoading &&
       hasMoreData
     ) {
-      fetchNextTweets();
+      fetchNextPosts();
     }
   };
 
-  const fetchNextTweets = async () => {
+  const fetchNextPosts = async () => {
     setIsLoading(true);
-    const lastTweet = myTweets[myTweets.length - 1];
-    const tweetsQuery = query(
-      collection(db, "tweets"),
+    const lastPost = myPosts[myPosts.length - 1];
+    const postsQuery = query(
+      collection(db, "posts"),
       where("userId", "==", user.uid),
       orderBy("createdAt", "desc"),
-      startAfter(lastTweet?.createdAt),
+      startAfter(lastPost?.createdAt),
       limit(pageSize)
     );
-    const snapshot = await getDocs(tweetsQuery);
-    const newTweets: ITweet[] = [];
+    const snapshot = await getDocs(postsQuery);
+    const newPosts: IPost[] = [];
     snapshot.forEach((doc) => {
-      const { tweet, createdAt, userId, username, photo, userImg } = doc.data();
-      newTweets.push({
-        id: doc.id,
-        tweet,
-        createdAt,
+      const {
+        userName,
         userId,
-        username,
-        photo,
         userImg,
+        content,
+        createdAt,
+        postImg,
+        tags,
+        bookmarkedBy,
+        likedBy,
+      } = doc.data();
+      newPosts.push({
+        postId: doc.id,
+        userName,
+        userId,
+        userImg,
+        content,
+        createdAt,
+        postImg,
+        tags,
+        bookmarkedBy,
+        likedBy,
       });
     });
-    setMyTweets((prevTweets) => [...prevTweets, ...newTweets]);
+    setMyPosts((prevPosts) => [...prevPosts, ...newPosts]);
     setIsLoading(false);
     if (snapshot.size < pageSize) {
       setHasMoreData(false);
@@ -136,13 +163,13 @@ export default function Profile() {
       });
 
       // 사용자의 모든 트윗을 가져와서 각각 업데이트합니다.
-      const userTweetsQuery = query(
-        collection(db, "tweets"),
+      const userPostsQuery = query(
+        collection(db, "posts"),
         where("userId", "==", user.uid)
       );
-      const querySnapshot = await getDocs(userTweetsQuery);
+      const querySnapshot = await getDocs(userPostsQuery);
       querySnapshot.forEach(async (document) => {
-        await updateDoc(doc(db, "tweets", document.id), {
+        await updateDoc(doc(db, "posts", document.id), {
           username: newUsername,
         });
       });
@@ -150,7 +177,7 @@ export default function Profile() {
     {
       onSuccess: () => {
         setUsername(newUsername);
-        fetchTweets(); // 프로필이름이 변경될 때마다 트윗 목록을 다시 가져옴
+        fetchPosts(); // 프로필이름이 변경될 때마다 트윗 목록을 다시 가져옴
       },
     }
   );
@@ -278,11 +305,11 @@ export default function Profile() {
             <Username>{username}</Username>
           )}
         </UsernameSpace>
-        <Tweets>
-          {myTweets?.map((tweet, index) => (
-            <Tweet key={`${tweet.id}-${index}`} {...tweet} />
+        <Posts>
+          {myPosts?.map((post, index) => (
+            <Post key={`${post.postId}-${index}`} {...post} />
           ))}
-        </Tweets>
+        </Posts>
         {isLoading && <Loader>isLoading...</Loader>}
       </Wrapper>
     )
