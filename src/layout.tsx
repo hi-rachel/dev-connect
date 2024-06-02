@@ -1,10 +1,11 @@
-import { Link, Outlet, useNavigate } from "react-router-dom";
+import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { auth } from "./firebase";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { LayoutWrapper, Menu, MenuItem } from "./layout.styled";
 
 export default function Layout() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [selectedItem, setSelectedItem] = useState("");
 
   const onLogOut = async () => {
@@ -14,6 +15,14 @@ export default function Layout() {
       navigate("/login");
     }
   };
+
+  useEffect(() => {
+    if (location.pathname === "/") {
+      setSelectedItem("home");
+    } else if (location.pathname === "/profile") {
+      setSelectedItem("profile");
+    }
+  }, [location]);
 
   return (
     <LayoutWrapper>
