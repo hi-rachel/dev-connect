@@ -7,6 +7,6 @@ export interface IPost {
   createdAt: string;
   postImg?: string;
   tags: [];
-  bookmarkedBy: [];
-  likedBy: [];
+  bookmarkedBy: string[];
+  likedBy: string[];
 }
