@@ -16,7 +16,8 @@ type ParticlesProps = {
   particleColor?: string;
   particleDensity?: number;
 };
-export const SparklesCore = (props: ParticlesProps) => {
+
+const SparklesCore = (props: ParticlesProps) => {
   const {
     id,
     className,
@@ -78,6 +79,7 @@ export const SparklesCore = (props: ParticlesProps) => {
                   enable: false,
                   mode: "repulse",
                 },
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 resize: true as any,
               },
               modes: {
@@ -430,3 +432,5 @@ export const SparklesCore = (props: ParticlesProps) => {
     </motion.div>
   );
 };
+
+export default SparklesCore;
