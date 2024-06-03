@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
-import { Wrapper } from "../common/common.styled";
+import { Wrapper } from "../../common/common.styled";
 import { Posts } from "../profile/Profile.styled";
-import Post from "../posts/Post";
-import { IPost } from "../type/post";
+import Post from "../../common/post/Post";
+import { IPost } from "../../type/post";
 import { Unsubscribe } from "firebase/auth";
 import {
   collection,
@@ -14,11 +14,11 @@ import {
   startAfter,
   where,
 } from "firebase/firestore";
-import { auth, db } from "../firebase";
-import { Loader } from "../timeline/Timeline.styled";
-import { PAGE_SIZE } from "../constants/constants";
+import { auth, db } from "../../firebase";
+import { Loader } from "../home/timeline/Timeline.styled";
+import { PAGE_SIZE } from "../../constants/constants";
 
-const LikedPosts = () => {
+const BookmarkedPosts = () => {
   const user = auth.currentUser;
   const [myPosts, setMyPosts] = useState<IPost[]>([]);
   const [hasMoreData, setHasMoreData] = useState(true);
@@ -31,7 +31,7 @@ const LikedPosts = () => {
       setIsLoading(true);
       const postsQuery = query(
         collection(db, "posts"),
-        where("likedBy", "array-contains", user?.uid),
+        where("bookmarkedBy", "array-contains", user?.uid),
         orderBy("createdAt", "desc"),
         limit(PAGE_SIZE)
       );
@@ -94,7 +94,7 @@ const LikedPosts = () => {
     const lastPost = myPosts[myPosts.length - 1];
     const postsQuery = query(
       collection(db, "posts"),
-      where("likedBy", "array-contains", user?.uid),
+      where("bookmarkedBy", "array-contains", user?.uid),
       orderBy("createdAt", "desc"),
       startAfter(lastPost?.createdAt),
       limit(PAGE_SIZE)
@@ -155,4 +155,4 @@ const LikedPosts = () => {
   );
 };
 
-export default LikedPosts;
+export default BookmarkedPosts;

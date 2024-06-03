@@ -1,13 +1,13 @@
 import { lazy, useState } from "react";
-import { auth } from "../firebase";
+import { auth } from "../../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { Input, Switcher, Title, Error, Form } from "../common/auth.styled";
+import { Input, Switcher, Title, Error, Form } from "../../common/auth.styled";
 import GithubButton from "./GithubBtn";
 import GoogleButton from "./GoogleBtn";
 
-const SparklesCore = lazy(() => import("../common/ui/Sparkles"));
+const SparklesCore = lazy(() => import("../../common/ui/Sparkles"));
 
 export default function CreateAccount() {
   const navigate = useNavigate();

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const Wrapper = styled.div`
+export const TimelineWrapper = styled.div`
   width: 100%;
   margin-top: 50px;
   display: flex;

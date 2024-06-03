@@ -15,15 +15,15 @@ import {
 
 import { MdAddAPhoto } from "react-icons/md";
 
-import { DeletePostImg } from "./Post.styled";
+import { DeletePostImg } from "../../../common/post/Post.styled";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { auth, db, storage } from "../firebase";
-import { TextArea } from "../common/form/Form.styled";
-import { AttachFileInput, Tag } from "../common/common.styled";
+import { auth, db, storage } from "../../../firebase";
+import { TextArea } from "../../../common/form/Form.styled";
+import { AttachFileInput, Tag } from "../../../common/common.styled";
 import {
   MAX_POST_CHARACTER_SIZE,
   MAX_UPLOAD_SIZE,
-} from "../constants/constants";
+} from "../../../constants/constants";
 
 export default function NewPostForm() {
   const [loading, setLoading] = useState(false);

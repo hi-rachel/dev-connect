@@ -1,7 +1,7 @@
 import styled from "styled-components";
-import { FONTS, FONTS_WEIGHT } from "../constants/fonts";
-import { AttachFileInput, HoverButton } from "../common/common.styled";
-import { TextArea } from "../common/form/Form.styled";
+import { FONTS, FONTS_WEIGHT } from "../../constants/fonts";
+import { AttachFileInput, HoverButton } from "../common.styled";
+import { TextArea } from "../form/Form.styled";
 
 export const PostWrapper = styled.div`
   max-width: 700px;

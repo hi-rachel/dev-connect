@@ -1,10 +1,10 @@
 import { GithubAuthProvider, signInWithPopup } from "firebase/auth";
-import { auth } from "../firebase";
+import { auth } from "../../firebase";
 import { FirebaseError } from "firebase/app";
 import { useNavigate } from "react-router-dom";
-import { Button, Logo } from "../common/auth.styled";
+import { Button, Logo } from "../../common/auth.styled";
 import { useState } from "react";
-import { Error } from "../common/auth.styled";
+import { Error } from "../../common/auth.styled";
 
 export default function GithubButton() {
   const [loading, setLoading] = useState(false);

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useMutation } from "react-query";
-import { auth, db, storage } from "../firebase";
+import { auth, db, storage } from "../../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { Unsubscribe, updateProfile } from "firebase/auth";
 import {
@@ -15,7 +15,7 @@ import {
   startAfter,
   onSnapshot,
 } from "firebase/firestore";
-import { IPost } from "../type/post";
+import { IPost } from "../../type/post";
 import {
   AvartarImg,
   AvartarInput,
@@ -29,8 +29,8 @@ import {
   UsernameSpace,
   Wrapper,
 } from "./Profile.styled";
-import Post from "../posts/Post";
-import { MAX_UPLOAD_SIZE, PAGE_SIZE } from "../constants/constants";
+import Post from "../../common/post/Post";
+import { MAX_UPLOAD_SIZE, PAGE_SIZE } from "../../constants/constants";
 
 export default function Profile() {
   const user = auth.currentUser;

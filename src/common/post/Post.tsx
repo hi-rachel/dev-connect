@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { auth, db, storage } from "../firebase";
+import { auth, db, storage } from "../../firebase";
 import { deleteDoc, deleteField, doc, updateDoc } from "firebase/firestore";
 import {
   deleteObject,
@@ -28,19 +28,19 @@ import {
   FooterControls,
   PostContents,
 } from "./Post.styled";
-import { IPost } from "../type/post";
+import { IPost } from "../../type/post";
 import moment from "moment-timezone";
 import { MdAddAPhoto, MdOutlineModeEdit } from "react-icons/md";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { IoCameraReverseSharp, IoClose } from "react-icons/io5";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { Photo } from "../common/form/Form.styled";
+import { Photo } from "../form/Form.styled";
 import { DeletePostIcon, DeletePostImg, PostImg } from "./Post.styled";
-import { Tag } from "../common/common.styled";
+import { Tag } from "../common.styled";
 import {
   MAX_POST_CHARACTER_SIZE,
   MAX_UPLOAD_SIZE,
-} from "../constants/constants";
+} from "../../constants/constants";
 
 // [TODO]
 // - [x] tags 등록 추가

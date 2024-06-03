@@ -1,16 +1,16 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./layout";
-import Home from "./Home";
-import Profile from "./profile/Profile";
-import Login from "./login/Login";
-import CreateAccount from "./login/CreateAccount";
+import Home from "./pages/home/Home";
+import Profile from "./pages/profile/Profile";
+import Login from "./pages/login/Login";
+import CreateAccount from "./pages/login/CreateAccount";
 import { useEffect, useState } from "react";
 import LoadingScreen from "./common/LoadingScreen";
 import { auth } from "./firebase";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import styled from "styled-components";
-import LikedPosts from "./likes/LikedPosts";
-import BookmarkedPosts from "./bookmarks/BookmarkedPosts";
+import LikedPosts from "./pages/likes/LikedPosts";
+import BookmarkedPosts from "./pages/bookmarks/BookmarkedPosts";
 
 const router = createBrowserRouter([
   {

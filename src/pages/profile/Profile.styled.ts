@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
-import { FONTS } from "../constants/fonts";
-import { TextArea } from "../common/form/Form.styled";
+import { FONTS } from "../../constants/fonts";
+import { TextArea } from "../../common/form/Form.styled";
 
 export const Wrapper = styled.div`
   display: flex;
