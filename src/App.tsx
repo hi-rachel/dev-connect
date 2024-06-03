@@ -5,7 +5,7 @@ import Profile from "./pages/profile/Profile";
 import Login from "./pages/login/Login";
 import CreateAccount from "./pages/login/CreateAccount";
 import { useEffect, useState } from "react";
-import LoadingScreen from "./common/LoadingScreen";
+import LoadingScreen from "./common/loading/LoadingScreen";
 import { auth } from "./firebase";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import styled from "styled-components";

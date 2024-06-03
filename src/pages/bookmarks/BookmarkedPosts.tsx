@@ -15,8 +15,8 @@ import {
   where,
 } from "firebase/firestore";
 import { auth, db } from "../../firebase";
-import { Loader } from "../home/timeline/Timeline.styled";
 import { PAGE_SIZE } from "../../constants/constants";
+import { Loader } from "../../common/loading/Loading.styled";
 
 const BookmarkedPosts = () => {
   const user = auth.currentUser;

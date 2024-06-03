@@ -8,11 +8,6 @@ export const TimelineWrapper = styled.div`
   flex-direction: column;
 `;
 
-export const Loader = styled.div`
-  padding: 20px;
-  text-align: center;
-`;
-
 export const HeartBounce = styled.div`
   position: fixed;
   top: 50%;

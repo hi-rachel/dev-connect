@@ -31,7 +31,7 @@ import Post from "../../common/post/Post";
 import { MAX_UPLOAD_SIZE, PAGE_SIZE } from "../../constants/constants";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { MdOutlineModeEdit } from "react-icons/md";
-import { Loader } from "../../common/common.styled";
+import { Loader } from "../../common/loading/Loading.styled";
 
 export default function Profile() {
   const user = auth.currentUser;

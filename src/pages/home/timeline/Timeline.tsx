@@ -12,9 +12,10 @@ import { db } from "../../../firebase";
 import Post from "../../../common/post/Post";
 import { Unsubscribe } from "firebase/auth";
 // import HeartAnimation from "/heart-animation-2.gif";
-import { Loader, TimelineWrapper } from "./Timeline.styled";
+import { TimelineWrapper } from "./Timeline.styled";
 import { IPost } from "../../../type/post";
 import { PAGE_SIZE } from "../../../constants/constants";
+import { Loader } from "../../../common/loading/Loading.styled";
 
 // [TODO]
 // - [x] 글 검색 기능
