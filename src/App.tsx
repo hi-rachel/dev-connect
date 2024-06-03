@@ -9,6 +9,8 @@ import LoadingScreen from "./common/LoadingScreen";
 import { auth } from "./firebase";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import styled from "styled-components";
+import LikedPosts from "./likes/LikedPosts";
+import BookmarkedPosts from "./bookmarks/BookmarkedPosts";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +28,14 @@ const router = createBrowserRouter([
       {
         path: "profile",
         element: <Profile />,
+      },
+      {
+        path: "likes",
+        element: <LikedPosts />,
+      },
+      {
+        path: "bookmarks",
+        element: <BookmarkedPosts />,
       },
     ],
   },

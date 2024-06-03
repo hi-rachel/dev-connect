@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { FONTS, FONTS_WEIGHT } from "./../constants/fonts";
+import { FONTS, FONTS_WEIGHT } from "../constants/fonts";
 import { AttachFileInput, HoverButton } from "../common/common.styled";
 import { TextArea } from "../common/form/Form.styled";
 
@@ -25,6 +25,37 @@ export const PostWrapper = styled.div`
 
   @media (max-width: 480px) {
     max-width: 360px;
+  }
+`;
+
+export const PostImg = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const DeletePostIcon = styled.div`
+  border-radius: 20px;
+  z-index: 100;
+  background-color: var(--gray--100);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  cursor: pointer;
+  opacity: 0;
+`;
+
+export const DeletePostImg = styled(PostImg)`
+  position: relative;
+  &:hover ${DeletePostIcon} {
+    opacity: 0.6;
   }
 `;
 

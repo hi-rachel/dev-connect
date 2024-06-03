@@ -30,19 +30,17 @@ import {
   Wrapper,
 } from "./Profile.styled";
 import Post from "../posts/Post";
+import { MAX_UPLOAD_SIZE, PAGE_SIZE } from "../constants/constants";
 
 export default function Profile() {
   const user = auth.currentUser;
-
-  if (!user) return null;
   const [avatar, setAvatar] = useState(user?.photoURL);
-  const [username, setUsername] = useState(user.displayName || "Anonymous");
+  const [username, setUsername] = useState(user?.displayName || "Anonymous");
   const [newUsername, setNewUsername] = useState(username);
   const [editUsername, setEditUsername] = useState(false);
   const [myPosts, setMyPosts] = useState<IPost[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMoreData, setHasMoreData] = useState(true);
-  const pageSize = 10;
 
   useEffect(() => {
     let unsubscribe: Unsubscribe | null = null;
@@ -51,9 +49,9 @@ export default function Profile() {
       setIsLoading(true);
       const postsQuery = query(
         collection(db, "posts"),
-        where("userId", "==", user.uid),
+        where("userId", "==", user?.uid),
         orderBy("createdAt", "desc"),
-        limit(pageSize)
+        limit(PAGE_SIZE)
       );
       unsubscribe = await onSnapshot(postsQuery, (snapshot) => {
         const newPosts: IPost[] = [];
@@ -114,10 +112,10 @@ export default function Profile() {
     const lastPost = myPosts[myPosts.length - 1];
     const postsQuery = query(
       collection(db, "posts"),
-      where("userId", "==", user.uid),
+      where("userId", "==", user?.uid),
       orderBy("createdAt", "desc"),
       startAfter(lastPost?.createdAt),
-      limit(pageSize)
+      limit(PAGE_SIZE)
     );
     const snapshot = await getDocs(postsQuery);
     const newPosts: IPost[] = [];
@@ -148,7 +146,7 @@ export default function Profile() {
     });
     setMyPosts((prevPosts) => [...prevPosts, ...newPosts]);
     setIsLoading(false);
-    if (snapshot.size < pageSize) {
+    if (snapshot.size < PAGE_SIZE) {
       setHasMoreData(false);
     }
   };
@@ -163,13 +161,17 @@ export default function Profile() {
 
   const updateUserProfile = useMutation(
     async (newUsername: string) => {
-      await updateProfile(user, {
-        displayName: newUsername,
-      });
+      if (user) {
+        await updateProfile(user, {
+          displayName: newUsername,
+        });
+      } else {
+        console.error("User information is not available.");
+      }
 
       const userPostsQuery = query(
         collection(db, "posts"),
-        where("userId", "==", user.uid)
+        where("userId", "==", user?.uid)
       );
       const querySnapshot = await getDocs(userPostsQuery);
       querySnapshot.forEach(async (document) => {
@@ -188,8 +190,7 @@ export default function Profile() {
   const onAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!user) return;
     const { files } = e.target;
-    const maxSize = 1024 * 1024;
-    if (files && files.length === 1 && files[0].size <= maxSize) {
+    if (files && files.length === 1 && files[0].size <= MAX_UPLOAD_SIZE) {
       const file = files[0];
       const locationRef = ref(storage, `avatars/${user?.uid}`);
       const result = await uploadBytes(locationRef, file);

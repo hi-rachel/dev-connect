@@ -28,7 +28,6 @@ import {
   FooterControls,
   PostContents,
 } from "./Post.styled";
-// import { useMutation, useQueryClient } from "react-query";
 import { IPost } from "../type/post";
 import moment from "moment-timezone";
 import { MdAddAPhoto, MdOutlineModeEdit } from "react-icons/md";
@@ -36,18 +35,18 @@ import { FaRegCheckCircle } from "react-icons/fa";
 import { IoCameraReverseSharp, IoClose } from "react-icons/io5";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { Photo } from "../common/form/Form.styled";
-import {
-  DeletePostIcon,
-  DeletePostImg,
-  PostImg,
-} from "../common/post/Post.styled";
+import { DeletePostIcon, DeletePostImg, PostImg } from "./Post.styled";
 import { Tag } from "../common/common.styled";
+import {
+  MAX_POST_CHARACTER_SIZE,
+  MAX_UPLOAD_SIZE,
+} from "../constants/constants";
 
 // [TODO]
 // - [x] tags 등록 추가
 // - [ ] 0시간 전 등 글 작성 시간 추가
-// - [ ] 각 개인별 like 여부 관리
-// - [ ] likes cnt 관리
+// - [x] 각 개인별 like 여부 관리
+// - [x] likes cnt 관리
 // - [ ] 서버 상태 즉시 반영
 // - [x] 기존 tweet docs명 변경, 데이터 새로 관리
 // - [x] Delete, Edit -> Icon으로 변경하기
@@ -78,13 +77,19 @@ export default function Post({
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isHeartClick, setIsHeartClick] = useState(false);
   const [isBookmark, setIsBookmark] = useState(false);
-  // const queryClient = useQueryClient();
 
-  if (!user) return;
+  useEffect(() => {
+    if (user) {
+      setIsHeartClick(likedBy.includes(user.uid));
+      setIsBookmark(bookmarkedBy.includes(user.uid));
+    }
+  }, [likedBy, bookmarkedBy, user?.uid]);
 
   useEffect(() => {
     setOriginalPhoto(postImg || null);
   }, [postImg]);
+
+  if (!user) return;
 
   const onDelete = async () => {
     const ok = window.confirm("Are you sure you want to delete this Post?");
@@ -110,9 +115,7 @@ export default function Post({
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
 
-    const maxSize = 1024 * 768;
-
-    if (files && files.length === 1 && files[0].size <= maxSize) {
+    if (files && files.length === 1 && files[0].size <= MAX_UPLOAD_SIZE) {
       const newFile = files[0];
       setFile(newFile);
 
@@ -145,8 +148,10 @@ export default function Post({
 
       console.log(editPost.length);
 
-      if (editPost.length > 500) {
-        alert("Please keep your message under 500 characters.");
+      if (editPost.length > MAX_POST_CHARACTER_SIZE) {
+        alert(
+          `Please keep your message under ${MAX_POST_CHARACTER_SIZE} characters.`
+        );
         return;
       }
 
@@ -188,22 +193,47 @@ export default function Post({
     }
   };
 
-  const handleClickHeart = () => {
-    // like true면 false로 변환, cnt -= 1, show 하트 애니메이션
-    // like false면 true로 변환 cnt += 1
-    // setIsHeartClick((prevLike) => {
-    //   const newLike = !prevLike;
-    //   onClickHeart(newLike);
-    //   return newLike;
-    // });
-    // toggleLike();
-    // setIsHeartClick((prevLike) => !prevLike);
-    // onClickHeart(!isHeartClick);
+  const handleClickHeart = async () => {
+    try {
+      const likedIndex = likedBy.indexOf(user.uid);
+      const updatedLikedBy = [...likedBy];
+
+      if (likedIndex === -1) {
+        updatedLikedBy.push(user.uid);
+      } else {
+        updatedLikedBy.splice(likedIndex, 1);
+      }
+
+      await updateDoc(doc(db, "posts", postId), {
+        likedBy: updatedLikedBy,
+      });
+
+      setIsHeartClick(!isHeartClick);
+    } catch (error) {
+      console.error("Error updating likedBy array:", error);
+    }
   };
 
   const handleClickBookmark = async () => {
     // toast 알림 넣기
-    // setIsBookmark((prev) => !prev);
+    try {
+      const bookmarkedIndex = bookmarkedBy.indexOf(user.uid);
+      const updatedbookmarkedBy = [...bookmarkedBy];
+
+      if (bookmarkedIndex === -1) {
+        updatedbookmarkedBy.push(user.uid);
+      } else {
+        updatedbookmarkedBy.splice(bookmarkedIndex, 1);
+      }
+
+      await updateDoc(doc(db, "posts", postId), {
+        bookmarkedBy: updatedbookmarkedBy,
+      });
+
+      setIsBookmark(!isBookmark);
+    } catch (error) {
+      console.error("Error updating likedBy array:", error);
+    }
   };
 
   return (
@@ -265,7 +295,7 @@ export default function Post({
           {edit ? (
             <EditTextArea
               rows={10}
-              maxLength={500}
+              maxLength={MAX_POST_CHARACTER_SIZE}
               onChange={onPostChange}
               value={editPost}
             />
@@ -300,11 +330,11 @@ export default function Post({
                   color={isHeartClick ? "#5eead4" : "grey"}
                   onClick={handleClickHeart}
                 />
-                <p>200</p>
+                <p>{likedBy.length}</p>
               </LikesCount>
               <FaBookmark
                 size={18}
-                color={isBookmark ? "#292b2a" : "gray"}
+                color={isBookmark ? "#5eead4" : "gray"}
                 onClick={handleClickBookmark}
               />
             </FooterControls>

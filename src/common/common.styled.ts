@@ -1,6 +1,13 @@
 import { styled } from "styled-components";
 import { FONTS, FONTS_WEIGHT } from "../constants/fonts";
 
+export const Wrapper = styled.div`
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 20px;
+`;
+
 export const HoverButton = styled.button`
   display: flex;
   align-items: center;
@@ -49,6 +56,7 @@ export const AttachFileInput = styled.input`
 
 export const Tag = styled.div`
   font-weight: ${FONTS_WEIGHT.semiBold};
+  font-size: ${FONTS.sm};
   color: var(--primary);
   border-radius: 50px;
   padding: 6px 12px;

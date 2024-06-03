@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { addDoc, collection, updateDoc } from "firebase/firestore";
-import { auth, db, storage } from "../firebase";
+
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
   Form,
@@ -12,11 +12,18 @@ import {
   PreviewPhoto,
   DeletePreviewIcon,
 } from "./NewPostForm.styled";
-import { AttachFileInput, Tag } from "../common/common.styled";
+
 import { MdAddAPhoto } from "react-icons/md";
-import { TextArea } from "../common/form/Form.styled";
-import { DeletePostImg } from "../common/post/Post.styled";
+
+import { DeletePostImg } from "./Post.styled";
 import { RiDeleteBin6Line } from "react-icons/ri";
+import { auth, db, storage } from "../firebase";
+import { TextArea } from "../common/form/Form.styled";
+import { AttachFileInput, Tag } from "../common/common.styled";
+import {
+  MAX_POST_CHARACTER_SIZE,
+  MAX_UPLOAD_SIZE,
+} from "../constants/constants";
 
 export default function NewPostForm() {
   const [loading, setLoading] = useState(false);
@@ -32,9 +39,8 @@ export default function NewPostForm() {
 
   const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
-    const maxSize = 1024 * 1024;
 
-    if (files && files.length === 1 && files[0].size <= maxSize) {
+    if (files && files.length === 1 && files[0].size <= MAX_UPLOAD_SIZE) {
       setFile(files[0]);
       const reader = new FileReader();
       reader.onload = () => {
@@ -90,8 +96,10 @@ export default function NewPostForm() {
       return;
     }
 
-    if (post.length > 500) {
-      alert("Please keep your message under 500 characters.");
+    if (post.length > MAX_POST_CHARACTER_SIZE) {
+      alert(
+        `Please keep your message under ${MAX_POST_CHARACTER_SIZE} characters.`
+      );
       return;
     }
 
@@ -132,7 +140,7 @@ export default function NewPostForm() {
     <Form onSubmit={onSubmit}>
       <TextArea
         rows={8}
-        maxLength={500}
+        maxLength={MAX_POST_CHARACTER_SIZE}
         onChange={onChange}
         value={post}
         placeholder="What is happening?!"

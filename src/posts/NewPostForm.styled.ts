@@ -1,6 +1,6 @@
 import { Photo } from "../common/form/Form.styled";
-import { DeletePostIcon } from "../common/post/Post.styled";
-import { FONTS, FONTS_WEIGHT } from "./../constants/fonts";
+import { DeletePostIcon } from "./Post.styled";
+import { FONTS, FONTS_WEIGHT } from "../constants/fonts";
 import { styled } from "styled-components";
 
 export const Form = styled.form`

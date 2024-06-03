@@ -17,6 +17,7 @@ export const LayoutWrapper = styled.div`
 
 export const Menu = styled.div`
   display: flex;
+  align-items: center;
   flex-direction: column;
   align-items: center;
   gap: 20px;

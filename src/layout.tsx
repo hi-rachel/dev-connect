@@ -2,6 +2,7 @@ import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { auth } from "./firebase";
 import { useEffect, useState } from "react";
 import { LayoutWrapper, Menu, MenuItem } from "./layout.styled";
+import { FaBookmark, FaHeart, FaRegBookmark, FaRegHeart } from "react-icons/fa";
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -21,6 +22,10 @@ export default function Layout() {
       setSelectedItem("home");
     } else if (location.pathname === "/profile") {
       setSelectedItem("profile");
+    } else if (location.pathname === "/likes") {
+      setSelectedItem("likes");
+    } else if (location.pathname === "bookmarks") {
+      setSelectedItem("bookmarks");
     }
   }, [location]);
 
@@ -29,7 +34,12 @@ export default function Layout() {
       <Menu>
         <Link to="/">
           <MenuItem onClick={() => setSelectedItem("home")}>
-            <img width={50} src="main-logo.png" alt="logo" />
+            <img
+              width={50}
+              src="main-logo.png"
+              alt="Dev Connect Logo"
+              aria-label="Dev Connect Logo"
+            />
           </MenuItem>
         </Link>
         <Link to="/">
@@ -39,7 +49,7 @@ export default function Layout() {
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
+                aria-label="Home"
               >
                 <path
                   clipRule="evenodd"
@@ -54,7 +64,7 @@ export default function Layout() {
                 strokeWidth={1.5}
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
+                aria-label="Home"
               >
                 <path
                   strokeLinecap="round"
@@ -73,7 +83,7 @@ export default function Layout() {
                 fill="currentColor"
                 viewBox="0 0 20 20"
                 xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
+                aria-label="Profile Page"
               >
                 <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
               </svg>
@@ -84,7 +94,7 @@ export default function Layout() {
                 strokeWidth={1.5}
                 viewBox="0 0 24 24"
                 xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
+                aria-label="Profile Page"
               >
                 <path
                   strokeLinecap="round"
@@ -95,12 +105,30 @@ export default function Layout() {
             )}
           </MenuItem>
         </Link>
+        <Link to="/likes">
+          <MenuItem onClick={() => setSelectedItem("likes")}>
+            {selectedItem === "likes" ? (
+              <FaHeart aria-label="Liked Posts Page" size={22} />
+            ) : (
+              <FaRegHeart size={22} />
+            )}
+          </MenuItem>
+        </Link>
+        <Link to="/bookmarks">
+          <MenuItem onClick={() => setSelectedItem("bookmarks")}>
+            {selectedItem === "bookmarks" ? (
+              <FaBookmark aria-label="Bookmarked Posts Page" size={22} />
+            ) : (
+              <FaRegBookmark size={22} />
+            )}
+          </MenuItem>
+        </Link>
         <MenuItem onClick={onLogOut}>
           <svg
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
+            aria-label="Logout"
           >
             <path
               clipRule="evenodd"
