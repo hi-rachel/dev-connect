@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { auth, db, storage } from "../firebase";
-import { deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { deleteDoc, deleteField, doc, updateDoc } from "firebase/firestore";
 import {
   deleteObject,
   getDownloadURL,
@@ -11,38 +11,49 @@ import { FaBookmark, FaHeart } from "react-icons/fa";
 import {
   ChangeFileButton,
   ChangeFileInput,
-  Column,
   DeletePostButton,
   EditPostButton,
   EditTextArea,
   Payload,
-  Photo,
   PostDate,
   PostFooter,
-  Tag,
   TagWrapper,
   UserProfileNoPhoto,
   UserProfilePhoto,
   UserWrapper,
   Username,
   PostWrapper,
-  PostGrid,
   LikesCount,
+  PostControls,
+  FooterControls,
+  PostContents,
 } from "./Post.styled";
 // import { useMutation, useQueryClient } from "react-query";
 import { IPost } from "../type/post";
+import moment from "moment-timezone";
+import { MdAddAPhoto, MdOutlineModeEdit } from "react-icons/md";
+import { FaRegCheckCircle } from "react-icons/fa";
+import { IoCameraReverseSharp, IoClose } from "react-icons/io5";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { Photo } from "../common/form/Form.styled";
+import {
+  DeletePostIcon,
+  DeletePostImg,
+  PostImg,
+} from "../common/post/Post.styled";
+import { Tag } from "../common/common.styled";
 
 // [TODO]
-// - [ ] tags 등록 추가
+// - [x] tags 등록 추가
 // - [ ] 0시간 전 등 글 작성 시간 추가
 // - [ ] 각 개인별 like 여부 관리
 // - [ ] likes cnt 관리
 // - [ ] 서버 상태 즉시 반영
-// - [ ] 기존 tweet docs명 변경, 데이터 새로 관리
-// - [ ] Delete, Edit -> Icon으로 변경하기
+// - [x] 기존 tweet docs명 변경, 데이터 새로 관리
+// - [x] Delete, Edit -> Icon으로 변경하기
 // - [ ] 글 클릭시 크게 보기 추가
 // - Post 로직 편하게 수정하기 -
-// - [ ] Add Photo -> 카메라 아이콘, 미리보기 추가!
+// - [x] Add Photo -> 카메라 아이콘, 미리보기 추가!
 
 export default function Post({
   postId,
@@ -57,7 +68,9 @@ export default function Post({
   likedBy,
 }: IPost) {
   const user = auth.currentUser;
-  const date = createdAt.substring(0, 10);
+  const userTimeZone = "Asia/Seoul";
+  const localTime = moment.utc(createdAt).tz(userTimeZone);
+  const formattedDate12Hour = localTime.format("h:mm A · MMM D, YYYY");
   const [edit, setEdit] = useState(false);
   const [editPost, setEditPost] = useState(content);
   const [file, setFile] = useState<File | null>(null);
@@ -66,6 +79,8 @@ export default function Post({
   const [isHeartClick, setIsHeartClick] = useState(false);
   const [isBookmark, setIsBookmark] = useState(false);
   // const queryClient = useQueryClient();
+
+  if (!user) return;
 
   useEffect(() => {
     setOriginalPhoto(postImg || null);
@@ -115,7 +130,7 @@ export default function Post({
 
   const onEdit = async () => {
     setEdit(true);
-    if (!edit || !user) return;
+    if (!edit) return;
 
     try {
       if (file) {
@@ -124,17 +139,24 @@ export default function Post({
         const url = await getDownloadURL(result.ref);
         setOriginalPhoto(url);
         await updateDoc(doc(db, "posts", postId), {
-          photo: url,
+          postImg: url,
         });
       }
 
+      console.log(editPost.length);
+
+      if (editPost.length > 500) {
+        alert("Please keep your message under 500 characters.");
+        return;
+      }
+
       if (editPost.length < 2) {
-        alert("Please write your Post.");
+        alert("Please write your message more than 2 characters.");
         return;
       }
 
       await updateDoc(doc(db, "posts", postId), {
-        Post: editPost,
+        content: editPost,
       });
     } catch (e) {
       console.log(e);
@@ -143,20 +165,28 @@ export default function Post({
     }
   };
 
-  // const { mutate: toggleLike } = useMutation(
-  //   async () => {
-  //     const PostRef = doc(db, "posts", postId);
-  //     await updateDoc(PostRef, {
-  //       likes: isHeartClick ? likes - 1 : likes + 1,
-  //       like: !isHeartClick,
-  //     });
-  //   },
-  //   {
-  //     onSuccess: () => {
-  //       queryClient.invalidateQueries("Posts");
-  //     },
-  //   }
-  // );
+  const onDeletePostImg = async () => {
+    try {
+      if (confirm("Are you sure you want to delete this photo?")) {
+        if (file) {
+          setFile(null);
+          setOriginalPhoto(null);
+          return;
+        }
+
+        if (postImg) {
+          const photoRef = ref(storage, `posts/${user.uid}/${postId}`);
+          await deleteObject(photoRef);
+          await updateDoc(doc(db, "posts", postId), {
+            postImg: deleteField(),
+          });
+          setOriginalPhoto(null);
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const handleClickHeart = () => {
     // like true면 false로 변환, cnt -= 1, show 하트 애니메이션
@@ -179,90 +209,107 @@ export default function Post({
   return (
     <>
       <PostWrapper>
-        <PostGrid>
-          <Column>
-            <UserWrapper>
-              {userImg ? (
-                <UserProfilePhoto src={userImg} alt="user-profile-image" />
-              ) : (
-                <UserProfileNoPhoto />
-              )}
+        <UserWrapper>
+          {userImg ? (
+            <UserProfilePhoto src={userImg} alt="user-profile-image" />
+          ) : (
+            <UserProfileNoPhoto />
+          )}
 
-              <Username>{userName}</Username>
-            </UserWrapper>
-            {edit ? (
-              <EditTextArea
-                rows={5}
-                maxLength={180}
-                onChange={onPostChange}
-                value={editPost}
-              />
-            ) : (
-              <Payload>{content}</Payload>
-            )}
-          </Column>
-          <Column>
-            {edit ? (
-              <>
-                <ChangeFileButton onClick={() => fileInputRef.current?.click()}>
-                  {originalPhoto ? (
-                    <>
-                      <svg
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                        aria-hidden="true"
-                      >
-                        <path d="M2.695 14.763l-1.262 3.154a.5.5 0 00.65.65l3.155-1.262a4 4 0 001.343-.885L17.5 5.5a2.121 2.121 0 00-3-3L3.58 13.42a4 4 0 00-.885 1.343z" />
-                      </svg>
-                      Edit
-                    </>
-                  ) : (
-                    "Add Photo"
-                  )}
-                </ChangeFileButton>
-                <ChangeFileInput
-                  ref={fileInputRef}
-                  onChange={onFileChange}
-                  id="file"
-                  accept="image/*"
-                  type="file"
-                />
+          <Username>{userName}</Username>
+          {user?.uid === userId ? (
+            <PostControls>
+              <div>
+                {edit && (
+                  <>
+                    <ChangeFileButton
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      {originalPhoto ? (
+                        <IoCameraReverseSharp
+                          aria-label="Change a photo"
+                          size={25}
+                        />
+                      ) : (
+                        <MdAddAPhoto aria-label="Add a photo" size={25} />
+                      )}
+                    </ChangeFileButton>
+                    <ChangeFileInput
+                      ref={fileInputRef}
+                      onChange={onFileChange}
+                      id="file"
+                      accept="image/*"
+                      type="file"
+                    />
+                  </>
+                )}
+              </div>
+              <EditPostButton onClick={onEdit}>
+                {edit ? (
+                  <FaRegCheckCircle
+                    color="var(--success)"
+                    aria-label="Fininsh editing"
+                    size={25}
+                  />
+                ) : (
+                  <MdOutlineModeEdit aria-label="Start editing" size={22} />
+                )}
+              </EditPostButton>
+              <DeletePostButton onClick={onDelete}>
+                <IoClose aria-label="Delete" size={22} />
+              </DeletePostButton>
+            </PostControls>
+          ) : null}
+        </UserWrapper>
+        <PostContents>
+          {edit ? (
+            <EditTextArea
+              rows={10}
+              maxLength={500}
+              onChange={onPostChange}
+              value={editPost}
+            />
+          ) : (
+            <Payload>{content}</Payload>
+          )}
+          {edit ? (
+            <>
+              <DeletePostImg onClick={onDeletePostImg}>
                 {originalPhoto && <Photo src={originalPhoto} />}
-              </>
-            ) : (
-              originalPhoto && <Photo src={originalPhoto} />
-            )}
-          </Column>
-          <PostDate>{date}</PostDate>
-          <Column>
-            {user?.uid === userId ? (
-              <>
-                <DeletePostButton onClick={onDelete}>Delete</DeletePostButton>
-                <EditPostButton onClick={onEdit}>
-                  {edit ? "Save" : "Edit"}
-                </EditPostButton>
-              </>
-            ) : null}
-          </Column>
-        </PostGrid>
-        <TagWrapper>
-          {tags.length >= 1 &&
-            tags.map((tag, index) => <Tag key={index}>{tag}</Tag>)}
-        </TagWrapper>
-        <PostFooter>
-          <FaHeart
-            size={18}
-            color={isHeartClick ? "#5eead4" : "grey"}
-            onClick={handleClickHeart}
-          />
-          <LikesCount>200</LikesCount>
-          <FaBookmark
-            size={18}
-            color={isBookmark ? "#5eead4" : "gray"}
-            onClick={handleClickBookmark}
-          />
-        </PostFooter>
+                <DeletePostIcon>
+                  <RiDeleteBin6Line size={30} />
+                </DeletePostIcon>
+              </DeletePostImg>
+            </>
+          ) : (
+            <PostImg>{originalPhoto && <Photo src={originalPhoto} />}</PostImg>
+          )}
+
+          {tags.length >= 1 && (
+            <TagWrapper>
+              {tags.length >= 1 &&
+                tags.map((tag, index) => <Tag key={index}>{tag}</Tag>)}
+            </TagWrapper>
+          )}
+          <PostFooter>
+            <PostDate>{formattedDate12Hour}</PostDate>
+            <FooterControls>
+              <LikesCount>
+                <FaHeart
+                  size={18}
+                  color={isHeartClick ? "#5eead4" : "grey"}
+                  onClick={handleClickHeart}
+                />
+                <p>200</p>
+              </LikesCount>
+              <FaBookmark
+                size={18}
+                color={isBookmark ? "#292b2a" : "gray"}
+                onClick={handleClickBookmark}
+              />
+            </FooterControls>
+          </PostFooter>
+        </PostContents>
       </PostWrapper>
     </>
   );

@@ -1,10 +1,35 @@
+import { Photo } from "../common/form/Form.styled";
+import { DeletePostIcon } from "../common/post/Post.styled";
+import { FONTS, FONTS_WEIGHT } from "./../constants/fonts";
 import { styled } from "styled-components";
-import { FONTS, FONTS_WEIGHT } from "../constants/fonts";
 
 export const Form = styled.form`
+  margin: 0 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+`;
+
+export const PreviewPhoto = styled(Photo)`
+  width: 50%;
+`;
+
+export const DeletePreviewIcon = styled(DeletePostIcon)`
+  width: 50%;
+`;
+
+export const TagInputArea = styled.div`
+  display: flex;
+  gap: 10px;
+  padding: 5px;
+  flex-wrap: wrap;
+`;
+
+export const TagInput = styled.input`
+  width: 100%;
+  &:focus {
+    outline: none;
+  }
 `;
 
 export const MainBtn = styled.input`
@@ -30,8 +55,19 @@ export const AttachFileButton = styled.label`
   cursor: pointer;
 `;
 
+export const AddPhoto = styled.div`
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  align-items: center;
+`;
+
 export const SubmitBtn = styled(MainBtn)`
   background-color: var(--primary);
   color: var(--black);
   font-weight: ${FONTS_WEIGHT.semiBold};
+
+  @media (max-width: 768px) {
+    font-size: ${FONTS.sm};
+  }
 `;

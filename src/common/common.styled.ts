@@ -1,42 +1,61 @@
 import { styled } from "styled-components";
 import { FONTS, FONTS_WEIGHT } from "../constants/fonts";
 
-export const EditButton = styled.button`
-  font-weight: ${FONTS_WEIGHT.medium};
-  font-size: ${FONTS.sm};
-  padding: 5px 10px;
-  border-radius: 5px;
+export const HoverButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  padding: 5px;
+
   cursor: pointer;
   &:hover,
   &:active {
-    opacity: 0.8;
+    background-color: var(--gray-100);
+  }
+  @media (prefers-color-scheme: dark) {
+    &:hover,
+    &:active {
+      background-color: var(--gray);
+    }
   }
 `;
 
-export const TextArea = styled.textarea`
-  background: transparent;
-  overflow: hidden;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-  padding: 20px;
-  border-radius: 20px;
-  font-size: ${FONTS.md};
-  width: 100%;
-  resize: none;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
-  &::placeholder {
-    font-size: ${FONTS.md};
-  }
-  &:focus {
-    outline: none;
-    border-color: var(--primary);
+export const EditButton = styled.button`
+  font-weight: ${FONTS_WEIGHT.medium};
+  font-size: ${FONTS.sm};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  width: 30px;
+  border-radius: 50%;
+  cursor: pointer;
+  &:hover,
+  &:active {
+    background-color: var(--gray-100);
   }
   @media (prefers-color-scheme: dark) {
-    box-shadow: rgba(255, 255, 255, 0.2) 0px 4px 12px;
-    border: 1px solid var(--gray);
+    &:hover,
+    &:active {
+      background-color: var(--gray);
+    }
   }
 `;
 
 export const AttachFileInput = styled.input`
   display: none;
+`;
+
+export const Tag = styled.div`
+  font-weight: ${FONTS_WEIGHT.semiBold};
+  color: var(--primary);
+  border-radius: 50px;
+  padding: 6px 12px;
+  background-color: var(--gray--100);
+
+  @media (max-width: 480px) {
+    font-size: ${FONTS.xs};
+    padding: 3px 8px;
+  }
 `;

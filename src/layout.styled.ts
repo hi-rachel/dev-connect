@@ -8,6 +8,11 @@ export const LayoutWrapper = styled.div`
   height: 100%;
   width: 100%;
   max-width: 860px;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+    padding: 20px 10px;
+  }
 `;
 
 export const Menu = styled.div`
@@ -15,6 +20,12 @@ export const Menu = styled.div`
   flex-direction: column;
   align-items: center;
   gap: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
+  }
 `;
 
 export const MenuItem = styled.div`
@@ -37,6 +48,14 @@ export const MenuItem = styled.div`
     &:hover,
     &:active {
       background-color: var(--gray);
+    }
+  }
+
+  @media (max-width: 768px) {
+    height: 40px;
+    width: 40px;
+    svg {
+      width: 20px;
     }
   }
 `;

@@ -1,35 +1,49 @@
 import styled from "styled-components";
-import { FONTS, FONTS_WEIGHT } from "../constants/fonts";
-import { AttachFileInput, EditButton, TextArea } from "../common/common.styled";
+import { FONTS, FONTS_WEIGHT } from "./../constants/fonts";
+import { AttachFileInput, HoverButton } from "../common/common.styled";
+import { TextArea } from "../common/form/Form.styled";
 
 export const PostWrapper = styled.div`
+  max-width: 700px;
+  overflow: hidden;
+  width: 100%;
+  position: relative;
   padding: 20px;
   border-radius: 15px;
   height: auto;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  margin: 10px auto;
 
   @media (prefers-color-scheme: dark) {
     box-shadow: rgba(255, 255, 255, 0.2) 0px 4px 12px;
     border: 1px solid var(--gray);
   }
+
+  @media (max-width: 768px) {
+    max-width: 680px;
+  }
+
+  @media (max-width: 480px) {
+    max-width: 360px;
+  }
 `;
 
-export const PostGrid = styled.div`
-  display: grid;
-  grid-template-columns: 3fr 1fr;
-`;
+export const PostContents = styled.div`
+  padding: 10px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-content: center;
 
-export const Column = styled.div``;
+  @media (max-width: 480px) {
+    padding: 10px 20px;
+  }
+`;
 
 export const EditTextArea = styled(TextArea)`
   margin-right: 20px;
   margin-bottom: 20px;
-  width: 90%;
-`;
-
-export const Photo = styled.img`
   width: 100%;
-  border-radius: 15px;
 `;
 
 export const UserWrapper = styled.div`
@@ -45,6 +59,14 @@ export const Username = styled.p`
 export const UserProfilePhoto = styled.img`
   width: 36px;
   border-radius: 50%;
+
+  @media (max-width: 768px) {
+    width: 30px;
+  }
+
+  @media (max-width: 480px) {
+    width: 25px;
+  }
 `;
 
 export const UserProfileNoPhoto = styled.div`
@@ -52,60 +74,113 @@ export const UserProfileNoPhoto = styled.div`
   height: 36px;
   border-radius: 50%;
   background-color: var(--primary);
+
+  @media (max-width: 768px) {
+    width: 30px;
+    height: 30px;
+  }
+
+  @media (max-width: 480px) {
+    width: 25px;
+    height: 25px;
+  }
 `;
 
 export const Payload = styled.p`
-  margin: 10px 0px;
+  word-wrap: break-word;
+  margin-bottom: 15px;
   font-size: ${FONTS.lg};
+
+  @media (max-width: 768px) {
+    font-size: ${FONTS.md};
+  }
+
+  @media (max-width: 480px) {
+    font-size: ${FONTS.sm};
+  }
 `;
 
-export const DeletePostButton = styled(EditButton)`
-  background-color: var(--danger);
-  color: var(--foreground);
+export const PostControls = styled.div`
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  right: 0px;
+  top: 20px;
+`;
+
+export const DeletePostButton = styled(HoverButton)`
   margin-right: 15px;
+  &:hover,
+  &:active {
+    background-color: rgba(255, 79, 84, 0.5);
+  }
 `;
 
-export const EditPostButton = styled(EditButton)`
-  background-color: var(--success);
-`;
+export const EditPostButton = styled(HoverButton)``;
 
 export const ChangeFileInput = styled(AttachFileInput)``;
 
-export const ChangeFileButton = styled(EditButton)`
-  border: 1px solid var(--primary);
-  color: var(--primary);
-  margin-bottom: 10px;
+export const ChangeFileButton = styled.button`
   display: flex;
+  justify-content: center;
   align-items: center;
-  svg {
-    height: 15px;
-    margin-right: 5px;
+  padding: 5px;
+  border-radius: 50%;
+  cursor: pointer;
+  &:hover,
+  &:active {
+    background-color: var(--gray-100);
+  }
+  @media (prefers-color-scheme: dark) {
+    &:hover,
+    &:active {
+      background-color: var(--gray);
+    }
   }
 `;
 
 export const PostDate = styled.div`
-  margin: 15px 0;
+  color: var(--gray);
+
+  @media (max-width: 480px) {
+    font-size: ${FONTS.sm};
+  }
 `;
 
 export const TagWrapper = styled.div`
+  font-size: ${FONTS.sm};
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
-`;
-
-export const Tag = styled.div`
-  padding: 4px 8px;
-  border-radius: 16px;
-  background-color: #f3f4f6;
+  gap: 10px;
+  margin-top: 15px;
 `;
 
 export const PostFooter = styled.div`
-  width: 100%;
+  margin-top: 10px;
+  color: var(--gray);
   display: flex;
-  gap: 10px;
+  flex-direction: column;
+
+  @media (max-width: 480px) {
+    font-size: ${FONTS.sm};
+  }
+`;
+
+export const FooterControls = styled.div`
+  margin-top: 10px;
+  display: flex;
+  gap: 15px;
   align-items: center;
+
+  @media (max-width: 768px) {
+    gap: 10px;
+  }
 `;
 
 export const LikesCount = styled.div`
-  color: var(--gray);
+  display: flex;
+  align-items: center;
+  gap: 6px;
 `;
