@@ -66,4 +66,8 @@ export const Tag = styled.div`
     font-size: ${FONTS.xs};
     padding: 3px 8px;
   }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: var(--gray);
+  }
 `;

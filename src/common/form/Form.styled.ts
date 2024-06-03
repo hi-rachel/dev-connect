@@ -8,7 +8,6 @@ export const Photo = styled.img`
 `;
 
 export const TextArea = styled.textarea`
-  /* margin: 0 10px; */
   background: transparent;
   overflow: auto; /* Ensure scrollbar is always visible */
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
@@ -44,9 +43,4 @@ export const TextArea = styled.textarea`
   &::-webkit-scrollbar-track {
     background-color: transparent; /* Color of the scrollbar track */
   }
-
-  /* @media (max-width: 480px) {
-    font-size: ${FONTS.xs};
-    padding: 3px 8px;
-  } */
 `;

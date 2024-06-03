@@ -178,6 +178,10 @@ export const PostDate = styled.div`
   @media (max-width: 480px) {
     font-size: ${FONTS.sm};
   }
+
+  @media (prefers-color-scheme: dark) {
+    color: var(--gray--200);
+  }
 `;
 
 export const TagWrapper = styled.div`
@@ -196,6 +200,10 @@ export const PostFooter = styled.div`
 
   @media (max-width: 480px) {
     font-size: ${FONTS.sm};
+  }
+
+  @media (prefers-color-scheme: dark) {
+    color: var(--gray--200);
   }
 `;
 

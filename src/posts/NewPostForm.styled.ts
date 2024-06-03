@@ -26,6 +26,7 @@ export const TagInputArea = styled.div`
 `;
 
 export const TagInput = styled.input`
+  background-color: var(--background);
   width: 100%;
   &:focus {
     outline: none;
