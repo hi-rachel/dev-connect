@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { useMutation } from "react-query";
 import { auth, db, storage } from "../../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { Unsubscribe, updateProfile } from "firebase/auth";
@@ -22,7 +21,6 @@ import {
   AvatarUpload,
   EditUsernameIcon,
   EditUsernameTextArea,
-  Loader,
   SaveUsernameIcon,
   Posts,
   Username,
@@ -31,6 +29,9 @@ import {
 } from "./Profile.styled";
 import Post from "../../common/post/Post";
 import { MAX_UPLOAD_SIZE, PAGE_SIZE } from "../../constants/constants";
+import { FaRegCheckCircle } from "react-icons/fa";
+import { MdOutlineModeEdit } from "react-icons/md";
+import { Loader } from "../../common/common.styled";
 
 export default function Profile() {
   const user = auth.currentUser;
@@ -108,6 +109,7 @@ export default function Profile() {
   };
 
   const fetchNextPosts = async () => {
+    if (myPosts.length === 0) return;
     setIsLoading(true);
     const lastPost = myPosts[myPosts.length - 1];
     const postsQuery = query(
@@ -159,33 +161,28 @@ export default function Profile() {
     };
   }, [isLoading, hasMoreData]);
 
-  const updateUserProfile = useMutation(
-    async (newUsername: string) => {
-      if (user) {
-        await updateProfile(user, {
-          displayName: newUsername,
-        });
-      } else {
-        console.error("User information is not available.");
-      }
-
-      const userPostsQuery = query(
-        collection(db, "posts"),
-        where("userId", "==", user?.uid)
-      );
-      const querySnapshot = await getDocs(userPostsQuery);
-      querySnapshot.forEach(async (document) => {
-        await updateDoc(doc(db, "posts", document.id), {
-          userName: newUsername,
-        });
+  const updateUserProfile = async (newUsername: string) => {
+    if (user) {
+      await updateProfile(user, {
+        displayName: newUsername,
       });
-    },
-    {
-      onSuccess: () => {
-        setUsername(newUsername);
-      },
+    } else {
+      console.error("User information is not available.");
     }
-  );
+
+    const userPostsQuery = query(
+      collection(db, "posts"),
+      where("userId", "==", user?.uid)
+    );
+    const querySnapshot = await getDocs(userPostsQuery);
+    querySnapshot.forEach(async (document) => {
+      await updateDoc(doc(db, "posts", document.id), {
+        userName: newUsername,
+      });
+    });
+
+    setUsername(newUsername);
+  };
 
   const onAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!user) return;
@@ -196,8 +193,20 @@ export default function Profile() {
       const result = await uploadBytes(locationRef, file);
       const avatarURL = await getDownloadURL(result.ref);
       setAvatar(avatarURL);
+      console.log(user);
       await updateProfile(user, {
         photoURL: avatarURL,
+      });
+
+      const userPostsQuery = query(
+        collection(db, "posts"),
+        where("userId", "==", user?.uid)
+      );
+      const querySnapshot = await getDocs(userPostsQuery);
+      querySnapshot.forEach(async (document) => {
+        await updateDoc(doc(db, "posts", document.id), {
+          userImg: avatarURL,
+        });
       });
     } else {
       alert("Please upload a picture smaller than 1 MB.");
@@ -210,7 +219,7 @@ export default function Profile() {
     if (e.key === "Enter") {
       e.preventDefault();
       if (newUsername !== username) {
-        await updateUserProfile.mutateAsync(newUsername);
+        await updateUserProfile(newUsername);
       }
       setEditUsername(false);
     }
@@ -232,7 +241,7 @@ export default function Profile() {
       return;
     }
     if (newUsername !== username) {
-      await updateUserProfile.mutateAsync(newUsername);
+      await updateUserProfile(newUsername);
     }
     setEditUsername(false);
   };
@@ -263,41 +272,6 @@ export default function Profile() {
         />
         <UsernameSpace>
           {editUsername ? (
-            <SaveUsernameIcon onClick={onUsernameSave}>
-              <svg
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={1.5}
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-                />
-              </svg>
-            </SaveUsernameIcon>
-          ) : (
-            <EditUsernameIcon onClick={onUsernameEdit}>
-              <svg
-                fill="none"
-                stroke="currentColor"
-                strokeWidth={1.5}
-                viewBox="0 0 24 24"
-                xmlns="http://www.w3.org/2000/svg"
-                aria-hidden="true"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125"
-                />
-              </svg>
-            </EditUsernameIcon>
-          )}
-          {editUsername ? (
             <EditUsernameTextArea
               rows={1}
               maxLength={20}
@@ -307,6 +281,19 @@ export default function Profile() {
             />
           ) : (
             <Username>{username}</Username>
+          )}
+          {editUsername ? (
+            <SaveUsernameIcon onClick={onUsernameSave}>
+              <FaRegCheckCircle
+                color="var(--success)"
+                aria-label="Fininsh editing"
+                size={25}
+              />
+            </SaveUsernameIcon>
+          ) : (
+            <EditUsernameIcon onClick={onUsernameEdit}>
+              <MdOutlineModeEdit aria-label="Start editing" size={22} />
+            </EditUsernameIcon>
           )}
         </UsernameSpace>
         <Posts>

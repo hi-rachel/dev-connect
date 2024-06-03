@@ -1,6 +1,7 @@
 import { styled } from "styled-components";
 import { FONTS } from "../../constants/fonts";
 import { TextArea } from "../../common/form/Form.styled";
+import { HoverButton } from "../../common/common.styled";
 
 export const Wrapper = styled.div`
   display: flex;
@@ -35,7 +36,9 @@ export const AvartarInput = styled.input`
 
 export const UsernameSpace = styled.form`
   display: flex;
+  gap: 10px;
   align-items: center;
+  justify-content: center;
 `;
 
 export const Username = styled.div`
@@ -43,29 +46,16 @@ export const Username = styled.div`
 `;
 
 export const EditUsernameTextArea = styled(TextArea)`
-  width: fit-content;
-  padding: 5px;
+  padding: 10px 15px;
 `;
 
-export const EditUsernameIcon = styled.div`
-  width: 22px;
-  height: 22px;
-  margin-right: 8px;
-`;
+export const EditUsernameIcon = styled(HoverButton)``;
 
-export const SaveUsernameIcon = styled(EditUsernameIcon)`
-  width: 32px;
-  height: 32px;
-`;
+export const SaveUsernameIcon = styled(HoverButton)``;
 
 export const Posts = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   gap: 10px;
-`;
-
-export const Loader = styled.div`
-  padding: 20px;
-  text-align: center;
 `;
