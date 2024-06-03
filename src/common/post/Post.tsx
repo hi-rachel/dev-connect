@@ -245,7 +245,6 @@ export default function Post({
           ) : (
             <UserProfileNoPhoto />
           )}
-
           <Username>{userName}</Username>
           {user?.uid === userId ? (
             <PostControls>

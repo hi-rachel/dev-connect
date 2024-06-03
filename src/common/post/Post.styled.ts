@@ -80,7 +80,7 @@ export const EditTextArea = styled(TextArea)`
 export const UserWrapper = styled.div`
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: 10px;
 `;
 
 export const Username = styled.p`
@@ -88,15 +88,13 @@ export const Username = styled.p`
 `;
 
 export const UserProfilePhoto = styled.img`
-  width: 36px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
 
-  @media (max-width: 768px) {
-    width: 30px;
-  }
-
   @media (max-width: 480px) {
-    width: 25px;
+    width: 35px;
+    height: 35px;
   }
 `;
 
