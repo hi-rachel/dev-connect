@@ -40,6 +40,7 @@ import { Tag } from "../common.styled";
 import {
   MAX_POST_CHARACTER_SIZE,
   MAX_UPLOAD_SIZE,
+  USER_TIMEZONE,
 } from "../../constants/constants";
 
 // [TODO]
@@ -67,8 +68,7 @@ export default function Post({
   likedBy,
 }: IPost) {
   const user = auth.currentUser;
-  const userTimeZone = "Asia/Seoul";
-  const localTime = moment.utc(createdAt).tz(userTimeZone);
+  const localTime = moment.utc(createdAt).tz(USER_TIMEZONE);
   const formattedDate12Hour = localTime.format("h:mm A · MMM D, YYYY");
   const [edit, setEdit] = useState(false);
   const [editPost, setEditPost] = useState(content);
