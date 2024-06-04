@@ -77,7 +77,7 @@ export default function CreateAccount() {
           />
         </Suspense>
       </div>
-      <div className="w-96 z-20 p-5">
+      <div className="w-96 z-20 p-10">
         <Title>Sign Up</Title>
         <Form onSubmit={onSubmit}>
           <Input

@@ -68,7 +68,7 @@ export default function CreateAccount() {
           />
         </Suspense>
       </div>
-      <div className="z-20 w-96 p-5">
+      <div className="z-20 w-96 p-10">
         <Title>Log In</Title>
         <Form onSubmit={onSubmit}>
           <Input
