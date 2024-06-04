@@ -31,7 +31,7 @@ export default function GithubButton() {
     <>
       <Button onClick={onClick}>
         <Logo src="/github-logo.svg" />
-        {loading ? "Connecting" : "Continue with Github"}
+        <b>{loading ? "Connecting" : "Continue with Github"}</b>
       </Button>
       {error !== "" && <Error>{error}</Error>}
     </>

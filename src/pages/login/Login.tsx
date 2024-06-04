@@ -3,7 +3,15 @@ import { auth } from "../../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { Input, Switcher, Title, Error, Form } from "../../common/auth.styled";
+import {
+  Input,
+  Switcher,
+  Title,
+  Error,
+  Form,
+  Button,
+  GoLoginOrSignUp,
+} from "../../common/auth.styled";
 import GithubButton from "./GithubBtn";
 import GoogleButton from "./GoogleBtn";
 import LoadingScreen from "../../common/loading/LoadingScreen";
@@ -52,15 +60,15 @@ export default function CreateAccount() {
           <SparklesCore
             id="tsparticlesfullpage"
             background="transparent"
-            minSize={0.6}
-            maxSize={3}
-            particleDensity={100}
+            minSize={1}
+            maxSize={15}
+            particleDensity={60}
             className="w-full h-full"
             particleColor="#5eead4"
           />
         </Suspense>
       </div>
-      <div className="z-20 md:w-96 sm:w-80">
+      <div className="z-20 w-96 p-5">
         <Title>Log In</Title>
         <Form onSubmit={onSubmit}>
           <Input
@@ -79,17 +87,15 @@ export default function CreateAccount() {
             type="password"
             required
           />
-          <Input
-            onChange={onChange}
-            type="submit"
-            value={loading ? "Loading" : "Log In"}
-          />
+          <Button type="submit">
+            <b>{loading ? "Loading" : "Log In"}</b>
+          </Button>
         </Form>
         {error !== "" && <Error>{error}</Error>}
         <Switcher>
           Don't have an account ?{" "}
           <Link to="/create-account">
-            <b>Create one &rarr;</b>
+            <GoLoginOrSignUp>Create one &rarr;</GoLoginOrSignUp>
           </Link>
         </Switcher>
         <GithubButton />

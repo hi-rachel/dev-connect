@@ -31,7 +31,7 @@ export default function GoogleButton() {
     <>
       <Button onClick={onClick}>
         <Logo src="/google-logo.svg" />
-        {loading ? "Connecting" : "Continue with Google"}
+        <b>{loading ? "Connecting" : "Continue with Google"}</b>
       </Button>
       {error !== "" && <Error>{error}</Error>}
     </>
