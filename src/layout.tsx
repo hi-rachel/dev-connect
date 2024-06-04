@@ -171,6 +171,7 @@ export default function Layout() {
             </FooterMenuItem>
           </Link>
         </FooterMenu>
+
         <Outlet />
       </LayoutWrapper>
     </>

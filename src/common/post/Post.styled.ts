@@ -10,6 +10,11 @@ export const Posts = styled.div`
   flex-direction: column;
   gap: 10px;
   margin-bottom: 50px;
+  max-width: 820px;
+
+  @media (max-width: 790px) {
+    max-width: 700px;
+  }
 `;
 
 export const PageTitle = styled.div`
@@ -21,7 +26,6 @@ export const PageTitle = styled.div`
 export const PostWrapper = styled.div`
   width: 100%;
   overflow: hidden;
-  width: 100%;
   position: relative;
   padding: 20px;
   border-radius: 15px;

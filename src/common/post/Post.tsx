@@ -150,11 +150,15 @@ export default function Post({
         alert(
           `Please keep your message under ${MAX_POST_CHARACTER_SIZE} characters.`
         );
+        setEdit(false);
+        setEditPost(content);
         return;
       }
 
       if (editPost.length < 2) {
         alert("Please write your message more than 2 characters.");
+        setEdit(false);
+        setEditPost(content);
         return;
       }
 
@@ -297,7 +301,7 @@ export default function Post({
               value={editPost}
             />
           ) : (
-            <Payload>{content}</Payload>
+            <Payload>{editPost}</Payload>
           )}
           {edit ? (
             <>
@@ -311,7 +315,6 @@ export default function Post({
           ) : (
             <PostImg>{originalPhoto && <Photo src={originalPhoto} />}</PostImg>
           )}
-
           {tags.length >= 1 && (
             <TagWrapper>
               {tags.length >= 1 &&

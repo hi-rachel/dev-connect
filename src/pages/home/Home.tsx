@@ -4,6 +4,7 @@ import Timeline from "./timeline/Timeline";
 import { useState } from "react";
 import SearchPostInput from "./search-post-input/SearchPostInput";
 import { FONTS, FONTS_WEIGHT } from "../../constants/fonts";
+import HomeFooter from "../../common/footer/HomeFooter";
 
 const Wrapper = styled.div`
   display: flex;
@@ -30,6 +31,7 @@ export default function Home() {
       <SearchPostInput setSearchKeyword={setSearchKeyword} />
       <NewPostForm />
       <Timeline searchKeyword={searchKeyword} />
+      <HomeFooter />
     </Wrapper>
   );
 }
