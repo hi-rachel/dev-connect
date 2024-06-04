@@ -46,6 +46,7 @@ import {
   TagInput,
   TagInputArea,
 } from "../../pages/home/new-post-form/NewPostForm.styled";
+import LinkifiedText from "./LikifiedText";
 
 // [TODO]
 // - [x] tags 등록 추가
@@ -331,7 +332,9 @@ export default function Post({
               value={editPost}
             />
           ) : (
-            <Payload>{editPost}</Payload>
+            <Payload>
+              <LinkifiedText text={editPost} />
+            </Payload>
           )}
           {edit ? (
             <>
