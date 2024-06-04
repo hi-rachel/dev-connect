@@ -261,8 +261,7 @@ export default function Profile() {
   };
 
   return (
-    user &&
-    user.displayName && (
+    user && (
       <ProfileWrapper>
         <AvatarUpload htmlFor="avatar">
           {avatar ? (

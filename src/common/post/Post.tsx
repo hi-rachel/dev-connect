@@ -42,6 +42,10 @@ import {
   MAX_UPLOAD_SIZE,
   USER_TIMEZONE,
 } from "../../constants/constants";
+import {
+  TagInput,
+  TagInputArea,
+} from "../../pages/home/new-post-form/NewPostForm.styled";
 
 // [TODO]
 // - [x] tags 등록 추가
@@ -74,6 +78,8 @@ export default function Post({
   const [editPost, setEditPost] = useState(content);
   const [file, setFile] = useState<File | null>(null);
   const [originalPhoto, setOriginalPhoto] = useState<string | null>(null);
+  const [editTags, setEditTags] = useState<string[]>(tags || []);
+  const [tagInput, setTagInput] = useState("");
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isHeartClick, setIsHeartClick] = useState(false);
   const [isBookmark, setIsBookmark] = useState(false);
@@ -164,6 +170,7 @@ export default function Post({
 
       await updateDoc(doc(db, "posts", postId), {
         content: editPost,
+        tags: editTags,
       });
     } catch (e) {
       console.log(e);
@@ -193,6 +200,29 @@ export default function Post({
     } catch (e) {
       console.log(e);
     }
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && tagInput.trim() !== "") {
+      e.preventDefault();
+      if (editTags.length >= 10) {
+        alert("You can't add more than 10 tags.");
+        setTagInput("");
+        return;
+      }
+      const newTag = tagInput.trim().toLowerCase();
+      if (editTags.map((tag) => tag.toLowerCase()).includes(newTag)) {
+        alert("This tag is already added.");
+        setTagInput("");
+        return;
+      }
+      setEditTags((prevTags) => [...prevTags, tagInput.trim()]);
+      setTagInput("");
+    }
+  };
+
+  const handleTagRemove = (index: number) => {
+    setEditTags((prevTags) => prevTags.filter((_, i) => i !== index));
   };
 
   const handleClickHeart = async () => {
@@ -315,10 +345,28 @@ export default function Post({
           ) : (
             <PostImg>{originalPhoto && <Photo src={originalPhoto} />}</PostImg>
           )}
-          {tags.length >= 1 && (
+          {edit ? (
+            <TagInputArea>
+              {editTags.map((tag, index) => (
+                <Tag key={index}>
+                  {tag}{" "}
+                  <button onClick={() => handleTagRemove(index)}>x</button>
+                </Tag>
+              ))}
+              <TagInput
+                type="text"
+                tabIndex={0}
+                aria-label="tags"
+                value={tagInput}
+                onChange={(e) => setTagInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Add tags, press Enter to add"
+              />
+            </TagInputArea>
+          ) : (
             <TagWrapper>
-              {tags.length >= 1 &&
-                tags.map((tag, index) => <Tag key={index}>{tag}</Tag>)}
+              {editTags.length >= 1 &&
+                editTags.map((tag, index) => <Tag key={index}>{tag}</Tag>)}
             </TagWrapper>
           )}
           <PostFooter>

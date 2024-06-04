@@ -59,6 +59,12 @@ export default function NewPostForm() {
         setTagInput("");
         return;
       }
+      const newTag = tagInput.trim().toLowerCase();
+      if (tags.map((tag) => tag.toLowerCase()).includes(newTag)) {
+        alert("This tag is already added.");
+        setTagInput("");
+        return;
+      }
       setTags((prevTags) => [...prevTags, tagInput.trim()]);
       setTagInput("");
     }
@@ -90,6 +96,11 @@ export default function NewPostForm() {
 
     if (post === "") {
       alert("Please enter your message.");
+      return;
+    }
+
+    if (post.length < 2) {
+      alert("Please write your message more than 2 characters.");
       return;
     }
 
