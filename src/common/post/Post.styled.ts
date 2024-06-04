@@ -20,7 +20,7 @@ export const Posts = styled.div`
 export const PageTitle = styled.div`
   font-size: ${FONTS.xl};
   font-weight: ${FONTS_WEIGHT.bold};
-  padding: 10px 20px;
+  padding: 10px 0;
 `;
 
 export const PostWrapper = styled.div`
@@ -43,7 +43,6 @@ export const NoPost = styled.div`
   width: 100%;
   color: var(--gray--500);
   font-size: ${FONTS.lg};
-  padding: 0 20px;
 
   @media (prefers-color-scheme: dark) {
     color: var(--gary);

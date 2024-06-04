@@ -34,7 +34,7 @@ export const LayoutHeader = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
-    padding: 15px 30px;
+    padding: 15px 20px;
     background-color: var(--background);
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   }
@@ -90,8 +90,8 @@ export const MenuItem = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 50px;
-  width: 50px;
+  height: 40px;
+  width: 40px;
   border-radius: 50%;
 
   &:hover,
