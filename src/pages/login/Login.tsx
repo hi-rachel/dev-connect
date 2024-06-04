@@ -1,4 +1,4 @@
-import { lazy, useState } from "react";
+import { Suspense, lazy, useState } from "react";
 import { auth } from "../../firebase";
 import { Link, useNavigate } from "react-router-dom";
 import { FirebaseError } from "firebase/app";
@@ -6,6 +6,7 @@ import { signInWithEmailAndPassword } from "firebase/auth";
 import { Input, Switcher, Title, Error, Form } from "../../common/auth.styled";
 import GithubButton from "./GithubBtn";
 import GoogleButton from "./GoogleBtn";
+import LoadingScreen from "../../common/loading/LoadingScreen";
 
 const SparklesCore = lazy(() => import("../../common/ui/Sparkles"));
 
@@ -47,15 +48,17 @@ export default function CreateAccount() {
   return (
     <div className="h-screen relative w-full flex flex-col items-center justify-center overflow-hidden rounded-md">
       <div className="w-full absolute inset-0">
-        <SparklesCore
-          id="tsparticlesfullpage"
-          background="transparent"
-          minSize={0.6}
-          maxSize={3}
-          particleDensity={100}
-          className="w-full h-full"
-          particleColor="#5eead4"
-        />
+        <Suspense fallback={<LoadingScreen />}>
+          <SparklesCore
+            id="tsparticlesfullpage"
+            background="transparent"
+            minSize={0.6}
+            maxSize={3}
+            particleDensity={100}
+            className="w-full h-full"
+            particleColor="#5eead4"
+          />
+        </Suspense>
       </div>
       <div className="z-20 md:w-96 sm:w-80">
         <Title>Log In</Title>
