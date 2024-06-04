@@ -15,6 +15,7 @@ export const Form = styled.form`
 `;
 
 export const Input = styled.input`
+  color: var(--background);
   border: 1px solid var(--gray--300);
   font-weight: ${FONTS_WEIGHT.medium};
   padding: 10px 20px;
