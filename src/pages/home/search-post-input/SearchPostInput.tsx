@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from "react";
-import { SearchInput } from "./SearchPostInput.styled";
+import { SearchInput, SearchInputWrapper } from "./SearchPostInput.styled";
 
 interface SearchPostInputProps {
   setSearchKeyword: (keyword: string) => void;
@@ -13,11 +13,13 @@ const SearchPostInput: React.FC<SearchPostInputProps> = ({
   };
 
   return (
-    <SearchInput
-      type="text"
-      placeholder="Search..."
-      onChange={handleSearchChange}
-    />
+    <SearchInputWrapper>
+      <SearchInput
+        type="text"
+        placeholder="Search..."
+        onChange={handleSearchChange}
+      />
+    </SearchInputWrapper>
   );
 };
 

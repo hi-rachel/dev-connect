@@ -2,21 +2,30 @@ import { FONTS, FONTS_WEIGHT } from "./constants/fonts";
 import styled from "styled-components";
 
 export const LayoutWrapper = styled.div`
+  position: relative;
   width: 100%;
   justify-content: center;
   display: flex;
   gap: 20px;
-  padding: 50px 0px;
+  margin-top: 30px;
   max-width: 860px;
-  position: relative;
-  padding-top: 80px;
-  padding-bottom: 60px;
+  min-width: 600px;
+
+  @media (max-width: 768px) {
+    margin-top: 0px;
+    padding-top: 80px;
+    padding-bottom: 60px;
+  }
+
+  @media (max-width: 480px) {
+    min-width: 330px;
+  }
 `;
 
 export const LayoutHeader = styled.div`
   display: none;
 
-  @media (max-width: 480px) {
+  @media (max-width: 768px) {
     position: fixed;
     top: 0;
     z-index: 100;
@@ -59,14 +68,18 @@ export const AvatarPopUp = styled.div`
 `;
 
 export const Menu = styled.div`
+  position: fixed;
+  top: 30px;
+  left: 30px;
   display: flex;
   align-items: center;
   flex-direction: column;
-  align-items: center;
   gap: 20px;
+  height: 100%;
+  align-items: stretch;
 
-  @media (max-width: 480px) {
-    display: none;
+  @media (max-width: 768px) {
+    display: none; /* 태블릿 반응형에서는 보이지 않음 */
   }
 `;
 
@@ -99,7 +112,7 @@ export const MenuItem = styled.div`
 
 export const FooterMenu = styled.div`
   display: none;
-  @media (max-width: 480px) {
+  @media (max-width: 768px) {
     z-index: 100;
     background-color: var(--background);
     display: flex;

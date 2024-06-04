@@ -5,6 +5,7 @@ import { HoverButton, Wrapper } from "../../common/common.styled";
 
 export const ProfileWrapper = styled(Wrapper)`
   align-items: center;
+  margin-top: 10px;
 `;
 
 export const AvatarUpload = styled.label`
@@ -48,7 +49,7 @@ export const EditUsernameTextArea = styled(TextArea)`
   width: 45%;
   padding: 10px 15px;
   font-size: ${FONTS.lg};
-  min-width: 320px;
+  min-width: 330px;
 
   @media (max-width: 480px) {
     width: 80%;

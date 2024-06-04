@@ -1,9 +1,13 @@
 import styled from "styled-components";
 
+export const SearchInputWrapper = styled.div`
+  width: 100%;
+  padding: 0 20px;
+`;
+
 export const SearchInput = styled.input`
-  margin: 0 10px;
   background: transparent;
-  width: 97%;
+  width: 100%;
   padding: 0.6rem;
   margin-bottom: 1rem;
   border: 1px solid var(--primary);

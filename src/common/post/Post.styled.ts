@@ -20,7 +20,6 @@ export const PageTitle = styled.div`
 
 export const PostWrapper = styled.div`
   width: 100%;
-  max-width: 700px;
   overflow: hidden;
   width: 100%;
   position: relative;

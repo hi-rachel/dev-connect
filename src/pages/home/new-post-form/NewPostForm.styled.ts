@@ -4,10 +4,10 @@ import { FONTS, FONTS_WEIGHT } from "../../../constants/fonts";
 import { styled } from "styled-components";
 
 export const Form = styled.form`
-  margin: 0 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;
+  padding: 0 20px;
 `;
 
 export const PreviewPhoto = styled(Photo)`

@@ -53,6 +53,11 @@ const Wrapper = styled.div`
   overflow-x: hidden;
   display: flex;
   justify-content: center;
+  padding-left: 100px;
+
+  @media (max-width: 768px) {
+    padding: 0px;
+  }
 `;
 
 function App() {
