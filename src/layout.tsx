@@ -14,7 +14,7 @@ import { FaBookmark, FaHeart, FaRegBookmark, FaRegHeart } from "react-icons/fa";
 import { HiHome, HiOutlineHome } from "react-icons/hi";
 import { FaRegUser, FaUser } from "react-icons/fa6";
 import { CgLogOut } from "react-icons/cg";
-import { UserAvatar } from "./common/user/Avatar";
+import { AvatarCircle, UserAvatar } from "./common/user/Avatar";
 
 export default function Layout() {
   const user = auth.currentUser;
@@ -64,11 +64,6 @@ export default function Layout() {
             </MenuItem>
           </Link>
           <div>
-            <UserAvatar
-              src={user.photoURL || ""}
-              onClick={togglePopover}
-              style={{ cursor: "pointer" }}
-            />
             {showPopover && (
               <AvatarPopUp onClick={onLogOut}>
                 <CgLogOut size={28} />
@@ -129,7 +124,20 @@ export default function Layout() {
             <CgLogOut size={26} />
           </MenuItem>
           <MenuItem>
-            {user && <UserAvatar src={user.photoURL || ""} />}
+            <AvatarCircle>
+              {user.photoURL ? (
+                <UserAvatar src={user.photoURL} onClick={togglePopover} />
+              ) : (
+                <svg
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                  aria-hidden="true"
+                >
+                  <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
+                </svg>
+              )}
+            </AvatarCircle>
           </MenuItem>
         </Menu>
 

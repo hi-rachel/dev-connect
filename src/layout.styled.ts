@@ -10,11 +10,13 @@ export const LayoutWrapper = styled.div`
   margin-top: 30px;
   max-width: 860px;
   min-width: 600px;
+  padding-left: 100px;
 
   @media (max-width: 768px) {
     margin-top: 0px;
     padding-top: 80px;
     padding-bottom: 60px;
+    padding-left: 0px;
   }
 
   @media (max-width: 480px) {
