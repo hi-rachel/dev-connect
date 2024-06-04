@@ -28,6 +28,9 @@ export const Input = styled.input`
       opacity: 0.8;
     }
   }
+  @media (prefers-color-scheme: light) {
+    color: var(--black);
+  }
 `;
 
 export const Error = styled.span`
@@ -35,16 +38,22 @@ export const Error = styled.span`
   color: var(--danger);
 `;
 
+export const GoLoginOrSignUp = styled.span`
+  font-weight: ${FONTS_WEIGHT.bold};
+
+  &:hover {
+    color: var(--info);
+  }
+`;
+
 export const Switcher = styled.div`
   text-align: center;
   margin-top: 20px;
   margin-bottom: 30px;
-  a {
-    color: var(--primary);
-  }
 `;
 
 export const Button = styled.button`
+  color: var(--foreground);
   background: transparent;
   margin-top: 20px;
   font-weight: ${FONTS_WEIGHT.medium};

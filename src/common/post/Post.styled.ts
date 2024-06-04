@@ -109,34 +109,6 @@ export const Username = styled.p`
   font-weight: ${FONTS_WEIGHT.semiBold};
 `;
 
-export const UserProfilePhoto = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-
-  @media (max-width: 480px) {
-    width: 35px;
-    height: 35px;
-  }
-`;
-
-export const UserProfileNoPhoto = styled.div`
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background-color: var(--primary);
-
-  @media (max-width: 768px) {
-    width: 30px;
-    height: 30px;
-  }
-
-  @media (max-width: 480px) {
-    width: 25px;
-    height: 25px;
-  }
-`;
-
 export const Payload = styled.p`
   word-wrap: break-word;
   margin-bottom: 15px;
