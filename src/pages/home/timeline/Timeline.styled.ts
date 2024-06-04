@@ -1,13 +1,5 @@
 import styled from "styled-components";
 
-export const TimelineWrapper = styled.div`
-  width: 100%;
-  margin-top: 50px;
-  display: flex;
-  gap: 10px;
-  flex-direction: column;
-`;
-
 export const HeartBounce = styled.div`
   position: fixed;
   top: 50%;

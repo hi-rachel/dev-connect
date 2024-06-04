@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { addDoc, collection, updateDoc } from "firebase/firestore";
-
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
   Form,
@@ -12,9 +11,7 @@ import {
   PreviewPhoto,
   DeletePreviewIcon,
 } from "./NewPostForm.styled";
-
 import { MdAddAPhoto } from "react-icons/md";
-
 import { DeletePostImg } from "../../../common/post/Post.styled";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { auth, db, storage } from "../../../firebase";

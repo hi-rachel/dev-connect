@@ -16,14 +16,11 @@ export const TextArea = styled.textarea`
   font-size: ${FONTS.md};
   width: 100%;
   resize: none;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   &::placeholder {
     font-size: ${FONTS.md};
   }
   &:focus {
     outline: none;
-    border-color: var(--primary);
   }
   @media (prefers-color-scheme: dark) {
     box-shadow: rgba(255, 255, 255, 0.2) 0px 4px 12px;

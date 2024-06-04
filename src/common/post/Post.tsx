@@ -146,8 +146,6 @@ export default function Post({
         });
       }
 
-      console.log(editPost.length);
-
       if (editPost.length > MAX_POST_CHARACTER_SIZE) {
         alert(
           `Please keep your message under ${MAX_POST_CHARACTER_SIZE} characters.`

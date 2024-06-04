@@ -50,20 +50,23 @@ const router = createBrowserRouter([
 ]);
 
 const Wrapper = styled.div`
-  height: 100vh;
+  overflow-x: hidden;
   display: flex;
   justify-content: center;
 `;
 
 function App() {
   const [loading, setLoading] = useState(true);
+
   const init = async () => {
     await auth.authStateReady();
     setLoading(false);
   };
+
   useEffect(() => {
     init();
   }, []);
+
   return (
     <Wrapper>
       {loading ? <LoadingScreen /> : <RouterProvider router={router} />}

@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Wrapper } from "../../common/common.styled";
-import { Posts } from "../profile/Profile.styled";
 import Post from "../../common/post/Post";
 import { IPost } from "../../type/post";
 import { Unsubscribe } from "firebase/auth";
@@ -17,6 +16,9 @@ import {
 import { auth, db } from "../../firebase";
 import { PAGE_SIZE } from "../../constants/constants";
 import { Loader } from "../../common/loading/Loading.styled";
+import { NoPost, PageTitle, Posts } from "../../common/post/Post.styled";
+
+// post가 없을때 메시지 보여주기
 
 const BookmarkedPosts = () => {
   const user = auth.currentUser;
@@ -145,10 +147,18 @@ const BookmarkedPosts = () => {
 
   return (
     <Wrapper>
+      <PageTitle>Bookmarked Lists</PageTitle>
       <Posts>
-        {myPosts?.map((post, index) => (
-          <Post key={`${post.postId}-${index}`} {...post} />
-        ))}
+        {myPosts.length >= 1 ? (
+          myPosts.map((post, index) => (
+            <Post key={`${post.postId}-${index}`} {...post} />
+          ))
+        ) : (
+          <NoPost>
+            You haven't bookmarked any Posts.
+            <br /> When you do, they'll show up here.
+          </NoPost>
+        )}
       </Posts>
       {isLoading && <Loader>isLoading...</Loader>}
     </Wrapper>

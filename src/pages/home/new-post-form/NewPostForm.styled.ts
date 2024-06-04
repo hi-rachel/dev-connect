@@ -26,7 +26,7 @@ export const TagInputArea = styled.div`
 `;
 
 export const TagInput = styled.input`
-  background-color: var(--background);
+  background: transparent;
   width: 100%;
   &:focus {
     outline: none;
@@ -67,6 +67,7 @@ export const SubmitBtn = styled(MainBtn)`
   background-color: var(--primary);
   color: var(--black);
   font-weight: ${FONTS_WEIGHT.semiBold};
+  margin-bottom: 50px;
 
   @media (max-width: 768px) {
     font-size: ${FONTS.sm};

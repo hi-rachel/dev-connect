@@ -4,6 +4,7 @@ export const FONTS = {
   md: "16px",
   lg: "18px",
   xl: "24px",
+  logo: "30px",
   title: "42px",
 };
 

@@ -3,28 +3,47 @@ import { FONTS, FONTS_WEIGHT } from "../../constants/fonts";
 import { AttachFileInput, HoverButton } from "../common.styled";
 import { TextArea } from "../form/Form.styled";
 
+export const Posts = styled.div`
+  width: 100%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 50px;
+`;
+
+export const PageTitle = styled.div`
+  font-size: ${FONTS.xl};
+  font-weight: ${FONTS_WEIGHT.bold};
+  padding: 10px 20px;
+`;
+
 export const PostWrapper = styled.div`
+  width: 100%;
   max-width: 700px;
   overflow: hidden;
   width: 100%;
   position: relative;
   padding: 20px;
   border-radius: 15px;
-  height: auto;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-  margin: 10px auto;
 
   @media (prefers-color-scheme: dark) {
     box-shadow: rgba(255, 255, 255, 0.2) 0px 4px 12px;
     border: 1px solid var(--gray);
   }
+`;
 
-  @media (max-width: 768px) {
-    max-width: 680px;
-  }
+export const NoPost = styled.div`
+  display: flex;
+  margin-top: 30px;
+  width: 100%;
+  color: var(--gray--500);
+  font-size: ${FONTS.lg};
+  padding: 0 20px;
 
-  @media (max-width: 480px) {
-    max-width: 360px;
+  @media (prefers-color-scheme: dark) {
+    color: var(--gary);
   }
 `;
 
@@ -171,7 +190,7 @@ export const ChangeFileButton = styled.button`
 `;
 
 export const PostDate = styled.div`
-  color: var(--gray);
+  color: var(--gray--400);
 
   @media (max-width: 480px) {
     font-size: ${FONTS.sm};

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, KeyboardEvent, MouseEvent } from "react";
 import { auth, db, storage } from "../../firebase";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import { Unsubscribe, updateProfile } from "firebase/auth";
@@ -22,22 +22,23 @@ import {
   EditUsernameIcon,
   EditUsernameTextArea,
   SaveUsernameIcon,
-  Posts,
   Username,
-  UsernameSpace,
-  Wrapper,
+  ProfileWrapper,
+  EditUsernameForm,
 } from "./Profile.styled";
 import Post from "../../common/post/Post";
 import { MAX_UPLOAD_SIZE, PAGE_SIZE } from "../../constants/constants";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { Loader } from "../../common/loading/Loading.styled";
+import { Posts } from "../../common/post/Post.styled";
 
 export default function Profile() {
   const user = auth.currentUser;
   const [avatar, setAvatar] = useState(user?.photoURL);
-  const [username, setUsername] = useState(user?.displayName || "Anonymous");
-  const [newUsername, setNewUsername] = useState(username);
+  const [newUsername, setNewUsername] = useState(
+    user?.displayName || "Anonymous"
+  );
   const [editUsername, setEditUsername] = useState(false);
   const [myPosts, setMyPosts] = useState<IPost[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -54,7 +55,7 @@ export default function Profile() {
         orderBy("createdAt", "desc"),
         limit(PAGE_SIZE)
       );
-      unsubscribe = await onSnapshot(postsQuery, (snapshot) => {
+      unsubscribe = onSnapshot(postsQuery, (snapshot) => {
         const newPosts: IPost[] = [];
         snapshot.forEach((doc) => {
           const {
@@ -81,7 +82,7 @@ export default function Profile() {
             likedBy,
           });
         });
-        setMyPosts(() => [...newPosts]);
+        setMyPosts([...newPosts]);
         setIsLoading(false);
       });
     };
@@ -161,39 +162,17 @@ export default function Profile() {
     };
   }, [isLoading, hasMoreData]);
 
-  const updateUserProfile = async (newUsername: string) => {
-    if (user) {
-      await updateProfile(user, {
-        displayName: newUsername,
-      });
-    } else {
-      console.error("User information is not available.");
-    }
-
-    const userPostsQuery = query(
-      collection(db, "posts"),
-      where("userId", "==", user?.uid)
-    );
-    const querySnapshot = await getDocs(userPostsQuery);
-    querySnapshot.forEach(async (document) => {
-      await updateDoc(doc(db, "posts", document.id), {
-        userName: newUsername,
-      });
-    });
-
-    setUsername(newUsername);
-  };
-
   const onAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!user) return;
+
     const { files } = e.target;
+
     if (files && files.length === 1 && files[0].size <= MAX_UPLOAD_SIZE) {
       const file = files[0];
       const locationRef = ref(storage, `avatars/${user?.uid}`);
       const result = await uploadBytes(locationRef, file);
       const avatarURL = await getDownloadURL(result.ref);
       setAvatar(avatarURL);
-      console.log(user);
       await updateProfile(user, {
         photoURL: avatarURL,
       });
@@ -213,18 +192,6 @@ export default function Profile() {
     }
   };
 
-  const onUsernameKeyDown = async (
-    e: React.KeyboardEvent<HTMLTextAreaElement>
-  ) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      if (newUsername !== username) {
-        await updateUserProfile(newUsername);
-      }
-      setEditUsername(false);
-    }
-  };
-
   const onUsernameChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewUsername(e.target.value);
   };
@@ -233,23 +200,70 @@ export default function Profile() {
     setEditUsername(true);
   };
 
-  const onUsernameSave = async () => {
+  const updateUserProfile = async (newUsername: string) => {
+    if (user) {
+      await updateProfile(user, {
+        displayName: newUsername,
+      });
+
+      const userPostsQuery = query(
+        collection(db, "posts"),
+        where("userId", "==", user?.uid)
+      );
+
+      const querySnapshot = await getDocs(userPostsQuery);
+      querySnapshot.forEach(async (document) => {
+        await updateDoc(doc(db, "posts", document.id), {
+          userName: newUsername,
+        });
+      });
+    } else {
+      console.error("User information is not available.");
+    }
+    setEditUsername(false);
+  };
+
+  const onUsernameSave = async (
+    e:
+      | KeyboardEvent<HTMLTextAreaElement>
+      | MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
+  ) => {
+    e.preventDefault();
     if (!user || !setEditUsername) return;
+
     if (newUsername.length < 2) {
       alert("Please enter a username with at least 2 characters.");
       setEditUsername(false);
       return;
     }
-    if (newUsername !== username) {
-      await updateUserProfile(newUsername);
+
+    if (newUsername.length > 20) {
+      alert("Please enter a username with at least 20 characters.");
+      setEditUsername(false);
+      return;
     }
-    setEditUsername(false);
+
+    if (newUsername == user.displayName) {
+      alert("Please write a name that is different from your existing name.");
+      setEditUsername(false);
+      return;
+    }
+    await updateUserProfile(newUsername);
+  };
+
+  const onUsernameKeyDown = async (
+    e: React.KeyboardEvent<HTMLTextAreaElement>
+  ) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      onUsernameSave(e);
+    }
   };
 
   return (
     user &&
     user.displayName && (
-      <Wrapper>
+      <ProfileWrapper>
         <AvatarUpload htmlFor="avatar">
           {avatar ? (
             <AvartarImg src={avatar} alt="avatar" />
@@ -270,24 +284,26 @@ export default function Profile() {
           type="file"
           accept="image/*"
         />
-        <UsernameSpace>
+        <EditUsernameForm>
           {editUsername ? (
             <EditUsernameTextArea
+              placeholder="2 ~ 20 characters"
               rows={1}
+              minLength={2}
               maxLength={20}
               onChange={onUsernameChange}
               value={newUsername}
               onKeyDown={onUsernameKeyDown}
             />
           ) : (
-            <Username>{username}</Username>
+            <Username>{user.displayName}</Username>
           )}
           {editUsername ? (
-            <SaveUsernameIcon onClick={onUsernameSave}>
+            <SaveUsernameIcon onClick={(e) => onUsernameSave(e)}>
               <FaRegCheckCircle
                 color="var(--success)"
                 aria-label="Fininsh editing"
-                size={25}
+                size={28}
               />
             </SaveUsernameIcon>
           ) : (
@@ -295,14 +311,14 @@ export default function Profile() {
               <MdOutlineModeEdit aria-label="Start editing" size={22} />
             </EditUsernameIcon>
           )}
-        </UsernameSpace>
+        </EditUsernameForm>
         <Posts>
           {myPosts?.map((post, index) => (
             <Post key={`${post.postId}-${index}`} {...post} />
           ))}
         </Posts>
         {isLoading && <Loader>isLoading...</Loader>}
-      </Wrapper>
+      </ProfileWrapper>
     )
   );
 }

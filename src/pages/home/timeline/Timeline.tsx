@@ -12,10 +12,11 @@ import { db } from "../../../firebase";
 import Post from "../../../common/post/Post";
 import { Unsubscribe } from "firebase/auth";
 // import HeartAnimation from "/heart-animation-2.gif";
-import { TimelineWrapper } from "./Timeline.styled";
 import { IPost } from "../../../type/post";
 import { PAGE_SIZE } from "../../../constants/constants";
 import { Loader } from "../../../common/loading/Loading.styled";
+import { Wrapper } from "../../../common/common.styled";
+import { Posts } from "../../../common/post/Post.styled";
 
 // [TODO]
 // - [x] 글 검색 기능
@@ -76,7 +77,7 @@ export default function Timeline({ searchKeyword }: TimelineProps) {
             likedBy,
           });
         });
-        setPosts(() => [...newPosts]); // 기존 트윗 목록에 새로운 트윗 추가
+        setPosts([...newPosts]); // 기존 트윗 목록에 새로운 트윗 추가
         setIsLoading(false);
       });
     };
@@ -183,7 +184,7 @@ export default function Timeline({ searchKeyword }: TimelineProps) {
   });
 
   return (
-    <TimelineWrapper>
+    <Wrapper>
       {/* <HeartBounce>
         {showHeartAnimation && (
           <img
@@ -193,14 +194,16 @@ export default function Timeline({ searchKeyword }: TimelineProps) {
           />
         )}
       </HeartBounce> */}
-      {searchKeyword
-        ? filteredPosts.map((post, index) => (
-            <Post key={`${post.postId}-${index}`} {...post} />
-          ))
-        : posts.map((post, index) => (
-            <Post key={`${post.postId}-${index}`} {...post} />
-          ))}
+      <Posts>
+        {searchKeyword
+          ? filteredPosts.map((post, index) => (
+              <Post key={`${post.postId}-${index}`} {...post} />
+            ))
+          : posts.map((post, index) => (
+              <Post key={`${post.postId}-${index}`} {...post} />
+            ))}
+      </Posts>
       {isLoading && <Loader>isLoading...</Loader>}
-    </TimelineWrapper>
+    </Wrapper>
   );
 }
