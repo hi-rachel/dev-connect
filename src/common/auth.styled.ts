@@ -3,6 +3,7 @@ import { FONTS, FONTS_WEIGHT } from "../constants/fonts";
 
 export const Title = styled.h1`
   font-size: ${FONTS.title};
+  font-weight: ${FONTS_WEIGHT.semiBold};
 `;
 
 export const Form = styled.form`
