@@ -11,7 +11,6 @@ import {
 import { db } from "../../../firebase";
 import Post from "../../../common/post/Post";
 import { Unsubscribe } from "firebase/auth";
-// import HeartAnimation from "/heart-animation-2.gif";
 import { IPost } from "../../../type/post";
 import { PAGE_SIZE } from "../../../constants/constants";
 import { Loader } from "../../../common/loading/Loading.styled";
@@ -38,7 +37,6 @@ export default function Timeline({ searchKeyword }: TimelineProps) {
   const [posts, setPosts] = useState<IPost[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMoreData, setHasMoreData] = useState(true);
-  // const [showHeartAnimation, setShowHeartAnimation] = useState(false);
 
   useEffect(() => {
     let unsubscribe: Unsubscribe | null = null;
@@ -157,19 +155,6 @@ export default function Timeline({ searchKeyword }: TimelineProps) {
     };
   });
 
-  //   const handleClickHeart = (like: boolean) => {
-  //     if (like) {
-  //       setShowHeartAnimation(true);
-  //       setTimeout(() => {
-  //         setShowHeartAnimation(false);
-  //       }, 1000);
-  //     }
-  //   };
-
-  // const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setSearchKeyword(e.target.value);
-  // };
-
   const filteredPosts = posts.filter((post) => {
     const filteredTags = post.tags.filter((tag: string) =>
       tag.toLowerCase().includes(searchKeyword.toLowerCase())
@@ -185,15 +170,6 @@ export default function Timeline({ searchKeyword }: TimelineProps) {
 
   return (
     <Wrapper>
-      {/* <HeartBounce>
-        {showHeartAnimation && (
-          <img
-            src={HeartAnimation}
-            alt="heart-animation"
-            className="heart-animation"
-          />
-        )}
-      </HeartBounce> */}
       <Posts>
         {searchKeyword
           ? filteredPosts.map((post, index) => (
