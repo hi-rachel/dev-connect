@@ -30,7 +30,7 @@ export default function GoogleButton() {
   return (
     <>
       <Button onClick={onClick}>
-        <Logo alt="google-logo" src="/google-logo.svg" />
+        <Logo width={25} height={25} alt="google-logo" src="/google-logo.svg" />
         <b>{loading ? "Connecting" : "Continue with Google"}</b>
       </Button>
       {error !== "" && <Error>{error}</Error>}
