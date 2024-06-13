@@ -3,13 +3,13 @@ import {
   Container,
   ContentWrapper,
   FullPageWrapper,
-  Title,
 } from "../../common/login/auth.styled";
+import SignUpForm from "./SignUpForm";
+import GoLogin from "./GoLogin";
 import GithubButton from "../../common/login/GithubBtn";
 import GoogleButton from "../../common/login/GoogleBtn";
+import { Title } from "../../common/login/auth.styled";
 import LoadingScreen from "../../common/loading/LoadingScreen";
-import GoSignUp from "./GoSignUp";
-import LoginForm from "./LoginForm";
 
 const SparklesCore = lazy(() => import("../../common/ui/Sparkles"));
 
@@ -30,9 +30,9 @@ export default function CreateAccount() {
         </Suspense>
       </FullPageWrapper>
       <ContentWrapper>
-        <Title>Log In</Title>
-        <LoginForm />
-        <GoSignUp />
+        <Title>Sign Up</Title>
+        <SignUpForm />
+        <GoLogin />
         <GithubButton />
         <GoogleButton />
       </ContentWrapper>

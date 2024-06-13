@@ -1,5 +1,28 @@
 import { styled } from "styled-components";
-import { FONTS, FONTS_WEIGHT } from "../constants/fonts";
+import { FONTS, FONTS_WEIGHT } from "../../constants/fonts";
+
+export const Container = styled.div`
+  height: 100vh;
+  position: relative;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+`;
+
+export const FullPageWrapper = styled.div`
+  width: 100%;
+  position: absolute;
+  inset: 0;
+`;
+
+export const ContentWrapper = styled.div`
+  width: 24rem;
+  z-index: 20;
+  padding: 2.5rem;
+`;
 
 export const Title = styled.h1`
   font-size: ${FONTS.title};

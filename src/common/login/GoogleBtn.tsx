@@ -1,12 +1,12 @@
-import { GithubAuthProvider, signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
 import { FirebaseError } from "firebase/app";
 import { useNavigate } from "react-router-dom";
-import { Button, Logo } from "../../common/auth.styled";
+import { Button, Logo } from "./auth.styled";
 import { useState } from "react";
-import { Error } from "../../common/auth.styled";
+import { Error } from "./auth.styled";
 
-export default function GithubButton() {
+export default function GoogleButton() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ export default function GithubButton() {
     setLoading(true);
     setError("");
     try {
-      const provider = new GithubAuthProvider();
+      const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
       navigate("/");
     } catch (e) {
@@ -30,8 +30,8 @@ export default function GithubButton() {
   return (
     <>
       <Button onClick={onClick}>
-        <Logo src="/github-logo.svg" />
-        <b>{loading ? "Connecting" : "Continue with Github"}</b>
+        <Logo src="/google-logo.svg" />
+        <b>{loading ? "Connecting" : "Continue with Google"}</b>
       </Button>
       {error !== "" && <Error>{error}</Error>}
     </>

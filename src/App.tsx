@@ -3,7 +3,7 @@ import Layout from "./layout";
 import Home from "./pages/home/Home";
 import Profile from "./pages/profile/Profile";
 import Login from "./pages/login/Login";
-import CreateAccount from "./pages/login/CreateAccount";
+import CreateAccount from "./pages/sign-up/CreateAccount";
 import { useEffect, useState } from "react";
 import LoadingScreen from "./common/loading/LoadingScreen";
 import { auth } from "./firebase";
