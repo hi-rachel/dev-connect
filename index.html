@@ -9,7 +9,9 @@
   <title>Dev Connect</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+  <meta name="description"
+    content=" Dev Connect is primarily a community space where developers can communicate in real time.">
+  <meta name="author" content="hi-rachel" />
   <style>
     :root {
       --background: #fff;
@@ -53,6 +55,15 @@
       document.documentElement.style.setProperty('--background', '#000');
       document.documentElement.style.setProperty('--foreground', '#fff');
     }
+
+    const loadGoogleFonts = () => {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap';
+      document.head.appendChild(link);
+    }
+
+    window.addEventListener('load', loadGoogleFonts);
   </script>
 </body>
 
