@@ -15,10 +15,12 @@ import { HiHome, HiOutlineHome } from "react-icons/hi";
 import { FaRegUser, FaUser } from "react-icons/fa6";
 import { CgLogOut } from "react-icons/cg";
 import {
-  AvatarCircle,
+  AvartarImg,
+  LayoutAvatarCircle,
   PostAvatarCircle,
   UserAvatar,
 } from "./common/user/Avatar";
+import { BsEmojiSunglasses } from "react-icons/bs";
 
 export default function Layout() {
   const user = auth.currentUser;
@@ -142,9 +144,9 @@ export default function Layout() {
             <CgLogOut size={26} />
           </MenuItem>
           <MenuItem>
-            <AvatarCircle>
+            <LayoutAvatarCircle>
               {user.photoURL ? (
-                <UserAvatar src={user.photoURL} onClick={togglePopover} />
+                <AvartarImg src={user.photoURL} onClick={togglePopover} />
               ) : (
                 <svg
                   fill="currentColor"
@@ -155,7 +157,10 @@ export default function Layout() {
                   <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
                 </svg>
               )}
-            </AvatarCircle>
+            </LayoutAvatarCircle>
+          </MenuItem>
+          <MenuItem>
+            <BsEmojiSunglasses />
           </MenuItem>
         </Menu>
 

@@ -45,7 +45,7 @@ import {
   TagInputArea,
 } from "../../pages/home/new-post-form/NewPostForm.styled";
 import LinkifiedText from "./LikifiedText";
-import { PostAvatarCircle, UserAvatar } from "../user/Avatar";
+import { AvartarImg, PostAvatarCircle } from "../user/Avatar";
 
 // [TODO]
 // - [x] tags 등록 추가
@@ -274,7 +274,7 @@ export default function Post({
         <UserWrapper>
           <PostAvatarCircle>
             {userImg ? (
-              <UserAvatar src={userImg} alt="user-profile-image" />
+              <AvartarImg src={userImg} alt="user-profile-image" />
             ) : (
               <svg
                 fill="currentColor"

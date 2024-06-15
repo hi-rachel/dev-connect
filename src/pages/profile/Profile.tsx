@@ -1,6 +1,11 @@
 import { useState, useEffect, KeyboardEvent, MouseEvent } from "react";
 import { auth, db, storage } from "../../firebase";
-import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
+import {
+  deleteObject,
+  getDownloadURL,
+  ref,
+  uploadBytes,
+} from "firebase/storage";
 import { Unsubscribe, updateProfile } from "firebase/auth";
 import {
   collection,
@@ -13,10 +18,10 @@ import {
   limit,
   startAfter,
   onSnapshot,
+  deleteField,
 } from "firebase/firestore";
 import { IPost } from "../../type/post";
 import {
-  AvartarImg,
   AvartarInput,
   AvatarUpload,
   EditUsernameIcon,
@@ -25,6 +30,8 @@ import {
   Username,
   ProfileWrapper,
   EditUsernameForm,
+  AvartarDiv,
+  DeleteAvatarBtn,
 } from "./Profile.styled";
 import Post from "../../common/post/Post";
 import { MAX_UPLOAD_SIZE, PAGE_SIZE } from "../../constants/constants";
@@ -32,10 +39,12 @@ import { FaRegCheckCircle } from "react-icons/fa";
 import { MdOutlineModeEdit } from "react-icons/md";
 import { Loader } from "../../common/loading/Loading.styled";
 import { Posts } from "../../common/post/Post.styled";
+import { AvartarImg } from "../../common/user/Avatar";
+import { IoClose } from "react-icons/io5";
 
 export default function Profile() {
   const user = auth.currentUser;
-  const [avatar, setAvatar] = useState(user?.photoURL);
+  const [avatar, setAvatar] = useState(user?.photoURL || null);
   const [newUsername, setNewUsername] = useState(
     user?.displayName || "Anonymous"
   );
@@ -43,6 +52,9 @@ export default function Profile() {
   const [myPosts, setMyPosts] = useState<IPost[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMoreData, setHasMoreData] = useState(true);
+
+  console.log(user?.photoURL);
+  console.log(user);
 
   useEffect(() => {
     let unsubscribe: Unsubscribe | null = null;
@@ -192,6 +204,41 @@ export default function Profile() {
     }
   };
 
+  const onAvatarDelete = async () => {
+    const ok = window.confirm(
+      "Are you sure you want to delete this profile image?"
+    );
+
+    if (!ok || !user) return;
+
+    if (avatar === null) {
+      alert("There is no profile image.");
+    }
+
+    try {
+      const photoRef = ref(storage, `avatars/${user.uid}`);
+      await deleteObject(photoRef);
+
+      await updateProfile(user, {
+        photoURL: "",
+      });
+      setAvatar(null);
+
+      const userPostsQuery = query(
+        collection(db, "posts"),
+        where("userId", "==", user?.uid)
+      );
+      const querySnapshot = await getDocs(userPostsQuery);
+      querySnapshot.forEach(async (document) => {
+        await updateDoc(doc(db, "posts", document.id), {
+          userImg: deleteField(),
+        });
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const onUsernameChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewUsername(e.target.value);
   };
@@ -263,26 +310,33 @@ export default function Profile() {
   return (
     user && (
       <ProfileWrapper>
-        <AvatarUpload htmlFor="avatar">
-          {avatar ? (
-            <AvartarImg src={avatar} alt="avatar" />
-          ) : (
-            <svg
-              fill="currentColor"
-              viewBox="0 0 20 20"
-              xmlns="http://www.w3.org/2000/svg"
-              aria-hidden="true"
-            >
-              <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
-            </svg>
-          )}
-        </AvatarUpload>
-        <AvartarInput
-          onChange={onAvatarChange}
-          id="avatar"
-          type="file"
-          accept="image/*"
-        />
+        <AvartarDiv>
+          <AvatarUpload htmlFor="avatar">
+            {avatar ? (
+              <AvartarImg src={avatar} alt="avatar" />
+            ) : (
+              <svg
+                width={100}
+                height={100}
+                fill="currentColor"
+                viewBox="0 0 20 20"
+                xmlns="http://www.w3.org/2000/svg"
+                aria-hidden="true"
+              >
+                <path d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
+              </svg>
+            )}
+          </AvatarUpload>
+          <AvartarInput
+            onChange={onAvatarChange}
+            id="avatar"
+            type="file"
+            accept="image/*"
+          />
+          <DeleteAvatarBtn onClick={onAvatarDelete}>
+            <IoClose aria-label="Delete" size={18} />
+          </DeleteAvatarBtn>
+        </AvartarDiv>
         <EditUsernameForm>
           {editUsername ? (
             <EditUsernameTextArea

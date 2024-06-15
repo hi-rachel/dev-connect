@@ -2,10 +2,21 @@ import { styled } from "styled-components";
 import { FONTS } from "../../constants/fonts";
 import { TextArea } from "../../common/form/Form.styled";
 import { HoverButton, Wrapper } from "../../common/common.styled";
+import { DeletePostButton } from "../../common/post/Post.styled";
 
 export const ProfileWrapper = styled(Wrapper)`
   align-items: center;
   margin-top: 10px;
+`;
+
+export const AvartarDiv = styled.div`
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
+`;
+
+export const DeleteAvatarBtn = styled(DeletePostButton)`
+  margin-right: 0;
 `;
 
 export const AvatarUpload = styled.label`
@@ -18,14 +29,6 @@ export const AvatarUpload = styled.label`
   display: flex;
   justify-content: center;
   align-items: center;
-  svg {
-    width: 50px;
-  }
-`;
-
-export const AvartarImg = styled.img`
-  width: 100%;
-  height: 100%;
 `;
 
 export const AvartarInput = styled.input`
