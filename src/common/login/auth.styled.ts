@@ -52,9 +52,6 @@ export const Input = styled.input`
       opacity: 0.8;
     }
   }
-  @media (prefers-color-scheme: light) {
-    color: var(--black);
-  }
 `;
 
 export const Error = styled.span`

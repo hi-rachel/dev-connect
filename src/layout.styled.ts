@@ -36,12 +36,13 @@ export const LayoutHeader = styled.div`
     justify-content: space-between;
     padding: 15px 20px;
     background-color: var(--background);
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--box-shadow) 0 2px 5px;
   }
+`;
 
-  @media (prefers-color-scheme: dark) {
-    box-shadow: rgba(255, 255, 255, 0.2) 0px 0px 3px 3px;
-  }
+export const LayoutHeaderRightDiv = styled.div`
+  display: flex;
+  gap: 10px;
 `;
 
 export const AvatarPopUp = styled.div`
@@ -50,7 +51,7 @@ export const AvatarPopUp = styled.div`
   position: absolute;
   top: 50px;
   right: 1px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--box-shadow) 0 2px 5px;
   border-radius: 15px;
   z-index: 110;
   font-weight: ${FONTS_WEIGHT.medium};
@@ -59,10 +60,6 @@ export const AvatarPopUp = styled.div`
   gap: 8px;
   padding: 20px;
   max-width: 300px;
-
-  @media (prefers-color-scheme: dark) {
-    box-shadow: rgba(255, 255, 255, 0.2) 0px 2px 2px 2px;
-  }
 
   @media (max-width: 480px) {
     font-size: ${FONTS.sm};
@@ -96,14 +93,7 @@ export const MenuItem = styled.div`
 
   &:hover,
   &:active {
-    background-color: var(--gray-100);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    &:hover,
-    &:active {
-      background-color: var(--gray);
-    }
+    background-color: var(--hover);
   }
 
   @media (max-width: 480px) {
@@ -111,6 +101,8 @@ export const MenuItem = styled.div`
     height: 40px;
   }
 `;
+
+export const ToogleTheme = styled(MenuItem)``;
 
 export const FooterMenu = styled.div`
   display: none;
@@ -124,11 +116,7 @@ export const FooterMenu = styled.div`
     bottom: 0;
     width: 100%;
     padding: 10px 0;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    box-shadow: rgba(255, 255, 255, 0.2) 0 3px 3px 5px;
+    box-shadow: var(--box-shadow) 0 -2px 5px;
   }
 `;
 

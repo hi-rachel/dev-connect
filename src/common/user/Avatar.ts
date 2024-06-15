@@ -23,10 +23,3 @@ export const LayoutAvatarCircle = styled.div`
 `;
 
 export const AvartarImg = styled.img``;
-
-export const UserAvatar = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-`;

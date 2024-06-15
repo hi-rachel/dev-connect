@@ -12,50 +12,24 @@
   <meta name="description"
     content=" Dev Connect is primarily a community space where developers can communicate in real time.">
   <meta name="author" content="hi-rachel" />
-  <style>
-    :root {
-      --background: #fff;
-      --foreground: #000;
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2TVT6X8GLT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
 
-      --primary: #5eead4;
-      --success: #36B731;
-      --info: #2278F9;
-      --warning: #FFE711;
-      --danger: #FF4F54;
-
-      --gray: #2e2e2e78;
-      --gray--100: #f3f4f6;
-      --gray--200: #e5e7eb;
-      --gray--300: #d1d5db;
-      --gray--400: #9ca3af;
-      --gray--500: #6b7280;
-      --gray--600: #4b5563;
-      --gray--700: #374151;
+    function gtag() {
+      dataLayer.push(arguments);
     }
+    gtag('js', new Date());
 
-    body {
-      background-color: var(--background);
-      color: var(--foreground);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      body {
-        background-color: var(--black);
-        color: var(--white);
-      }
-    }
-  </style>
+    gtag('config', 'G-2TVT6X8GLT');
+  </script>
 </head>
 
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
-  <script>
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-      document.documentElement.style.setProperty('--background', '#000');
-      document.documentElement.style.setProperty('--foreground', '#fff');
-    }
-
+  <script async>
     const loadGoogleFonts = () => {
       const link = document.createElement('link');
       link.rel = 'stylesheet';

@@ -29,24 +29,15 @@ export const PostWrapper = styled.div`
   position: relative;
   padding: 20px;
   border-radius: 15px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
-
-  @media (prefers-color-scheme: dark) {
-    box-shadow: rgba(255, 255, 255, 0.2) 0px 4px 12px;
-    border: 1px solid var(--gray);
-  }
+  box-shadow: var(--box-shadow) 0px 4px 12px;
 `;
 
 export const NoPost = styled.div`
   display: flex;
   margin-top: 30px;
   width: 100%;
-  color: var(--gray--500);
+  color: var(--gray);
   font-size: ${FONTS.lg};
-
-  @media (prefers-color-scheme: dark) {
-    color: var(--gary);
-  }
 `;
 
 export const PostImg = styled.div`
@@ -153,25 +144,15 @@ export const ChangeFileButton = styled.button`
   cursor: pointer;
   &:hover,
   &:active {
-    background-color: var(--gray-100);
-  }
-  @media (prefers-color-scheme: dark) {
-    &:hover,
-    &:active {
-      background-color: var(--gray);
-    }
+    background-color: var(--gray);
   }
 `;
 
 export const PostDate = styled.div`
-  color: var(--gray--400);
+  color: var(--gray);
 
   @media (max-width: 480px) {
     font-size: ${FONTS.sm};
-  }
-
-  @media (prefers-color-scheme: dark) {
-    color: var(--gray--200);
   }
 `;
 
@@ -185,16 +166,11 @@ export const TagWrapper = styled.div`
 
 export const PostFooter = styled.div`
   margin-top: 10px;
-  color: var(--gray);
   display: flex;
   flex-direction: column;
-
+  color: var(--gray);
   @media (max-width: 480px) {
     font-size: ${FONTS.sm};
-  }
-
-  @media (prefers-color-scheme: dark) {
-    color: var(--gray--200);
   }
 `;
 

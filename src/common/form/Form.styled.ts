@@ -10,7 +10,7 @@ export const Photo = styled.img`
 export const TextArea = styled.textarea`
   background: transparent;
   overflow: auto; /* Ensure scrollbar is always visible */
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 12px;
+  box-shadow: var(--box-shadow) 0px 4px 12px;
   padding: 20px;
   border-radius: 20px;
   font-size: ${FONTS.md};
@@ -21,10 +21,6 @@ export const TextArea = styled.textarea`
   }
   &:focus {
     outline: none;
-  }
-  @media (prefers-color-scheme: dark) {
-    box-shadow: rgba(255, 255, 255, 0.2) 0px 4px 12px;
-    border: 1px solid var(--gray);
   }
 
   /* Custom scrollbar */

@@ -1,16 +1,27 @@
+import { useEffect, useState, Suspense, lazy } from "react";
+import { auth } from "./firebase";
+import styled from "styled-components";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./layout";
-import Home from "./pages/home/Home";
-import Profile from "./pages/profile/Profile";
-import Login from "./pages/login/Login";
-import CreateAccount from "./pages/sign-up/CreateAccount";
-import { useEffect, useState } from "react";
 import LoadingScreen from "./common/loading/LoadingScreen";
-import { auth } from "./firebase";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import styled from "styled-components";
-import LikedPosts from "./pages/likes/LikedPosts";
-import BookmarkedPosts from "./pages/bookmarks/BookmarkedPosts";
+
+const Home = lazy(() => import("./pages/home/Home"));
+const Profile = lazy(() => import("./pages/profile/Profile"));
+const Login = lazy(() => import("./pages/login/Login"));
+const CreateAccount = lazy(() => import("./pages/sign-up/CreateAccount"));
+const BookmarkedPosts = lazy(() => import("./pages/bookmarks/BookmarkedPosts"));
+const LikedPosts = lazy(() => import("./pages/likes/LikedPosts"));
+
+const Wrapper = styled.div`
+  overflow-x: hidden;
+  display: flex;
+  justify-content: center;
+
+  @media (max-width: 768px) {
+    padding: 0px;
+  }
+`;
 
 const router = createBrowserRouter([
   {
@@ -23,41 +34,55 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Home />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Home />
+          </Suspense>
+        ),
       },
       {
         path: "profile",
-        element: <Profile />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <Profile />
+          </Suspense>
+        ),
       },
       {
         path: "likes",
-        element: <LikedPosts />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <LikedPosts />
+          </Suspense>
+        ),
       },
       {
         path: "bookmarks",
-        element: <BookmarkedPosts />,
+        element: (
+          <Suspense fallback={<LoadingScreen />}>
+            <BookmarkedPosts />
+          </Suspense>
+        ),
       },
     ],
   },
   {
     path: "/login",
-    element: <Login />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <Login />
+      </Suspense>
+    ),
   },
   {
     path: "create-account",
-    element: <CreateAccount />,
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <CreateAccount />
+      </Suspense>
+    ),
   },
 ]);
-
-const Wrapper = styled.div`
-  overflow-x: hidden;
-  display: flex;
-  justify-content: center;
-
-  @media (max-width: 768px) {
-    padding: 0px;
-  }
-`;
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -73,7 +98,13 @@ function App() {
 
   return (
     <Wrapper>
-      {loading ? <LoadingScreen /> : <RouterProvider router={router} />}
+      {loading ? (
+        <LoadingScreen />
+      ) : (
+        <Suspense fallback={<LoadingScreen />}>
+          <RouterProvider router={router} />
+        </Suspense>
+      )}
     </Wrapper>
   );
 }

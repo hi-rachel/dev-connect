@@ -17,15 +17,10 @@ export const HoverButton = styled.button`
   padding: 5px;
 
   cursor: pointer;
+
   &:hover,
   &:active {
-    background-color: var(--gray-100);
-  }
-  @media (prefers-color-scheme: dark) {
-    &:hover,
-    &:active {
-      background-color: var(--gray);
-    }
+    background-color: var(--hover);
   }
 `;
 
@@ -41,13 +36,7 @@ export const EditButton = styled.button`
   cursor: pointer;
   &:hover,
   &:active {
-    background-color: var(--gray-100);
-  }
-  @media (prefers-color-scheme: dark) {
-    &:hover,
-    &:active {
-      background-color: var(--gray);
-    }
+    background-color: var(--hover);
   }
 `;
 
@@ -61,14 +50,10 @@ export const Tag = styled.div`
   color: var(--primary);
   border-radius: 50px;
   padding: 6px 12px;
-  background-color: var(--gray--100);
+  background-color: var(--tag-background);
 
   @media (max-width: 480px) {
     font-size: ${FONTS.xs};
     padding: 3px 8px;
-  }
-
-  @media (prefers-color-scheme: dark) {
-    background-color: var(--gray);
   }
 `;
