@@ -5,6 +5,8 @@ import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import Layout from "./layout";
 import LoadingScreen from "./common/loading/LoadingScreen";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import NotFound from "./pages/not-found/NotFound";
+import ThemeLayout from "./common/ThemeLayout";
 
 const Home = lazy(() => import("./pages/home/Home"));
 const Profile = lazy(() => import("./pages/profile/Profile"));
@@ -67,7 +69,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/login",
+    path: "login",
     element: (
       <Suspense fallback={<LoadingScreen />}>
         <Login />
@@ -82,9 +84,17 @@ const router = createBrowserRouter([
       </Suspense>
     ),
   },
+  {
+    path: "*",
+    element: (
+      <Suspense fallback={<LoadingScreen />}>
+        <NotFound />
+      </Suspense>
+    ),
+  },
 ]);
 
-function App() {
+const App = () => {
   const [loading, setLoading] = useState(true);
 
   const init = async () => {
@@ -95,9 +105,9 @@ function App() {
   useEffect(() => {
     init();
   }, []);
-
   return (
     <Wrapper>
+      <ThemeLayout />
       {loading ? (
         <LoadingScreen />
       ) : (
@@ -107,6 +117,6 @@ function App() {
       )}
     </Wrapper>
   );
-}
+};
 
 export default App;
