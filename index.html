@@ -13,8 +13,7 @@
     content=" Dev Connect is primarily a community space where developers can communicate in real time.">
   <meta name="author" content="hi-rachel" />
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2TVT6X8GLT"></script>
-  <script>
+  <script defer>
     window.dataLayer = window.dataLayer || [];
 
     function gtag() {
@@ -29,16 +28,6 @@
 <body>
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
-  <script async>
-    const loadGoogleFonts = () => {
-      const link = document.createElement('link');
-      link.rel = 'stylesheet';
-      link.href = 'https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap';
-      document.head.appendChild(link);
-    }
-
-    window.addEventListener('load', loadGoogleFonts);
-  </script>
 </body>
 
 </html>

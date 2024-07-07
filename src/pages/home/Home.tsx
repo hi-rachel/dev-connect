@@ -25,6 +25,16 @@ const LogoTitle = styled.div`
 export default function Home() {
   const [searchKeyword, setSearchKeyword] = useState("");
 
+  const loadGoogleFonts = () => {
+    const link = document.createElement("link");
+    link.rel = "stylesheet";
+    link.href =
+      "https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap";
+    document.head.appendChild(link);
+  };
+
+  loadGoogleFonts();
+
   return (
     <Wrapper>
       <LogoTitle>Dev Connect</LogoTitle>
