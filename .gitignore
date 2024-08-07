@@ -26,3 +26,6 @@ dist-ssr
 TODO.md
 firebase.ts
 .firebase
+
+.env
+.env.local
