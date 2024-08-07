@@ -13,7 +13,7 @@ const SignUpForm = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     if (loading || name === "" || email === "" || password === "") return;
@@ -38,7 +38,7 @@ const SignUpForm = () => {
     }
   };
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { name, value },
     } = e;
@@ -53,16 +53,16 @@ const SignUpForm = () => {
 
   return (
     <>
-      <Form onSubmit={onSubmit}>
+      <Form onSubmit={handleSubmit}>
         <Input
-          onChange={onChange}
+          onChange={handleChange}
           value={name}
           name="name"
           placeholder="Name"
           type="text"
         />
         <Input
-          onChange={onChange}
+          onChange={handleChange}
           value={email}
           name="email"
           placeholder="Email"
@@ -70,7 +70,7 @@ const SignUpForm = () => {
           required
         />
         <Input
-          onChange={onChange}
+          onChange={handleChange}
           value={password}
           name="password"
           placeholder="Password"

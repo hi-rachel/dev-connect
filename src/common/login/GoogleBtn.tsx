@@ -6,12 +6,12 @@ import { Button, Logo } from "./auth.styled";
 import { useState } from "react";
 import { Error } from "./auth.styled";
 
-export default function GoogleButton() {
+const GoogleButton = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const onClick = async () => {
+  const handleClick = async () => {
     setLoading(true);
     setError("");
     try {
@@ -29,11 +29,13 @@ export default function GoogleButton() {
   };
   return (
     <>
-      <Button onClick={onClick}>
+      <Button onClick={handleClick}>
         <Logo width={25} height={25} alt="google-logo" src="/google-logo.svg" />
         <b>{loading ? "Connecting" : "Continue with Google"}</b>
       </Button>
       {error !== "" && <Error>{error}</Error>}
     </>
   );
-}
+};
+
+export default GoogleButton;

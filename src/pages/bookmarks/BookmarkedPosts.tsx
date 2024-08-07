@@ -18,8 +18,6 @@ import { PAGE_SIZE } from "../../constants/constants";
 import { Loader } from "../../common/loading/Loading.styled";
 import { NoPost, PageTitle, Posts } from "../../common/post/Post.styled";
 
-// post가 없을때 메시지 보여주기
-
 const BookmarkedPosts = () => {
   const user = auth.currentUser;
   const [myPosts, setMyPosts] = useState<IPost[]>([]);

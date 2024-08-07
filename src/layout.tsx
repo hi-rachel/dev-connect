@@ -24,7 +24,7 @@ import {
 import { BsEmojiSunglasses } from "react-icons/bs";
 import { RiMoonClearLine } from "react-icons/ri";
 
-export default function Layout() {
+const Layout = () => {
   const user = auth.currentUser;
   const [theme, setTheme] = useState("");
   const navigate = useNavigate();
@@ -38,7 +38,7 @@ export default function Layout() {
     setTheme(theme);
   };
 
-  const onToggleTheme = () => {
+  const handleToggleTheme = () => {
     const currentTheme =
       localStorage.getItem("theme") === "dark" ? "light" : "dark";
     applyTheme(currentTheme);
@@ -53,7 +53,7 @@ export default function Layout() {
     applyTheme(savedTheme);
   }, [theme]);
 
-  const onLogOut = async () => {
+  const handleLogOut = async () => {
     const ok = confirm("Are you sure you want to log out?");
     if (ok) {
       auth.signOut();
@@ -73,7 +73,7 @@ export default function Layout() {
     }
   }, [location]);
 
-  const onTogglePopover = () => {
+  const handleTogglePopover = () => {
     setShowPopover((prev) => !prev);
   };
 
@@ -94,7 +94,7 @@ export default function Layout() {
             </MenuItem>
           </Link>
           <LayoutHeaderRightDiv>
-            <ToogleTheme onClick={onToggleTheme}>
+            <ToogleTheme onClick={handleToggleTheme}>
               {theme === "dark" ? (
                 <BsEmojiSunglasses id="lightModeIcon" size={35} />
               ) : (
@@ -104,7 +104,10 @@ export default function Layout() {
             <MenuItem>
               <PostAvatarCircle>
                 {user.photoURL ? (
-                  <AvartarImg src={user.photoURL} onClick={onTogglePopover} />
+                  <AvartarImg
+                    src={user.photoURL}
+                    onClick={handleTogglePopover}
+                  />
                 ) : (
                   <svg
                     fill="currentColor"
@@ -119,7 +122,7 @@ export default function Layout() {
             </MenuItem>
           </LayoutHeaderRightDiv>
           {showPopover && (
-            <AvatarPopUp onClick={onLogOut}>
+            <AvatarPopUp onClick={handleLogOut}>
               <CgLogOut size={25} />
               <p>Log Out @{user.displayName}</p>
             </AvatarPopUp>
@@ -173,10 +176,10 @@ export default function Layout() {
               )}
             </MenuItem>
           </Link>
-          <MenuItem onClick={onLogOut}>
+          <MenuItem onClick={handleLogOut}>
             <CgLogOut size={26} />
           </MenuItem>
-          <ToogleTheme onClick={onToggleTheme}>
+          <ToogleTheme onClick={handleToggleTheme}>
             {theme === "dark" ? (
               <BsEmojiSunglasses id="lightModeIcon" size={26} />
             ) : (
@@ -186,7 +189,7 @@ export default function Layout() {
           <MenuItem>
             <LayoutAvatarCircle>
               {user.photoURL ? (
-                <AvartarImg src={user.photoURL} onClick={onTogglePopover} />
+                <AvartarImg src={user.photoURL} onClick={handleTogglePopover} />
               ) : (
                 <svg
                   fill="currentColor"
@@ -244,4 +247,6 @@ export default function Layout() {
       </LayoutWrapper>
     </>
   );
-}
+};
+
+export default Layout;

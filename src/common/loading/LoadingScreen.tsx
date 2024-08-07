@@ -12,10 +12,12 @@ const Text = styled.span`
   font-size: ${FONTS.xl};
 `;
 
-export default function LoadingScreen() {
+const LoadingScreen = () => {
   return (
     <Wrapper>
       <Text>Loading...</Text>
     </Wrapper>
   );
-}
+};
+
+export default LoadingScreen;

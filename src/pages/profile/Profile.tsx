@@ -42,7 +42,7 @@ import { Posts } from "../../common/post/Post.styled";
 import { AvartarImg } from "../../common/user/Avatar";
 import { IoClose } from "react-icons/io5";
 
-export default function Profile() {
+const Profile = () => {
   const user = auth.currentUser;
   const [avatar, setAvatar] = useState(user?.photoURL || null);
   const [newUsername, setNewUsername] = useState(
@@ -52,9 +52,6 @@ export default function Profile() {
   const [myPosts, setMyPosts] = useState<IPost[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMoreData, setHasMoreData] = useState(true);
-
-  console.log(user?.photoURL);
-  console.log(user);
 
   useEffect(() => {
     let unsubscribe: Unsubscribe | null = null;
@@ -174,7 +171,7 @@ export default function Profile() {
     };
   }, [isLoading, hasMoreData]);
 
-  const onAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!user) return;
 
     const { files } = e.target;
@@ -204,7 +201,7 @@ export default function Profile() {
     }
   };
 
-  const onAvatarDelete = async () => {
+  const handleAvatarDelete = async () => {
     const ok = window.confirm(
       "Are you sure you want to delete this profile image?"
     );
@@ -239,11 +236,11 @@ export default function Profile() {
     }
   };
 
-  const onUsernameChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewUsername(e.target.value);
   };
 
-  const onUsernameEdit = () => {
+  const handleUsernameEdit = () => {
     setEditUsername(true);
   };
 
@@ -270,7 +267,7 @@ export default function Profile() {
     setEditUsername(false);
   };
 
-  const onUsernameSave = async (
+  const handleUsernameSave = async (
     e:
       | KeyboardEvent<HTMLTextAreaElement>
       | MouseEvent<HTMLButtonElement, globalThis.MouseEvent>
@@ -290,7 +287,7 @@ export default function Profile() {
       return;
     }
 
-    if (newUsername == user.displayName) {
+    if (newUsername === user.displayName) {
       alert("Please write a name that is different from your existing name.");
       setEditUsername(false);
       return;
@@ -298,12 +295,12 @@ export default function Profile() {
     await updateUserProfile(newUsername);
   };
 
-  const onUsernameKeyDown = async (
+  const handleUsernameKeyDown = async (
     e: React.KeyboardEvent<HTMLTextAreaElement>
   ) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      onUsernameSave(e);
+      handleUsernameSave(e);
     }
   };
 
@@ -328,12 +325,12 @@ export default function Profile() {
             )}
           </AvatarUpload>
           <AvartarInput
-            onChange={onAvatarChange}
+            onChange={handleAvatarChange}
             id="avatar"
             type="file"
             accept="image/*"
           />
-          <DeleteAvatarBtn onClick={onAvatarDelete}>
+          <DeleteAvatarBtn onClick={handleAvatarDelete}>
             <IoClose aria-label="Delete" size={18} />
           </DeleteAvatarBtn>
         </AvartarDiv>
@@ -344,15 +341,15 @@ export default function Profile() {
               rows={1}
               minLength={2}
               maxLength={20}
-              onChange={onUsernameChange}
+              onChange={handleUsernameChange}
               value={newUsername}
-              onKeyDown={onUsernameKeyDown}
+              onKeyDown={handleUsernameKeyDown}
             />
           ) : (
             <Username>{user.displayName}</Username>
           )}
           {editUsername ? (
-            <SaveUsernameIcon onClick={(e) => onUsernameSave(e)}>
+            <SaveUsernameIcon onClick={(e) => handleUsernameSave(e)}>
               <FaRegCheckCircle
                 color="var(--success)"
                 aria-label="Fininsh editing"
@@ -360,7 +357,7 @@ export default function Profile() {
               />
             </SaveUsernameIcon>
           ) : (
-            <EditUsernameIcon onClick={onUsernameEdit}>
+            <EditUsernameIcon onClick={handleUsernameEdit}>
               <MdOutlineModeEdit aria-label="Start editing" size={22} />
             </EditUsernameIcon>
           )}
@@ -374,4 +371,6 @@ export default function Profile() {
       </ProfileWrapper>
     )
   );
-}
+};
+
+export default Profile;

@@ -13,7 +13,7 @@ import LoginForm from "./LoginForm";
 
 const SparklesCore = lazy(() => import("../../common/ui/Sparkles"));
 
-export default function CreateAccount() {
+const CreateAccount = () => {
   return (
     <Container>
       <FullPageWrapper>
@@ -38,4 +38,6 @@ export default function CreateAccount() {
       </ContentWrapper>
     </Container>
   );
-}
+};
+
+export default CreateAccount;

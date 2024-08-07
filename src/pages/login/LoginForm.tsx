@@ -13,7 +13,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
       target: { name, value },
     } = e;
@@ -24,7 +24,7 @@ const LoginForm = () => {
     }
   };
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
     if (loading || email === "" || password === "") return;
@@ -36,7 +36,6 @@ const LoginForm = () => {
       if (e instanceof FirebaseError) {
         setError(e.message);
       }
-      console.log(e);
     } finally {
       setLoading(false);
     }
@@ -44,9 +43,9 @@ const LoginForm = () => {
 
   return (
     <>
-      <Form onSubmit={onSubmit}>
+      <Form onSubmit={handleSubmit}>
         <Input
-          onChange={onChange}
+          onChange={handleChange}
           value={email}
           name="email"
           placeholder="Email"
@@ -54,7 +53,7 @@ const LoginForm = () => {
           required
         />
         <Input
-          onChange={onChange}
+          onChange={handleChange}
           value={password}
           name="password"
           placeholder="Password"

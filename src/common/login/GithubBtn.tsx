@@ -6,12 +6,12 @@ import { Button, Logo } from "./auth.styled";
 import { useState } from "react";
 import { Error } from "./auth.styled";
 
-export default function GithubButton() {
+const GithubButton = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const onClick = async () => {
+  const handleClick = async () => {
     setLoading(true);
     setError("");
     try {
@@ -29,11 +29,13 @@ export default function GithubButton() {
   };
   return (
     <>
-      <Button onClick={onClick}>
+      <Button onClick={handleClick}>
         <Logo width={25} height={25} alt="github-logo" src="/github-logo.svg" />
         <b>{loading ? "Connecting" : "Continue with Github"}</b>
       </Button>
       {error !== "" && <Error>{error}</Error>}
     </>
   );
-}
+};
+
+export default GithubButton;

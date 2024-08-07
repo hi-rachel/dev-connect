@@ -22,7 +22,7 @@ import {
   MAX_UPLOAD_SIZE,
 } from "../../../constants/constants";
 
-export default function NewPostForm() {
+const NewPostForm = () => {
   const [loading, setLoading] = useState(false);
   const [post, setPost] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -30,11 +30,11 @@ export default function NewPostForm() {
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState("");
 
-  const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setPost(e.target.value);
   };
 
-  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
 
     if (files && files.length === 1 && files[0].size <= MAX_UPLOAD_SIZE) {
@@ -74,7 +74,7 @@ export default function NewPostForm() {
     setTags((prevTags) => prevTags.filter((_, i) => i !== index));
   };
 
-  const onDeletePostImg = async () => {
+  const handleDeletePostImg = async () => {
     try {
       if (file) {
         if (confirm("Are you sure you want to delete this photo?")) {
@@ -88,7 +88,7 @@ export default function NewPostForm() {
     }
   };
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const user = auth.currentUser;
 
@@ -129,7 +129,6 @@ export default function NewPostForm() {
         const locationRef = ref(storage, `posts/${user.uid}/${doc.id}`);
         const result = await uploadBytes(locationRef, file);
         const url = await getDownloadURL(result.ref);
-        console.log(url);
         await updateDoc(doc, {
           postImg: url,
         });
@@ -145,15 +144,15 @@ export default function NewPostForm() {
     }
   };
   return (
-    <Form onSubmit={onSubmit}>
+    <Form onSubmit={handleSubmit}>
       <TextArea
         rows={8}
         maxLength={MAX_POST_CHARACTER_SIZE}
-        onChange={onChange}
+        onChange={handleChange}
         value={post}
         placeholder="What is happening?!"
       />
-      <DeletePostImg onClick={onDeletePostImg}>
+      <DeletePostImg onClick={handleDeletePostImg}>
         {previewUrl && <PreviewPhoto src={previewUrl} />}
         <DeletePreviewIcon>
           <RiDeleteBin6Line size={30} />
@@ -182,7 +181,7 @@ export default function NewPostForm() {
         </AddPhoto>
       </AttachFileButton>
       <AttachFileInput
-        onChange={onFileChange}
+        onChange={handleFileChange}
         type="file"
         id="file"
         accept="image/*"
@@ -193,4 +192,6 @@ export default function NewPostForm() {
       ></SubmitBtn>
     </Form>
   );
-}
+};
+
+export default NewPostForm;
