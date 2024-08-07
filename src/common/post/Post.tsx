@@ -52,14 +52,20 @@ import { AvartarImg, PostAvatarCircle } from "../user/Avatar";
 // - [ ] 0시간 전 등 글 작성 시간 추가
 // - [x] 각 개인별 like 여부 관리
 // - [x] likes cnt 관리
-// - [ ] 서버 상태 즉시 반영
+// - [x] 서버 상태 즉시 반영
 // - [x] 기존 tweet docs명 변경, 데이터 새로 관리
 // - [x] Delete, Edit -> Icon으로 변경하기
 // - [ ] 글 클릭시 크게 보기 추가
-// - Post 로직 편하게 수정하기 -
 // - [x] Add Photo -> 카메라 아이콘, 미리보기 추가!
 
-export default function Post({
+interface PostProps {
+  setSearchKeyword?: (keyword: string) => void;
+  setFilterTag?: (tag: string) => void;
+  activeTag?: string;
+}
+
+const Post = ({
+  setFilterTag,
   postId,
   userName,
   userId,
@@ -70,7 +76,8 @@ export default function Post({
   tags,
   bookmarkedBy,
   likedBy,
-}: IPost) {
+  activeTag,
+}: IPost & PostProps) => {
   const user = auth.currentUser;
   const localTime = moment.utc(createdAt).tz(USER_TIMEZONE);
   const formattedDate12Hour = localTime.format("h:mm A · MMM D, YYYY");
@@ -97,7 +104,7 @@ export default function Post({
 
   if (!user) return;
 
-  const onDelete = async () => {
+  const handleDelete = async () => {
     const ok = window.confirm("Are you sure you want to delete this Post?");
 
     if (!ok || user?.uid !== userId) return;
@@ -114,11 +121,11 @@ export default function Post({
     }
   };
 
-  const onPostChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handlePostChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setEditPost(e.target.value);
   };
 
-  const onFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { files } = e.target;
 
     if (files && files.length === 1 && files[0].size <= MAX_UPLOAD_SIZE) {
@@ -137,7 +144,7 @@ export default function Post({
     }
   };
 
-  const onEdit = async () => {
+  const handleEdit = async () => {
     setEdit(true);
     if (!edit) return;
 
@@ -179,7 +186,7 @@ export default function Post({
     }
   };
 
-  const onDeletePostImg = async () => {
+  const handleDeletePostImg = async () => {
     try {
       if (confirm("Are you sure you want to delete this photo?")) {
         if (file) {
@@ -223,6 +230,16 @@ export default function Post({
 
   const handleTagRemove = (index: number) => {
     setEditTags((prevTags) => prevTags.filter((_, i) => i !== index));
+  };
+
+  const handleClickTag = (tag: string) => () => {
+    if (setFilterTag) {
+      if (activeTag === tag) {
+        setFilterTag("");
+      } else {
+        setFilterTag(tag);
+      }
+    }
   };
 
   const handleClickHeart = async () => {
@@ -306,7 +323,7 @@ export default function Post({
                     </ChangeFileButton>
                     <ChangeFileInput
                       ref={fileInputRef}
-                      onChange={onFileChange}
+                      onChange={handleFileChange}
                       id="file"
                       accept="image/*"
                       type="file"
@@ -314,7 +331,7 @@ export default function Post({
                   </>
                 )}
               </div>
-              <EditPostButton onClick={onEdit}>
+              <EditPostButton onClick={handleEdit}>
                 {edit ? (
                   <FaRegCheckCircle
                     color="var(--success)"
@@ -325,7 +342,7 @@ export default function Post({
                   <MdOutlineModeEdit aria-label="Start editing" size={22} />
                 )}
               </EditPostButton>
-              <DeletePostButton onClick={onDelete}>
+              <DeletePostButton onClick={handleDelete}>
                 <IoClose aria-label="Delete" size={22} />
               </DeletePostButton>
             </PostControls>
@@ -336,7 +353,7 @@ export default function Post({
             <EditTextArea
               rows={10}
               maxLength={MAX_POST_CHARACTER_SIZE}
-              onChange={onPostChange}
+              onChange={handlePostChange}
               value={editPost}
             />
           ) : (
@@ -346,7 +363,7 @@ export default function Post({
           )}
           {edit ? (
             <>
-              <DeletePostImg onClick={onDeletePostImg}>
+              <DeletePostImg onClick={handleDeletePostImg}>
                 {originalPhoto && <Photo src={originalPhoto} />}
                 <DeletePostIcon>
                   <RiDeleteBin6Line size={30} />
@@ -377,7 +394,15 @@ export default function Post({
           ) : (
             <TagWrapper>
               {editTags.length >= 1 &&
-                editTags.map((tag, index) => <Tag key={index}>{tag}</Tag>)}
+                editTags.map((tag, index) => (
+                  <Tag
+                    onClick={handleClickTag(tag)}
+                    key={index}
+                    active={activeTag === tag}
+                  >
+                    {tag}
+                  </Tag>
+                ))}
             </TagWrapper>
           )}
           <PostFooter>
@@ -402,4 +427,6 @@ export default function Post({
       </PostWrapper>
     </>
   );
-}
+};
+
+export default Post;

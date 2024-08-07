@@ -22,8 +22,9 @@ const LogoTitle = styled.div`
   font-style: normal;
 `;
 
-export default function Home() {
+const Home = () => {
   const [searchKeyword, setSearchKeyword] = useState("");
+  const [filterTag, setFilterTag] = useState("");
 
   const loadGoogleFonts = () => {
     const link = document.createElement("link");
@@ -40,8 +41,15 @@ export default function Home() {
       <LogoTitle>Dev Connect</LogoTitle>
       <SearchPostInput setSearchKeyword={setSearchKeyword} />
       <NewPostForm />
-      <Timeline searchKeyword={searchKeyword} />
+      <Timeline
+        searchKeyword={searchKeyword}
+        setSearchKeyword={setSearchKeyword}
+        filterTag={filterTag}
+        setFilterTag={setFilterTag}
+      />
       <HomeFooter />
     </Wrapper>
   );
-}
+};
+
+export default Home;

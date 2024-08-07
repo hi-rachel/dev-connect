@@ -9,34 +9,43 @@ import {
   startAfter,
 } from "firebase/firestore";
 import { db } from "../../../firebase";
-import Post from "../../../common/post/Post";
 import { Unsubscribe } from "firebase/auth";
 import { IPost } from "../../../type/post";
 import { PAGE_SIZE } from "../../../constants/constants";
 import { Loader } from "../../../common/loading/Loading.styled";
 import { Wrapper } from "../../../common/common.styled";
-import { Posts } from "../../../common/post/Post.styled";
+import PostList from "../../../common/post/PostList";
 
 // [TODO]
 // - [x] 글 검색 기능
 // - [ ] 프론트, 백엔드 nav 만들기
-// - [ ] tags별 검색
-// - [ ] 글 post 즉시 목록 업데이트
+// - [x] tags별 검색
+// - [x] 글 post 즉시 목록 업데이트
 // - [ ] toast 알림 추가
-// - [ ] 반응형 작업, 스타일 일관화
-// - [ ] Nav Bar 정리, 추가(내가 좋아요한 목록, 북마크 목록)
+// - [x] 반응형 작업
+// - [x] Nav Bar 정리, 추가(내가 좋아요한 목록, 북마크 목록)
+// - [ ] 아이콘 개선
 // - [ ] SEO 개선, meta 태그 추가
 // - [ ] 도메인 설정, 모바일 도메인 접근 풀기
 // UI Library
 
 interface TimelineProps {
   searchKeyword: string;
+  setSearchKeyword: (keyword: string) => void;
+  filterTag: string;
+  setFilterTag: (tag: string) => void;
 }
 
-export default function Timeline({ searchKeyword }: TimelineProps) {
+const Timeline = ({
+  searchKeyword,
+  setSearchKeyword,
+  filterTag,
+  setFilterTag,
+}: TimelineProps) => {
   const [posts, setPosts] = useState<IPost[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasMoreData, setHasMoreData] = useState(true);
+  const [activeTag, setActiveTag] = useState("");
 
   useEffect(() => {
     let unsubscribe: Unsubscribe | null = null;
@@ -75,7 +84,7 @@ export default function Timeline({ searchKeyword }: TimelineProps) {
             likedBy,
           });
         });
-        setPosts([...newPosts]); // 기존 트윗 목록에 새로운 트윗 추가
+        setPosts([...newPosts]);
         setIsLoading(false);
       });
     };
@@ -88,20 +97,6 @@ export default function Timeline({ searchKeyword }: TimelineProps) {
       }
     };
   }, []);
-
-  const handleScroll = () => {
-    const scrollHeight = document.documentElement.scrollHeight;
-    const scrollTop = document.documentElement.scrollTop;
-    const clientHeight = document.documentElement.clientHeight;
-    if (
-      scrollTop + clientHeight + 100 >= scrollHeight &&
-      isLoading === false &&
-      hasMoreData === true
-    ) {
-      // 페이지 끝에 도달하면 추가 데이터를 받아온다
-      fetchNextPosts();
-    }
-  };
 
   const fetchNextPosts = async () => {
     setIsLoading(true);
@@ -142,8 +137,20 @@ export default function Timeline({ searchKeyword }: TimelineProps) {
     setPosts((prevPosts) => [...prevPosts, ...newPosts]);
     setIsLoading(false);
     if (snapshot.size < PAGE_SIZE) {
-      // 페이지 당 데이터 크기보다 적게 받아왔으면 추가 데이터 없음을 표시
       setHasMoreData(false);
+    }
+  };
+
+  const handleScroll = () => {
+    const scrollHeight = document.documentElement.scrollHeight;
+    const scrollTop = document.documentElement.scrollTop;
+    const clientHeight = document.documentElement.clientHeight;
+    if (
+      scrollTop + clientHeight + 100 >= scrollHeight &&
+      isLoading === false &&
+      hasMoreData === true
+    ) {
+      fetchNextPosts();
     }
   };
 
@@ -156,30 +163,40 @@ export default function Timeline({ searchKeyword }: TimelineProps) {
   });
 
   const filteredPosts = posts.filter((post) => {
-    const filteredTags = post.tags.filter((tag: string) =>
-      tag.toLowerCase().includes(searchKeyword.toLowerCase())
-    );
-    const filteredContent = post.content
-      .toLowerCase()
-      .includes(searchKeyword.toLowerCase());
-    const filteredUserName = post.userName
-      .toLowerCase()
-      .includes(searchKeyword.toLowerCase());
-    return filteredTags.length > 0 || filteredContent || filteredUserName;
+    const matchesTag = filterTag
+      ? post.tags.some((tag: string) =>
+          tag.toLowerCase().includes(filterTag.toLowerCase())
+        )
+      : true;
+    const matchesKeyword = searchKeyword
+      ? post.content.toLowerCase().includes(searchKeyword.toLowerCase()) ||
+        post.userName.toLowerCase().includes(searchKeyword.toLowerCase())
+      : true;
+    return matchesTag && matchesKeyword;
   });
+
+  const handleTagClick = (tag: string) => {
+    setFilterTag(tag);
+    setActiveTag(tag);
+  };
+
+  useEffect(() => {
+    if (!filterTag) {
+      setActiveTag("");
+    }
+  }, [filterTag]);
 
   return (
     <Wrapper>
-      <Posts>
-        {searchKeyword
-          ? filteredPosts.map((post, index) => (
-              <Post key={`${post.postId}-${index}`} {...post} />
-            ))
-          : posts.map((post, index) => (
-              <Post key={`${post.postId}-${index}`} {...post} />
-            ))}
-      </Posts>
+      <PostList
+        posts={filteredPosts}
+        setSearchKeyword={setSearchKeyword}
+        setFilterTag={handleTagClick}
+        activeTag={activeTag}
+      />
       {isLoading && <Loader>isLoading...</Loader>}
     </Wrapper>
   );
-}
+};
+
+export default Timeline;

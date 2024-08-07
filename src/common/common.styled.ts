@@ -1,6 +1,10 @@
 import { styled } from "styled-components";
 import { FONTS, FONTS_WEIGHT } from "../constants/fonts";
 
+interface TagProps {
+  active?: boolean;
+}
+
 export const Wrapper = styled.div`
   width: 100%;
   padding: 0 20px;
@@ -44,13 +48,14 @@ export const AttachFileInput = styled.input`
   display: none;
 `;
 
-export const Tag = styled.div`
+export const Tag = styled.div<TagProps>`
   font-weight: ${FONTS_WEIGHT.semiBold};
   font-size: ${FONTS.sm};
-  color: var(--primary);
   border-radius: 50px;
   padding: 6px 12px;
-  background-color: var(--tag-background);
+  color: ${({ active }) => (active ? "var(--white)" : "var(--primary)")};
+  background-color: ${({ active }) =>
+    active ? "var(--primary)" : "var(--tag-background)"};
 
   @media (max-width: 480px) {
     font-size: ${FONTS.xs};
