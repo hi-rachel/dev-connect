@@ -1,0 +1,31 @@
+{
+  "welcomeMessage": "Dev Connect에 오신 것을 환영합니다",
+  "nav": {
+    "profile": "프로필",
+    "likes": "좋아요",
+    "bookmarks": "북마크",
+    "logOut": "로그아웃",
+    "home": "홈"
+  },
+  "newPostForm": {
+    "search": "검색",
+    "newPost": "새 게시물",
+    "postPlaceholder": "무슨 일이 일어나고 있나요?",
+    "tags": "태그",
+    "tagPlaceholder": "태그 추가, 엔터를 눌러 추가하세요",
+    "addPhoto": "사진 추가",
+    "photoAdded": "사진이 추가되었습니다 ✔️",
+    "addPhotoButton": "사진 추가",
+    "posting": "게시 중...",
+    "postButton": "게시",
+    "msg": {
+      "uploadWarning": "1MB 이하의 사진을 업로드하세요.",
+      "tagLimit": "태그는 10개까지 추가할 수 있습니다.",
+      "tagExists": "이 태그는 이미 추가되었습니다.",
+      "deletePhotoConfirm": "이 사진을 삭제하시겠습니까?",
+      "enterMessage": "메시지를 입력하세요.",
+      "messageTooShort": "메시지를 2자 이상 작성하세요.",
+      "messageTooLong": "메시지를 {{max}}자 이내로 작성하세요."
+    }
+  }
+}

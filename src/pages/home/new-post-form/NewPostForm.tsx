@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { addDoc, collection, updateDoc } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 import {
@@ -23,6 +24,7 @@ import {
 } from "../../../constants/constants";
 
 const NewPostForm = () => {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [post, setPost] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -47,7 +49,7 @@ const NewPostForm = () => {
       };
       reader.readAsDataURL(files[0]);
     } else {
-      alert("Please upload a picture smaller than 1 MB.");
+      alert(t("newPostForm.msg.uploadWarning"));
     }
   };
 
@@ -55,13 +57,13 @@ const NewPostForm = () => {
     if (e.key === "Enter" && tagInput.trim() !== "") {
       e.preventDefault();
       if (tags.length >= 10) {
-        alert("You can't add more than 10 tags.");
+        alert(t("newPostForm.msg.tagLimit"));
         setTagInput("");
         return;
       }
       const newTag = tagInput.trim().toLowerCase();
       if (tags.map((tag) => tag.toLowerCase()).includes(newTag)) {
-        alert("This tag is already added.");
+        alert(t("newPostForm.msg.tagExists"));
         setTagInput("");
         return;
       }
@@ -77,7 +79,7 @@ const NewPostForm = () => {
   const handleDeletePostImg = async () => {
     try {
       if (file) {
-        if (confirm("Are you sure you want to delete this photo?")) {
+        if (confirm(t("newPostForm.msg.deletePhotoConfirm"))) {
           setFile(null);
           setPreviewUrl(null);
           return;
@@ -95,18 +97,18 @@ const NewPostForm = () => {
     if (!user || loading) return;
 
     if (post === "") {
-      alert("Please enter your message.");
+      alert(t("newPostForm.msg.enterMessage"));
       return;
     }
 
     if (post.length < 2) {
-      alert("Please write your message more than 2 characters.");
+      alert(t("newPostForm.msg.messageTooShort"));
       return;
     }
 
     if (post.length > MAX_POST_CHARACTER_SIZE) {
       alert(
-        `Please keep your message under ${MAX_POST_CHARACTER_SIZE} characters.`
+        t("newPostForm.msg.messageTooLong", { max: MAX_POST_CHARACTER_SIZE })
       );
       return;
     }
@@ -143,6 +145,7 @@ const NewPostForm = () => {
       setPreviewUrl(null);
     }
   };
+
   return (
     <Form onSubmit={handleSubmit}>
       <TextArea
@@ -150,7 +153,7 @@ const NewPostForm = () => {
         maxLength={MAX_POST_CHARACTER_SIZE}
         onChange={handleChange}
         value={post}
-        placeholder="What is happening?!"
+        placeholder={t("newPostForm.postPlaceholder")}
       />
       <DeletePostImg onClick={handleDeletePostImg}>
         {previewUrl && <PreviewPhoto src={previewUrl} />}
@@ -167,17 +170,17 @@ const NewPostForm = () => {
         <TagInput
           type="text"
           tabIndex={0}
-          aria-label="tags"
+          aria-label={t("newPostForm.tags")}
           value={tagInput}
           onChange={(e) => setTagInput(e.target.value)}
           onKeyDown={handleKeyDown}
-          placeholder="Add tags, press Enter to add"
+          placeholder={t("newPostForm.tagPlaceholder")}
         />
       </TagInputArea>
       <AttachFileButton htmlFor="file">
         <AddPhoto>
-          <MdAddAPhoto aria-label="Add a photo" size={20} />
-          {file ? "Photo added ✔️" : "Add photo"}
+          <MdAddAPhoto aria-label={t("newPostForm.addPhoto")} size={20} />
+          {file ? t("newPostForm.photoAdded") : t("newPostForm.addPhotoButton")}
         </AddPhoto>
       </AttachFileButton>
       <AttachFileInput
@@ -185,11 +188,11 @@ const NewPostForm = () => {
         type="file"
         id="file"
         accept="image/*"
-      ></AttachFileInput>
+      />
       <SubmitBtn
         type="submit"
-        value={loading ? "Posting..." : "Post"}
-      ></SubmitBtn>
+        value={loading ? t("newPostForm.posting") : t("newPostForm.postButton")}
+      />
     </Form>
   );
 };

@@ -23,8 +23,11 @@ import {
 } from "./common/user/Avatar";
 import { BsEmojiSunglasses } from "react-icons/bs";
 import { RiMoonClearLine } from "react-icons/ri";
+import { useTranslation } from "react-i18next";
+import i18n from "./i18n";
 
 const Layout = () => {
+  const { t } = useTranslation();
   const user = auth.currentUser;
   const [theme, setTheme] = useState("");
   const navigate = useNavigate();
@@ -61,6 +64,11 @@ const Layout = () => {
     }
   };
 
+  const handleChangeLanguage = async (lng: string) => {
+    await i18n.changeLanguage(lng);
+    console.log(lng);
+  };
+
   useEffect(() => {
     if (location.pathname === "/") {
       setSelectedItem("home");
@@ -88,12 +96,18 @@ const Layout = () => {
               <img
                 width={40}
                 src="main-logo.png"
-                alt="Dev Connect Logo"
-                aria-label="Dev Connect Logo"
+                alt={"Dev Connect Logo"}
+                aria-label={"Dev Connect Logo"}
               />
             </MenuItem>
           </Link>
           <LayoutHeaderRightDiv>
+            <MenuItem>
+              <button onClick={() => handleChangeLanguage("en")}>En</button>
+            </MenuItem>
+            <MenuItem>
+              <button onClick={() => handleChangeLanguage("ko")}>Ko</button>
+            </MenuItem>
             <ToogleTheme onClick={handleToggleTheme}>
               {theme === "dark" ? (
                 <BsEmojiSunglasses id="lightModeIcon" size={35} />
@@ -124,7 +138,9 @@ const Layout = () => {
           {showPopover && (
             <AvatarPopUp onClick={handleLogOut}>
               <CgLogOut size={25} />
-              <p>Log Out @{user.displayName}</p>
+              <p>
+                {t("nav.log_out")} @{user.displayName}
+              </p>
             </AvatarPopUp>
           )}
         </LayoutHeader>
@@ -135,8 +151,8 @@ const Layout = () => {
               <img
                 width={50}
                 src="main-logo.png"
-                alt="Dev Connect Logo"
-                aria-label="Dev Connect Logo"
+                alt={t("nav.home")}
+                aria-label={t("nav.home")}
               />
             </MenuItem>
           </Link>
@@ -202,6 +218,12 @@ const Layout = () => {
               )}
             </LayoutAvatarCircle>
           </MenuItem>
+          <MenuItem>
+            <button onClick={() => handleChangeLanguage("en")}>En</button>
+          </MenuItem>
+          <MenuItem>
+            <button onClick={() => handleChangeLanguage("ko")}>Ko</button>
+          </MenuItem>
         </Menu>
 
         <FooterMenu>
@@ -226,7 +248,7 @@ const Layout = () => {
           <Link to="/likes">
             <FooterMenuItem onClick={() => setSelectedItem("likes")}>
               {selectedItem === "likes" ? (
-                <FaHeart aria-label="Liked Posts Page" size={26} />
+                <FaHeart aria-label={t("nav.likes")} size={26} />
               ) : (
                 <FaRegHeart size={26} />
               )}
@@ -235,7 +257,7 @@ const Layout = () => {
           <Link to="/bookmarks">
             <FooterMenuItem onClick={() => setSelectedItem("bookmarks")}>
               {selectedItem === "bookmarks" ? (
-                <FaBookmark aria-label="Bookmarked Posts Page" size={26} />
+                <FaBookmark aria-label={t("nav.bookmarks")} size={26} />
               ) : (
                 <FaRegBookmark size={26} />
               )}

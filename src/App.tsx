@@ -1,19 +1,10 @@
-import { useEffect, useState, Suspense, lazy } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { auth } from "./firebase";
 import styled from "styled-components";
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import Layout from "./layout";
+import { RouterProvider } from "react-router-dom";
 import LoadingScreen from "./common/loading/LoadingScreen";
-import ProtectedRoute from "./routes/ProtectedRoute";
-import NotFound from "./pages/not-found/NotFound";
 import ThemeLayout from "./common/ThemeLayout";
-
-const Home = lazy(() => import("./pages/home/Home"));
-const Profile = lazy(() => import("./pages/profile/Profile"));
-const Login = lazy(() => import("./pages/login/Login"));
-const CreateAccount = lazy(() => import("./pages/sign-up/CreateAccount"));
-const BookmarkedPosts = lazy(() => import("./pages/bookmarks/BookmarkedPosts"));
-const LikedPosts = lazy(() => import("./pages/likes/LikedPosts"));
+import router from "./routes/router";
 
 const Wrapper = styled.div`
   overflow-x: hidden;
@@ -24,75 +15,6 @@ const Wrapper = styled.div`
     padding: 0px;
   }
 `;
-
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: (
-      <ProtectedRoute>
-        <Layout />
-      </ProtectedRoute>
-    ),
-    children: [
-      {
-        path: "",
-        element: (
-          <Suspense fallback={<LoadingScreen />}>
-            <Home />
-          </Suspense>
-        ),
-      },
-      {
-        path: "profile",
-        element: (
-          <Suspense fallback={<LoadingScreen />}>
-            <Profile />
-          </Suspense>
-        ),
-      },
-      {
-        path: "likes",
-        element: (
-          <Suspense fallback={<LoadingScreen />}>
-            <LikedPosts />
-          </Suspense>
-        ),
-      },
-      {
-        path: "bookmarks",
-        element: (
-          <Suspense fallback={<LoadingScreen />}>
-            <BookmarkedPosts />
-          </Suspense>
-        ),
-      },
-    ],
-  },
-  {
-    path: "login",
-    element: (
-      <Suspense fallback={<LoadingScreen />}>
-        <Login />
-      </Suspense>
-    ),
-  },
-  {
-    path: "create-account",
-    element: (
-      <Suspense fallback={<LoadingScreen />}>
-        <CreateAccount />
-      </Suspense>
-    ),
-  },
-  {
-    path: "*",
-    element: (
-      <Suspense fallback={<LoadingScreen />}>
-        <NotFound />
-      </Suspense>
-    ),
-  },
-]);
 
 const App = () => {
   const [loading, setLoading] = useState(true);
@@ -105,6 +27,7 @@ const App = () => {
   useEffect(() => {
     init();
   }, []);
+
   return (
     <Wrapper>
       <ThemeLayout />
