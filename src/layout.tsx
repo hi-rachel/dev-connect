@@ -102,12 +102,16 @@ const Layout = () => {
             </MenuItem>
           </Link>
           <LayoutHeaderRightDiv>
-            <MenuItem>
-              <button onClick={() => handleChangeLanguage("en")}>En</button>
-            </MenuItem>
-            <MenuItem>
-              <button onClick={() => handleChangeLanguage("ko")}>Ko</button>
-            </MenuItem>
+            {i18n.language === "ko" && (
+              <MenuItem>
+                <button onClick={() => handleChangeLanguage("en")}>En</button>
+              </MenuItem>
+            )}
+            {i18n.language === "en" && (
+              <MenuItem>
+                <button onClick={() => handleChangeLanguage("ko")}>Ko</button>
+              </MenuItem>
+            )}
             <ToogleTheme onClick={handleToggleTheme}>
               {theme === "dark" ? (
                 <BsEmojiSunglasses id="lightModeIcon" size={35} />
@@ -218,12 +222,16 @@ const Layout = () => {
               )}
             </LayoutAvatarCircle>
           </MenuItem>
-          <MenuItem>
-            <button onClick={() => handleChangeLanguage("en")}>En</button>
-          </MenuItem>
-          <MenuItem>
-            <button onClick={() => handleChangeLanguage("ko")}>Ko</button>
-          </MenuItem>
+          {i18n.language === "ko" && (
+            <MenuItem>
+              <button onClick={() => handleChangeLanguage("en")}>En</button>
+            </MenuItem>
+          )}
+          {i18n.language === "en" && (
+            <MenuItem>
+              <button onClick={() => handleChangeLanguage("ko")}>Ko</button>
+            </MenuItem>
+          )}
         </Menu>
 
         <FooterMenu>
