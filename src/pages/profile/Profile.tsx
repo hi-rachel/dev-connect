@@ -41,8 +41,10 @@ import { Loader } from "../../common/loading/Loading.styled";
 import { Posts } from "../../common/post/Post.styled";
 import { AvartarImg } from "../../common/user/Avatar";
 import { IoClose } from "react-icons/io5";
+import { useTranslation } from "react-i18next";
 
 const Profile = () => {
+  const { t } = useTranslation();
   const user = auth.currentUser;
   const [avatar, setAvatar] = useState(user?.photoURL || null);
   const [newUsername, setNewUsername] = useState(
@@ -197,19 +199,17 @@ const Profile = () => {
         });
       });
     } else {
-      alert("Please upload a picture smaller than 1 MB.");
+      alert(t("profile.msg.uploadWarning"));
     }
   };
 
   const handleAvatarDelete = async () => {
-    const ok = window.confirm(
-      "Are you sure you want to delete this profile image?"
-    );
+    const ok = window.confirm(t("profile.deleteAvatarConfirm"));
 
     if (!ok || !user) return;
 
     if (avatar === null) {
-      alert("There is no profile image.");
+      alert(t("profile.noAvatar"));
     }
 
     try {
@@ -276,19 +276,19 @@ const Profile = () => {
     if (!user || !setEditUsername) return;
 
     if (newUsername.length < 2) {
-      alert("Please enter a username with at least 2 characters.");
+      alert(t("profile.msg.usernameTooShort"));
       setEditUsername(false);
       return;
     }
 
     if (newUsername.length > 20) {
-      alert("Please enter a username with at least 20 characters.");
+      alert(t("profile.msg.usernameTooLong"));
       setEditUsername(false);
       return;
     }
 
     if (newUsername === user.displayName) {
-      alert("Please write a name that is different from your existing name.");
+      alert(t("profile.msg.usernameSame"));
       setEditUsername(false);
       return;
     }
@@ -352,13 +352,16 @@ const Profile = () => {
             <SaveUsernameIcon onClick={(e) => handleUsernameSave(e)}>
               <FaRegCheckCircle
                 color="var(--success)"
-                aria-label="Fininsh editing"
+                aria-label={t("profile.saveUsername")}
                 size={28}
               />
             </SaveUsernameIcon>
           ) : (
             <EditUsernameIcon onClick={handleUsernameEdit}>
-              <MdOutlineModeEdit aria-label="Start editing" size={22} />
+              <MdOutlineModeEdit
+                aria-label={t("profile.editUsername")}
+                size={22}
+              />
             </EditUsernameIcon>
           )}
         </EditUsernameForm>
@@ -367,7 +370,7 @@ const Profile = () => {
             <Post key={`${post.postId}-${index}`} {...post} />
           ))}
         </Posts>
-        {isLoading && <Loader>isLoading...</Loader>}
+        {isLoading && <Loader>{t("loading")}</Loader>}
       </ProfileWrapper>
     )
   );

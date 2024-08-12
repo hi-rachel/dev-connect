@@ -17,8 +17,10 @@ import { auth, db } from "../../firebase";
 import { PAGE_SIZE } from "../../constants/constants";
 import { Loader } from "../../common/loading/Loading.styled";
 import { NoPost, PageTitle, Posts } from "../../common/post/Post.styled";
+import { useTranslation } from "react-i18next";
 
 const BookmarkedPosts = () => {
+  const { t } = useTranslation();
   const user = auth.currentUser;
   const [myPosts, setMyPosts] = useState<IPost[]>([]);
   const [hasMoreData, setHasMoreData] = useState(true);
@@ -145,20 +147,17 @@ const BookmarkedPosts = () => {
 
   return (
     <Wrapper>
-      <PageTitle>Bookmarked Lists</PageTitle>
+      <PageTitle>{t("bookmarkedLists.pageTitle")}</PageTitle>
       <Posts>
         {myPosts.length >= 1 ? (
           myPosts.map((post, index) => (
             <Post key={`${post.postId}-${index}`} {...post} />
           ))
         ) : (
-          <NoPost>
-            You haven't bookmarked any Posts.
-            <br /> When you do, they'll show up here.
-          </NoPost>
+          <NoPost>{t("bookmarkedLists.noPosts")}</NoPost>
         )}
       </Posts>
-      {isLoading && <Loader>isLoading...</Loader>}
+      {isLoading && <Loader>{t("loading")}</Loader>}
     </Wrapper>
   );
 };

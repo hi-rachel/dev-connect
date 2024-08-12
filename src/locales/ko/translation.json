@@ -1,5 +1,6 @@
 {
   "welcomeMessage": "Dev Connect에 오신 것을 환영합니다",
+  "loading": "로딩 중...",
   "nav": {
     "profile": "프로필",
     "likes": "좋아요",
@@ -8,7 +9,7 @@
     "home": "홈"
   },
   "newPostForm": {
-    "search": "검색",
+    "search": "검색 중...",
     "newPost": "새 게시물",
     "postPlaceholder": "무슨 일이 일어나고 있나요?",
     "tags": "태그",
@@ -27,5 +28,26 @@
       "messageTooShort": "메시지를 2자 이상 작성하세요.",
       "messageTooLong": "메시지를 {{max}}자 이내로 작성하세요."
     }
+  },
+  "profile": {
+    "editAvatar": "프로필 이미지 편집",
+    "deleteAvatarConfirm": "이 프로필 이미지를 삭제하시겠습니까?",
+    "noAvatar": "프로필 이미지가 없습니다.",
+    "editUsername": "사용자 이름 편집",
+    "saveUsername": "사용자 이름 저장",
+    "usernamePlaceholder": "2 ~ 20자",
+    "msg": {
+      "usernameTooShort": "최소 2자 이상의 사용자 이름을 입력하세요.",
+      "usernameTooLong": "최대 20자까지 사용자 이름을 입력하세요.",
+      "usernameSame": "기존 이름과 다른 이름을 작성하세요."
+    }
+  },
+  "likedLists": {
+    "pageTitle": "좋아요 목록",
+    "noPosts": "좋아요 한 게시물이 없습니다.\n좋아요를 누르면 여기에 표시됩니다."
+  },
+  "bookmarkedLists": {
+    "pageTitle": "북마크 목록",
+    "noPosts": "북마크 한 게시물이 없습니다.\n북마크를 하면 여기에 표시됩니다."
   }
 }

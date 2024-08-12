@@ -17,8 +17,10 @@ import { auth, db } from "../../firebase";
 import { PAGE_SIZE } from "../../constants/constants";
 import { Loader } from "../../common/loading/Loading.styled";
 import { NoPost, PageTitle, Posts } from "../../common/post/Post.styled";
+import { useTranslation } from "react-i18next";
 
 const LikedPosts = () => {
+  const { t } = useTranslation();
   const user = auth.currentUser;
   const [myPosts, setMyPosts] = useState<IPost[]>([]);
   const [hasMoreData, setHasMoreData] = useState(true);
@@ -145,20 +147,17 @@ const LikedPosts = () => {
 
   return (
     <Wrapper>
-      <PageTitle>Liked Lists</PageTitle>
+      <PageTitle>{t("likedLists.pageTitle")}</PageTitle>
       <Posts>
         {myPosts.length >= 1 ? (
           myPosts.map((post, index) => (
             <Post key={`${post.postId}-${index}`} {...post} />
           ))
         ) : (
-          <NoPost>
-            You haven't liked any Posts.
-            <br /> When you do, they'll show up here.
-          </NoPost>
+          <NoPost>{t("likedLists.noPosts")}</NoPost>
         )}
       </Posts>
-      {isLoading && <Loader>isLoading...</Loader>}
+      {isLoading && <Loader>{t("loading")}</Loader>}
     </Wrapper>
   );
 };

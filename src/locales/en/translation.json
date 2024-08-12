@@ -1,5 +1,6 @@
 {
   "welcomeMessage": "Welcome to Dev Connect",
+  "loading": "Loading...",
   "nav": {
     "profile": "Profile",
     "likes": "Likes",
@@ -8,7 +9,7 @@
     "home": "Home"
   },
   "newPostForm": {
-    "search": "Search",
+    "search": "Search...",
     "newPost": "New Post",
     "postPlaceholder": "What is happening?",
     "tags": "Tags",
@@ -27,5 +28,26 @@
       "messageTooShort": "Please write your message more than 2 characters.",
       "messageTooLong": "Please keep your message under {{max}} characters."
     }
+  },
+  "profile": {
+    "editAvatar": "Edit Avatar",
+    "deleteAvatarConfirm": "Are you sure you want to delete this profile image?",
+    "noAvatar": "There is no profile image.",
+    "editUsername": "Edit Username",
+    "saveUsername": "Save Username",
+    "usernamePlaceholder": "2 ~ 20 characters",
+    "msg": {
+      "usernameTooShort": "Please enter a username with at least 2 characters.",
+      "usernameTooLong": "Please enter a username with at most 20 characters.",
+      "usernameSame": "Please write a name that is different from your existing name."
+    }
+  },
+  "likedLists": {
+    "pageTitle": "Liked Lists",
+    "noPosts": "You haven't liked any Posts.\nWhen you do, they'll show up here."
+  },
+  "BookmarkedLists": {
+    "pageTitle": "Bookmarked Lists",
+    "noPosts": "You haven't bookmarked any Posts.\nWhen you do, they'll show up here."
   }
 }
