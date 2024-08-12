@@ -1,6 +1,6 @@
+import { useEffect, useState } from "react";
 import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import { auth } from "./firebase";
-import { useEffect, useState } from "react";
 import {
   AvatarPopUp,
   FooterMenu,
@@ -66,8 +66,22 @@ const Layout = () => {
 
   const handleChangeLanguage = async (lng: string) => {
     await i18n.changeLanguage(lng);
-    console.log(lng);
   };
+
+  const setInitialLanguage = () => {
+    const savedLanguage = localStorage.getItem("i18nextLng");
+    if (savedLanguage) {
+      i18n.changeLanguage(savedLanguage);
+    } else {
+      const userLang = navigator.language;
+      const isKorean = userLang.startsWith("ko");
+      i18n.changeLanguage(isKorean ? "ko" : "en");
+    }
+  };
+
+  useEffect(() => {
+    setInitialLanguage();
+  }, []);
 
   useEffect(() => {
     if (location.pathname === "/") {
@@ -85,7 +99,18 @@ const Layout = () => {
     setShowPopover((prev) => !prev);
   };
 
-  if (!user) return;
+  const LanguageToggleButton = () =>
+    i18n.language === "en" ? (
+      <MenuItem>
+        <button onClick={() => handleChangeLanguage("ko")}>Ko</button>
+      </MenuItem>
+    ) : (
+      <MenuItem>
+        <button onClick={() => handleChangeLanguage("en")}>En</button>
+      </MenuItem>
+    );
+
+  if (!user) return null;
 
   return (
     <>
@@ -102,16 +127,7 @@ const Layout = () => {
             </MenuItem>
           </Link>
           <LayoutHeaderRightDiv>
-            {i18n.language === "ko" && (
-              <MenuItem>
-                <button onClick={() => handleChangeLanguage("en")}>En</button>
-              </MenuItem>
-            )}
-            {i18n.language === "en" && (
-              <MenuItem>
-                <button onClick={() => handleChangeLanguage("ko")}>Ko</button>
-              </MenuItem>
-            )}
+            <LanguageToggleButton />
             <ToogleTheme onClick={handleToggleTheme}>
               {theme === "dark" ? (
                 <BsEmojiSunglasses id="lightModeIcon" size={35} />
