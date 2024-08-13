@@ -46,7 +46,7 @@
     "pageTitle": "Liked Lists",
     "noPosts": "You haven't liked any Posts.\nWhen you do, they'll show up here."
   },
-  "BookmarkedLists": {
+  "bookmarkedLists": {
     "pageTitle": "Bookmarked Lists",
     "noPosts": "You haven't bookmarked any Posts.\nWhen you do, they'll show up here."
   }
